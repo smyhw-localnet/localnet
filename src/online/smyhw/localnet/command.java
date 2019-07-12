@@ -47,6 +47,12 @@ public class command
 			return " ";
 		}
 		command=command+" ";//尾部加空格，防止单节指令无法读到空格而出错
+		//添加特殊功能
+		if(num==-1)//砍掉指令第一段
+		{
+			return command.substring(command.indexOf(' ')+1);
+		}
+		//一般分解过程
 		while(true)
 		{
 			if(command.length()==sy){break;}
@@ -96,7 +102,7 @@ class command_to
 		message.info(command.fj(input,1)+"(报告ID为"+ID+")发来报文"+temp);
 		if(temp.equals("OK"))
 		{
-			out.writeUTF(command.fj(input,2));
+			out.writeUTF(command.fj((command.fj(input,-1)),-1));
 		}
 		client.close();
 	}
