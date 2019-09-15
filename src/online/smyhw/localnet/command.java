@@ -16,6 +16,9 @@ public class command
 		case "to":
 			command_to.main(command);
 			break;
+		case "mcow":
+			command_mcow.main(command);
+			break;
 		default:
 			message.show("未知指令!");
 		}
@@ -105,5 +108,26 @@ class command_to
 			out.writeUTF(command.fj((command.fj(input,-1)),-1));
 		}
 		client.close();
+	}
+}
+
+class command_mcow
+{
+	public static void main(String input) throws Exception
+	{
+		switch(command.fj(input,1))
+		{
+		case"pl":
+			BufferedReader temp = new BufferedReader(new FileReader("E:\\pl"));
+			String temp1;
+			while(true)
+			{
+				temp1=temp.readLine();
+				if(temp1==null) {break;}
+				message.show(temp1);
+			}
+			temp.close();
+			break;
+		}
 	}
 }

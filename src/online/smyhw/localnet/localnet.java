@@ -10,8 +10,9 @@ public class localnet
 	public static Date time;//时间类
 	public static online online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
-	public static int set_debug=1;//设置，1=开启debug输出
-	public static int set_test=0;//
+	public static int set_debug=0;//设置，1=开启debug输出
+//	public static int set_test=0;//
+	public static int set_re=0;//是否记录指令回显
 	public static BufferedReader input;//主输入流
 	
 	public static void main(String args[]) throws Exception
@@ -23,6 +24,13 @@ public class localnet
 		online_thread.start();//启动主联机进程
 		user_input=new input(input);//实例化用户主输入进程
 		smyhw.main();//awa
+	}
+	public static String[] dy(String input_command) throws Exception
+	{
+		set_re=1;
+		command.local(input_command);
+		String re[] = message.getre();
+		return re;
 	}
 }
 
@@ -39,7 +47,7 @@ class smyhw
 		message.show("|                         |");
 		message.show("+=========localnet========+");
 		message.show("\n\n\n\n\n\n\n\n\n");
-		message.info("输入ID");
+		message.show("输入ID");
 		localnet.ID = localnet.input.readLine();
 		localnet.user_input.start();//启动用户主输入进程
 		while(true) {}
