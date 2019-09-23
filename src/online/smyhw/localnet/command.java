@@ -1,6 +1,9 @@
 package online.smyhw.localnet;
 
 import java.net.*;
+
+import online.smyhw.localnet.lib.*;
+
 import java.io.*;
 
 public class command
@@ -89,6 +92,9 @@ class command_test
 {
 	public static void main(String input)
 	{
+		String temp = (WebAPI.get("https://top.timewk.cn/api/blacklist/query/1577050642"));
+		message.show("gg");
+		message.show(json.jx(temp,"from"));
 		message.show("test指令执行成功");
 	}
 }
@@ -195,6 +201,7 @@ class command_mcow
 				i++;
 			}
 			break;
+			//
 		}
 	}
 }
