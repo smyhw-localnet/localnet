@@ -7,14 +7,14 @@ public class json {
 	{
 		int xh=0;
 		String find_msg=("\""+find+"\": \"");
-		message.show(input+"?"+find_msg);
+//		message.show(input+"?"+find_msg);
 		int b = input.indexOf(find_msg);
 		b=b+find_msg.length();
-		message.show("aaa");
+//		message.show("aaa");
 		int e = input.indexOf('\"',b+1);
-		message.show(b+":bbb:"+e);
+//		message.show(b+":bbb:"+e);
 		String re = input.substring(b, e);
-		message.show("vvv");
+//		message.show("vvv");
 		return re;
 	}
 }

@@ -8,7 +8,9 @@ public class message
 	{
 		re[re_num]=null;
 		re_num=0;
-		return re;
+		String[] temp=re;
+		re = new String[999];
+		return temp;
 	}
 	public static void show(String input)
 	{
