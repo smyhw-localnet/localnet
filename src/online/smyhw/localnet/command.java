@@ -11,7 +11,7 @@ public class command
 	public static void local(String command) throws Exception
 	{
 		message.info("[命令解释器]:开始解析:"+command);
-		switch(fj(command,0))
+		switch(CommandFJ.fj(command,0))
 		{
 		case "test":
 			command_test.main(command);
@@ -22,68 +22,27 @@ public class command
 		case "mcow":
 			command_mcow.main(command);
 			break;
+		case "mc_p":
+			command_mc_p.main(command);
 		default:
 			message.show("未知指令!");
 		}
 	}
 	public static void net(String ID,String command)
 	{
-		switch(fj(command,0))
+		switch(CommandFJ.fj(command,0))
 		{
 		case "test":
 			command_test.main(command);
 			break;
 		case "show":
-			message.show("来自 "+ID+"的文本信息："+fj(command,1));
+			message.show("来自 "+ID+"的文本信息："+CommandFJ.fj(command,1));
 			break;
 		default:
 			message.show(ID+"传输了一个未知指令："+command);
 		}
 	}
-	static String fj(String command,int num)
-	{
-		String re=" ";
-		int sy=0;//索引，即现在检查到了哪个字符，以0开头
-		int dl=-1;//记录现在检查到了第几个参数，以1开头
-		int s=0,e=-1;//当前参数开始处索引以及结束处索引(e=结束处索引+1)
-		command=command.trim();//删除前后的空白
-		if(command.isEmpty())
-		{
-			message.info("[命令解释器]:空指令！");
-			return " ";
-		}
-		command=command+" ";//尾部加空格，防止单节指令无法读到空格而出错
-		//添加特殊功能
-		if(num==-1)//砍掉指令第一段
-		{
-			return command.substring(command.indexOf(' ')+1);
-		}
-		//一般分解过程
-		while(true)
-		{
-			if(command.length()==sy){break;}
-			if(command.charAt(sy)==' ')
-			{
-				s=e+1;
-				e=sy;
-				dl++;
-				if(dl==num)//返回字符串 
-				{
-					try 
-					{
-						re=command.substring(s,e);
-					}
-					catch(IndexOutOfBoundsException ee)
-					{
-						return "error";
-					}
-					return re;
-				}
-			}
-			sy++;
-		}
-		return " ";
-	}
+
 }
 
 
@@ -104,21 +63,21 @@ class command_to
 	static String ID,temp;
 	public static void main(String input) throws Exception
 	{
-		message.info("尝试连接至"+command.fj(input,1)+":4201");
-		Socket client = new Socket(command.fj(input,1),4201);
+		message.info("尝试连接至"+CommandFJ.fj(input,1)+":4201");
+		Socket client = new Socket(CommandFJ.fj(input,1),4201);
 		message.info("连接成功，尝试建立数据流");
 		DataInputStream in = new DataInputStream(client.getInputStream());
 		DataOutputStream out = new DataOutputStream(client.getOutputStream());
 		message.info("数据流建立成功，读取对方ID");
 		ID=in.readUTF();
-		message.show(command.fj(input,1)+"报告他的ID为："+ID);
+		message.show(CommandFJ.fj(input,1)+"报告他的ID为："+ID);
 		message.show("向"+ID+"发送本终端ID"+localnet.ID);
 		out.writeUTF(localnet.ID);
 		temp=in.readUTF();
-		message.info(command.fj(input,1)+"(报告ID为"+ID+")发来报文"+temp);
+		message.info(CommandFJ.fj(input,1)+"(报告ID为"+ID+")发来报文"+temp);
 		if(temp.equals("OK"))
 		{
-			out.writeUTF(command.fj((command.fj(input,-1)),-1));
+			out.writeUTF(CommandFJ.fj((CommandFJ.fj(input,-1)),-1));
 		}
 		client.close();
 	}
@@ -128,7 +87,7 @@ class command_mcow
 {
 	public static void main(String input) throws Exception
 	{
-		switch(command.fj(input,1))
+		switch(CommandFJ.fj(input,1))
 		{
 		case"pl":
 			BufferedReader temp = new BufferedReader(new FileReader("E:\\pl"));
@@ -144,7 +103,7 @@ class command_mcow
 			temp.close();
 			break;
 		case"vc":
-			String player_name = new String(command.fj(input, 2));
+			String player_name = new String(CommandFJ.fj(input, 2));
 			if(player_name.equals("error"))
 			{
 				message.show("玩家ID不合法！");
@@ -202,6 +161,55 @@ class command_mcow
 			}
 			break;
 			//
+		case "st":
+			{
+				Socket s = null;
+				try 
+         		{
+					s = new Socket("mc.smyhw.online",4202);
+					message.info("建立连接:服务器状态");
+	          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
+					DataOutputStream output = new DataOutputStream(s.getOutputStream());
+					output.writeUTF("#st");
+					String IP=input_1.readUTF();
+					String status = input_1.readUTF();
+					String member = input_1.readUTF();
+					String TPS = input_1.readUTF();
+					message.show("服务器状态检测：\nIP："+IP+"\n状态："+status+"\n在线人数:"+member+"\nTPS："+TPS);
+					s.close();
+	          	}
+	          	catch(Exception e)
+	          	{
+	          		message.show("服务器状态检测：\nIP：mc.smyhw.online:25565\n状态：离线\n在线人数:0/0\nTPS：0");
+	          		s.close();
+	          	}
+			}
+			break;
+		default:
+			message.show("未知指令！");
+		}
+	}
+}
+
+class command_mc_p
+{
+	static String IP;
+	public static void main(String input) throws Exception
+	{
+		IP=CommandFJ.fj(input,1);
+		int port=1650;
+		String re;
+		while(true)
+		{
+//			if(port==65535) {return;}
+			re=WebAPI.get("https://status.mctalks.com/return.php?address="+IP+"&port="+port);
+			message.info("扫描端口："+port);
+			if(!re.startsWith("无法连接至服务器")) 
+			{
+				if(re.indexOf("状态:下线")!=-1) {port++;continue;}
+				message.show(port+">>"+re);
+			}
+			port++;
 		}
 	}
 }

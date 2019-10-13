@@ -117,6 +117,7 @@ class input extends Thread
 	}
 	public void run()
 	{
+		System.out.println("请输入IP：");
 		try
 		{
 			while(true)
