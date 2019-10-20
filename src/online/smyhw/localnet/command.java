@@ -109,19 +109,21 @@ class command_mcow
 				message.show("玩家ID不合法！");
 				return;
 			}
-			File ml = new File("E:\\OurWorld\\plugins\\Essentials\\userdata");
+			File ml = new File(".\\plugins\\Essentials\\userdata");
 			String player_file_name[] = ml.list();
 			File player_file;
 			int player_v;
 			int i=0;
+			System.out.println("1");
 			while(true)
 			{
+				System.out.println("2");
 				if(i==player_file_name.length)
 				{
 					message.show("找遍了"+player_file_name.length+"个玩家，但就是没找到叫“"+player_name+"”的...");
 					break;
 				}
-				player_file = new File("E:\\OurWorld\\plugins\\Essentials\\userdata\\"+player_file_name[i]);
+				player_file = new File(".\\plugins\\Essentials\\userdata\\"+player_file_name[i]);
 				BufferedReader player_file_reader = new BufferedReader(new FileReader(player_file));
 				System.out.println("读取文件："+player_file);
 				while(true)
@@ -146,7 +148,7 @@ class command_mcow
 					}
 					else 
 					{
-						System.out.println("gg");
+//						System.out.println("gg");
 						if((temp1.startsWith("lastAccountName")) && (!(player_name.equals(temp1.substring(17)))))
 						{System.out.println("找到玩家ID："+temp1.substring(17)+"与需求不符");break;}
 						if(!(temp1.startsWith("lastAccountName")))
@@ -185,8 +187,26 @@ class command_mcow
 	          	}
 			}
 			break;
+		case "dh":
+			configer config = new configer("config");
+			if(config.get("dh")==1)
+			{config.set("dh",0);message.show("死亡信息显示已关闭");}
+			else
+			{config.set("dh",1);message.show("死亡信息显示已开启");}
+			break;
+		case "help":
+			message.show("命令列表\n"
+						+"!!st——查询服务器状态\n"
+						+"!!pl——列出在线列表\n"
+//						+"!!vc <玩家ID>——查询玩家的货币数量\n"
+						+"!!mo <玩家ID>——查询玩家死亡次数，不加玩家ID则显示服务器死亡榜\n"
+						+"!!dh——开关死亡显示\n"
+						+"------\n"
+						+"localnet信息系统 by smyhw"
+						);
+			break;
 		default:
-			message.show("未知指令！");
+			message.show("未知指令！\n使用!!help获取帮助列表");
 		}
 	}
 }
