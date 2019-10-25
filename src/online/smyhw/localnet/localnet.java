@@ -10,7 +10,7 @@ public class localnet
 	public static Date time;//时间类
 	public static online online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
-	public static int set_debug=0;//设置，1=开启debug输出
+	public static int set_debug=1;//设置，1=开启debug输出
 //	public static int set_test=0;//
 	public static int set_re=0;//是否记录指令回显
 	public static BufferedReader input;//主输入流
@@ -32,6 +32,8 @@ public class localnet
 		String re[] = message.getre();
 		return re;
 	}
+	
+
 }
 
 
@@ -117,7 +119,7 @@ class input extends Thread
 	}
 	public void run()
 	{
-		System.out.println("请输入IP：");
+//		System.out.println("请输入IP：");
 		try
 		{
 			while(true)

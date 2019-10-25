@@ -51,9 +51,8 @@ class command_test
 {
 	public static void main(String input)
 	{
-		String temp = (WebAPI.get("https://top.timewk.cn/api/blacklist/query/1577050642"));
-		message.show("gg");
-		message.show(json.jx(temp,"from"));
+		configer tt = new configer("/home/smyhw/work_temp/test_config");
+		message.show(""+tt.set("bbb", 100));
 		message.show("test指令执行成功");
 	}
 }
