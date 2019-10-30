@@ -88,79 +88,82 @@ class command_mcow
 	{
 		switch(CommandFJ.fj(input,1))
 		{
-		case"pl":
-			BufferedReader temp = new BufferedReader(new FileReader("E:\\pl"));
-			String temp1;
-			System.out.println("ga");
-			while(true)
-			{
-				temp1=temp.readLine();
-				if(temp1==null) {break;}
-				message.show(temp1);
-			}
-			System.out.println("gg");
-			temp.close();
+		case"ltest":
+			message.show("localnet后端command回应中！");
 			break;
-		case"vc":
-			String player_name = new String(CommandFJ.fj(input, 2));
-			if(player_name.equals("error"))
-			{
-				message.show("玩家ID不合法！");
-				return;
-			}
-			File ml = new File(".\\plugins\\Essentials\\userdata");
-			String player_file_name[] = ml.list();
-			File player_file;
-			int player_v;
-			int i=0;
-			System.out.println("1");
-			while(true)
-			{
-				System.out.println("2");
-				if(i==player_file_name.length)
-				{
-					message.show("找遍了"+player_file_name.length+"个玩家，但就是没找到叫“"+player_name+"”的...");
-					break;
-				}
-				player_file = new File(".\\plugins\\Essentials\\userdata\\"+player_file_name[i]);
-				BufferedReader player_file_reader = new BufferedReader(new FileReader(player_file));
-				System.out.println("读取文件："+player_file);
-				while(true)
-				{
-					temp1=player_file_reader.readLine();
-					System.out.println("读取行："+temp1);
-					if(temp1==null) {System.out.println("文件读取错误！(玩家名称)");break;}
-					if((temp1.startsWith("lastAccountName")) && (player_name.equals(temp1.substring(17))))
-					{
-						while(true)
-						{
-							temp1=player_file_reader.readLine();
-							System.out.println("读取货币数量。。。读取行："+temp1);
-							if(temp1==null) {System.out.println("文件读取错误！（玩家货币）");break;}
-							if(temp1.startsWith("money:"))
-							{
-								player_v=Double.valueOf(temp1.substring(8,temp1.length()-1)).intValue();
-								message.show("玩家"+player_name+"拥有"+player_v+"货币");
-								return;
-							}
-						}
-					}
-					else 
-					{
-//						System.out.println("gg");
-						if((temp1.startsWith("lastAccountName")) && (!(player_name.equals(temp1.substring(17)))))
-						{System.out.println("找到玩家ID："+temp1.substring(17)+"与需求不符");break;}
-						if(!(temp1.startsWith("lastAccountName")))
-						{System.out.println("玩家ID不在这一行");continue;}
-						System.out.println("在处理一个文件时遇到位置原因。。。跳过这个文件");
-						break;
-					}
+//		case"pl":
+//			BufferedReader temp = new BufferedReader(new FileReader("E:\\pl"));
+//			String temp1;
+//			System.out.println("ga");
+//			while(true)
+//			{
+//				temp1=temp.readLine();
+//				if(temp1==null) {break;}
+//				message.show(temp1);
+//			}
+//			System.out.println("gg");
+//			temp.close();
+//			break;
+//		case"vc":
+//			String player_name = new String(CommandFJ.fj(input, 2));
+//			if(player_name.equals("error"))
+//			{
+//				message.show("玩家ID不合法！");
+//				return;
+//			}
+//			File ml = new File(".\\plugins\\Essentials\\userdata");
+//			String player_file_name[] = ml.list();
+//			File player_file;
+//			int player_v;
+//			int i=0;
+//			System.out.println("1");
+//			while(true)
+//			{
+//				System.out.println("2");
+//				if(i==player_file_name.length)
+//				{
+//					message.show("找遍了"+player_file_name.length+"个玩家，但就是没找到叫“"+player_name+"”的...");
 //					break;
-				}
-				player_file_reader.close();
-				i++;
-			}
-			break;
+//				}
+//				player_file = new File(".\\plugins\\Essentials\\userdata\\"+player_file_name[i]);
+//				BufferedReader player_file_reader = new BufferedReader(new FileReader(player_file));
+//				System.out.println("读取文件："+player_file);
+//				while(true)
+//				{
+//					temp1=player_file_reader.readLine();
+//					System.out.println("读取行："+temp1);
+//					if(temp1==null) {System.out.println("文件读取错误！(玩家名称)");break;}
+//					if((temp1.startsWith("lastAccountName")) && (player_name.equals(temp1.substring(17))))
+//					{
+//						while(true)
+//						{
+//							temp1=player_file_reader.readLine();
+//							System.out.println("读取货币数量。。。读取行："+temp1);
+//							if(temp1==null) {System.out.println("文件读取错误！（玩家货币）");break;}
+//							if(temp1.startsWith("money:"))
+//							{
+//								player_v=Double.valueOf(temp1.substring(8,temp1.length()-1)).intValue();
+//								message.show("玩家"+player_name+"拥有"+player_v+"货币");
+//								return;
+//							}
+//						}
+//					}
+//					else 
+//					{
+////						System.out.println("gg");
+//						if((temp1.startsWith("lastAccountName")) && (!(player_name.equals(temp1.substring(17)))))
+//						{System.out.println("找到玩家ID："+temp1.substring(17)+"与需求不符");break;}
+//						if(!(temp1.startsWith("lastAccountName")))
+//						{System.out.println("玩家ID不在这一行");continue;}
+//						System.out.println("在处理一个文件时遇到位置原因。。。跳过这个文件");
+//						break;
+//					}
+////					break;
+//				}
+//				player_file_reader.close();
+//				i++;
+//			}
+//			break;
 			//
 		case "st":
 			{
@@ -182,10 +185,70 @@ class command_mcow
 	          	catch(Exception e)
 	          	{
 	          		message.show("服务器状态检测：\nIP：mc.smyhw.online:25565\n状态：离线\n在线人数:0/0\nTPS：0");
-	          		s.close();
+//	          		s.close();
 	          	}
 			}
 			break;
+		
+		case "jc":
+		{
+			if(CommandFJ.fj(input,2)==" ") 
+			{message.show("[localnet_指令格式错误]：!!jc <物品ID(数字)>");break;}
+			Socket s = null;
+			try 
+     		{
+				s = new Socket("mc.smyhw.online",4202);
+				message.info("建立连接:价格查询");
+          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
+				DataOutputStream output = new DataOutputStream(s.getOutputStream());
+				output.writeUTF("#jc");
+				output.writeUTF(CommandFJ.fj(input,2));
+				String re = input_1.readUTF();
+				if(re.equals("null_error"))
+				{message.show("???，找不到物品\""+CommandFJ.fj(input,2)+"\"的价格");}
+				else if(re.equals("0.0"))
+				{message.show("并没人想收\""+CommandFJ.fj(input,2)+"\"。。。");}
+				else
+				{message.show("物品\""+CommandFJ.fj(input,2)+"\"的价格是："+re+"货币/个");}
+				s.close();
+          	}
+          	catch(Exception e)
+          	{
+          		message.show("[localnet_error]:查询物价时与服务器连接出错！");
+//          		s.close();
+          	}
+		}
+		break;
+		//
+
+		//查询某玩家的货币数量
+		case "jq":
+		{
+			if(CommandFJ.fj(input,2)==" ") 
+			{message.show("[localnet_指令格式错误]：!!jq <玩家ID>");break;}
+			Socket s = null;
+			try 
+     		{
+				s = new Socket("mc.smyhw.online",4202);
+				message.info("建立连接:价格货币数量");
+          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
+				DataOutputStream output = new DataOutputStream(s.getOutputStream());
+				output.writeUTF("#jq");
+				output.writeUTF(CommandFJ.fj(input,2));
+				String re = input_1.readUTF();
+				if(re.equals("null_player"))
+				{message.show("???，找不到玩家\""+CommandFJ.fj(input,2)+"\"");}
+				else
+				{message.show("玩家\""+CommandFJ.fj(input,2)+"\"拥有"+re+"个货币");}
+				s.close();
+          	}
+          	catch(Exception e)
+          	{
+          		message.show("[localnet_error]:查询货币数量时与服务器连接出错！");
+          	}
+		}
+		break;
+			
 		case "dh":
 			configer config = new configer("config");
 			if(config.get("dh")==1)
@@ -200,6 +263,7 @@ class command_mcow
 //						+"!!vc <玩家ID>——查询玩家的货币数量\n"
 						+"!!mo <玩家ID>——查询玩家死亡次数，不加玩家ID则显示服务器死亡榜\n"
 						+"!!dh——开关死亡显示\n"
+						+"!!jc <物品ID(数字)>——查询某物品的实时价格\n"
 						+"------\n"
 						+"localnet信息系统 by smyhw"
 						);

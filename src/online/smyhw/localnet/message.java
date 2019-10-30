@@ -25,7 +25,8 @@ public class message
 	{
 		if(localnet.set_debug==1)
 		{
-			System.out.println(localnet.time.toString()+"[info]"+input);
+			System.out.println("[info]"+input);
+//			System.out.println(localnet.time.toString()+"[info]"+input);
 			log(localnet.time.toString()+"[info]"+input);
 		}
 	}
