@@ -1,298 +1,95 @@
 package online.smyhw.localnet;
 
-import java.net.*;
-
+import java.util.HashMap;
 import online.smyhw.localnet.lib.*;
 
-import java.io.*;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.Socket;
 
 public class command
 {
-	public static void local(String command) throws Exception
+	public static HashMap<String,Method> cmd_list = new HashMap<String, Method>();//存储指令和对应的类
+
+	/**
+	 * 
+	 * @author hanhz
+	 * 
+	 * @param cmd 需要添加的指令
+	 * @param rclass 处理这个指令的类
+	 */
+	public synchronized static void add_cmd(String cmd,Method mff)
 	{
-		message.info("[命令解释器]:开始解析:"+command);
-		switch(CommandFJ.fj(command,0))
+		try
 		{
-		case "test":
-			command_test.main(command);
-			break;
-		case "to":
-			command_to.main(command);
-			break;
-		case "mcow":
-			command_mcow.main(command);
-			break;
-		case "mc_p":
-			command_mc_p.main(command);
-		default:
-			message.show("未知指令!");
-		}
+			message.info("添加指令"+cmd);
+			if(cmd_list.containsKey(cmd)==false)
+			{cmd_list.put(cmd, mff);}
+			else{message.warning("添加指令\""+cmd+"\"失败，该指令已存在");}
+		} catch (SecurityException e) 
+		{message.info("添加指令\""+cmd+"\"时出现异常！");e.printStackTrace();}
 	}
-	public static void net(String ID,String command)
+	
+	/**
+	 * 
+	 * 
+	 * @param from
+	 * @param cmd
+	 */
+	public static void NETcmd(Client_sl from,String cmd)
 	{
-		switch(CommandFJ.fj(command,0))
-		{
-		case "test":
-			command_test.main(command);
-			break;
-		case "show":
-			message.show("来自 "+ID+"的文本信息："+CommandFJ.fj(command,1));
-			break;
-		default:
-			message.show(ID+"传输了一个未知指令："+command);
-		}
-	}
-
-}
-
-
-
-class command_test
-{
-	public static void main(String input)
-	{
-		configer tt = new configer("/home/smyhw/work_temp/test_config");
-		message.show(""+tt.set("bbb", 100));
-		message.show("test指令执行成功");
-	}
-}
-
-class command_to
-{
-	static String ID,temp;
-	public static void main(String input) throws Exception
-	{
-		message.info("尝试连接至"+CommandFJ.fj(input,1)+":4201");
-		Socket client = new Socket(CommandFJ.fj(input,1),4201);
-		message.info("连接成功，尝试建立数据流");
-		DataInputStream in = new DataInputStream(client.getInputStream());
-		DataOutputStream out = new DataOutputStream(client.getOutputStream());
-		message.info("数据流建立成功，读取对方ID");
-		ID=in.readUTF();
-		message.show(CommandFJ.fj(input,1)+"报告他的ID为："+ID);
-		message.show("向"+ID+"发送本终端ID"+localnet.ID);
-		out.writeUTF(localnet.ID);
-		temp=in.readUTF();
-		message.info(CommandFJ.fj(input,1)+"(报告ID为"+ID+")发来报文"+temp);
-		if(temp.equals("OK"))
-		{
-			out.writeUTF(CommandFJ.fj((CommandFJ.fj(input,-1)),-1));
-		}
-		client.close();
-	}
-}
-
-class command_mcow
-{
-	public static void main(String input) throws Exception
-	{
-		switch(CommandFJ.fj(input,1))
-		{
-		case"ltest":
-			message.show("localnet后端command回应中！");
-			break;
-//		case"pl":
-//			BufferedReader temp = new BufferedReader(new FileReader("E:\\pl"));
-//			String temp1;
-//			System.out.println("ga");
-//			while(true)
-//			{
-//				temp1=temp.readLine();
-//				if(temp1==null) {break;}
-//				message.show(temp1);
-//			}
-//			System.out.println("gg");
-//			temp.close();
-//			break;
-//		case"vc":
-//			String player_name = new String(CommandFJ.fj(input, 2));
-//			if(player_name.equals("error"))
-//			{
-//				message.show("玩家ID不合法！");
-//				return;
-//			}
-//			File ml = new File(".\\plugins\\Essentials\\userdata");
-//			String player_file_name[] = ml.list();
-//			File player_file;
-//			int player_v;
-//			int i=0;
-//			System.out.println("1");
-//			while(true)
-//			{
-//				System.out.println("2");
-//				if(i==player_file_name.length)
-//				{
-//					message.show("找遍了"+player_file_name.length+"个玩家，但就是没找到叫“"+player_name+"”的...");
-//					break;
-//				}
-//				player_file = new File(".\\plugins\\Essentials\\userdata\\"+player_file_name[i]);
-//				BufferedReader player_file_reader = new BufferedReader(new FileReader(player_file));
-//				System.out.println("读取文件："+player_file);
-//				while(true)
-//				{
-//					temp1=player_file_reader.readLine();
-//					System.out.println("读取行："+temp1);
-//					if(temp1==null) {System.out.println("文件读取错误！(玩家名称)");break;}
-//					if((temp1.startsWith("lastAccountName")) && (player_name.equals(temp1.substring(17))))
-//					{
-//						while(true)
-//						{
-//							temp1=player_file_reader.readLine();
-//							System.out.println("读取货币数量。。。读取行："+temp1);
-//							if(temp1==null) {System.out.println("文件读取错误！（玩家货币）");break;}
-//							if(temp1.startsWith("money:"))
-//							{
-//								player_v=Double.valueOf(temp1.substring(8,temp1.length()-1)).intValue();
-//								message.show("玩家"+player_name+"拥有"+player_v+"货币");
-//								return;
-//							}
-//						}
-//					}
-//					else 
-//					{
-////						System.out.println("gg");
-//						if((temp1.startsWith("lastAccountName")) && (!(player_name.equals(temp1.substring(17)))))
-//						{System.out.println("找到玩家ID："+temp1.substring(17)+"与需求不符");break;}
-//						if(!(temp1.startsWith("lastAccountName")))
-//						{System.out.println("玩家ID不在这一行");continue;}
-//						System.out.println("在处理一个文件时遇到位置原因。。。跳过这个文件");
-//						break;
-//					}
-////					break;
-//				}
-//				player_file_reader.close();
-//				i++;
-//			}
-//			break;
-			//
-		case "st":
-			{
-				Socket s = null;
-				try 
-         		{
-					s = new Socket("mc.smyhw.online",4202);
-					message.info("建立连接:服务器状态");
-	          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
-					DataOutputStream output = new DataOutputStream(s.getOutputStream());
-					output.writeUTF("#st");
-					String IP=input_1.readUTF();
-					String status = input_1.readUTF();
-					String member = input_1.readUTF();
-					String TPS = input_1.readUTF();
-					message.show("服务器状态检测：\nIP："+IP+"\n状态："+status+"\n在线人数:"+member+"\nTPS："+TPS);
-					s.close();
-	          	}
-	          	catch(Exception e)
-	          	{
-	          		message.show("服务器状态检测：\nIP：mc.smyhw.online:25565\n状态：离线\n在线人数:0/0\nTPS：0");
-//	          		s.close();
-	          	}
-			}
-			break;
 		
-		case "jc":
-		{
-			if(CommandFJ.fj(input,2)==" ") 
-			{message.show("[localnet_指令格式错误]：!!jc <物品ID(数字)>");break;}
-			Socket s = null;
-			try 
-     		{
-				s = new Socket("mc.smyhw.online",4202);
-				message.info("建立连接:价格查询");
-          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
-				DataOutputStream output = new DataOutputStream(s.getOutputStream());
-				output.writeUTF("#jc");
-				output.writeUTF(CommandFJ.fj(input,2));
-				String re = input_1.readUTF();
-				if(re.equals("null_error"))
-				{message.show("???，找不到物品\""+CommandFJ.fj(input,2)+"\"的价格");}
-				else if(re.equals("0.0"))
-				{message.show("并没人想收\""+CommandFJ.fj(input,2)+"\"。。。");}
-				else
-				{message.show("物品\""+CommandFJ.fj(input,2)+"\"的价格是："+re+"货币/个");}
-				s.close();
-          	}
-          	catch(Exception e)
-          	{
-          		message.show("[localnet_error]:查询物价时与服务器连接出错！");
-//          		s.close();
-          	}
-		}
-		break;
-		//
-
-		//查询某玩家的货币数量
-		case "jq":
-		{
-			if(CommandFJ.fj(input,2)==" ") 
-			{message.show("[localnet_指令格式错误]：!!jq <玩家ID>");break;}
-			Socket s = null;
-			try 
-     		{
-				s = new Socket("mc.smyhw.online",4202);
-				message.info("建立连接:价格货币数量");
-          		DataInputStream input_1 = new DataInputStream(s.getInputStream());
-				DataOutputStream output = new DataOutputStream(s.getOutputStream());
-				output.writeUTF("#jq");
-				output.writeUTF(CommandFJ.fj(input,2));
-				String re = input_1.readUTF();
-				if(re.equals("null_player"))
-				{message.show("???，找不到玩家\""+CommandFJ.fj(input,2)+"\"");}
-				else
-				{message.show("玩家\""+CommandFJ.fj(input,2)+"\"拥有"+re+"个货币");}
-				s.close();
-          	}
-          	catch(Exception e)
-          	{
-          		message.show("[localnet_error]:查询货币数量时与服务器连接出错！");
-          	}
-		}
-		break;
-			
-		case "dh":
-			configer config = new configer("config");
-			if(config.get("dh")==1)
-			{config.set("dh",0);message.show("死亡信息显示已关闭");}
-			else
-			{config.set("dh",1);message.show("死亡信息显示已开启");}
-			break;
-		case "help":
-			message.show("命令列表\n"
-						+"!!st——查询服务器状态\n"
-						+"!!pl——列出在线列表\n"
-//						+"!!vc <玩家ID>——查询玩家的货币数量\n"
-						+"!!mo <玩家ID>——查询玩家死亡次数，不加玩家ID则显示服务器死亡榜\n"
-						+"!!dh——开关死亡显示\n"
-						+"!!jc <物品ID(数字)>——查询某物品的实时价格\n"
-						+"------\n"
-						+"localnet信息系统 by smyhw"
-						);
-			break;
-		default:
-			message.show("未知指令！\n使用!!help获取帮助列表");
-		}
 	}
-}
-
-class command_mc_p
-{
-	static String IP;
-	public static void main(String input) throws Exception
+	
+	public static void ln(String command)
 	{
-		IP=CommandFJ.fj(input,1);
-		int port=1650;
-		String re;
-		while(true)
+//		if(UserID.equals(localnet.ID)) 
+//		{
+//			message.info("本地用户，最高权限!");
+//		}
+//		else
+//		{
+//			if(localnet.security(UserID, CommandFJ.fj(command, 0)))//判断是否有权运行该指令
+//			{}
+//			else {message.show("Insufficient authority\n权限不足");return;}
+//		}
+		String command_0=CommandFJ.fj(command,0);
+//		message.info("开始解析:"+command);
+		//这里判断几个系统指令
+		switch(command_0)
 		{
-//			if(port==65535) {return;}
-			re=WebAPI.get("https://status.mctalks.com/return.php?address="+IP+"&port="+port);
-			message.info("扫描端口："+port);
-			if(!re.startsWith("无法连接至服务器")) 
+			case "cmdList":
 			{
-				if(re.indexOf("状态:下线")!=-1) {port++;continue;}
-				message.show(port+">>"+re);
+				String re = cmd_list.toString();
+				re="\n".concat(re);
+				re=re.replace('=','\n');
+				re=re.replace(',', '\n');
+				message.show(re);
+				return;
 			}
-			port++;
+			case "connect":
+			{
+				String IP= CommandFJ.fj(command,1);
+				int Port = Integer.parseInt(CommandFJ.fj(command,2));
+				try {localnet.server_TCP=new Server_sl(new Socket(IP,Port));} catch (IOException e) {message.warning("连接至服务器\""+IP+":"+Port+"\"时出错！");e.printStackTrace();}
+				return;
+			}
+			case "help":
+			{
+				message.show("请使用cmdList来列出指令映射表！");
+				return;
+			}
+		}
+		if(cmd_list.containsKey(command_0)==false) {message.show("未知指令！\n请使用cmdList列出指令列表");return;};
+		try
+		{
+			Method re = (Method) cmd_list.get(command_0);
+			re.invoke(null,null, command);
+		}
+		catch(Exception e) 
+		{
+			message.error("执行指令\""+command+"\"时出现错误");
+			e.printStackTrace();
 		}
 	}
 }

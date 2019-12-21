@@ -7,10 +7,14 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
-
 import online.smyhw.localnet.message;
 
+/**
+ * 
+ * 一个配置文件对应一个configer实例
+ * @author smyhw
+ *
+ */
 public class configer 
 {
 	File file;
