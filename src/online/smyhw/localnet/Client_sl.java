@@ -2,6 +2,8 @@ package online.smyhw.localnet;
 
 import java.net.Socket;
 
+import online.smyhw.localnet.event.Client_DISconnect_Event;
+import online.smyhw.localnet.event.Client_connect_Event;
 import online.smyhw.localnet.lib.TCP_LK;
 
 public class Client_sl extends TCP_LK
@@ -42,10 +44,7 @@ public class Client_sl extends TCP_LK
 		switch(msg.charAt(0))
 		{
 		case '/':
-			//不允许使用指令，以后可能会添加
-//			localnet.set_re=1;//打开回显记录器
-//			message.re=new String("smyhwOS");//重置回显记录器
-//			this.Smsg(message.getre());//发送命令回显
+			command.ln(this, msg.substring(1));
 			break;
 		case '$':
 			break;
@@ -55,20 +54,21 @@ public class Client_sl extends TCP_LK
 			msg=msg.trim();
 			if(LNlib.ID_repeat(msg)) 
 			{
-				message.show("!1ID重复！");
+				this.Smsg("!1ID重复！");
 				return;
 			}
 			if(!LNlib.ID_rightful(msg))
 			{
-				message.show("!1ID不合法！");
+				this.Smsg("!1ID不合法！");
 				return;
 			}
 			this.ID=msg;
 //			System.out.println("aaa");
 			online.doclient(1, this, 0);
+			new Client_connect_Event(this);
 			break;
 		default:
-			localnet.mdata(ID, msg);
+			localnet.mdata(this, msg);
 			break;
 		}
 	}
@@ -78,6 +78,7 @@ public class Client_sl extends TCP_LK
 		StackTraceElement temp2=(StackTraceElement)temp[3];
 		online.doclient(0, this, 0);
 		message.warning("一个连接出错！丢弃！，位置："+temp2.getFileName()+":"+temp2.getClassName()+":"+temp2.getMethodName()+":"+temp2.getLineNumber());
+		new Client_DISconnect_Event(this);
 		return;
 	}
 	

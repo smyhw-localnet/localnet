@@ -29,19 +29,9 @@ public class command
 		} catch (SecurityException e) 
 		{message.info("添加指令\""+cmd+"\"时出现异常！");e.printStackTrace();}
 	}
+
 	
-	/**
-	 * 
-	 * 
-	 * @param from
-	 * @param cmd
-	 */
-	public static void NETcmd(Client_sl from,String cmd)
-	{
-		
-	}
-	
-	public static void ln(String command)
+	public static void ln(Client_sl User,String command)
 	{
 //		if(UserID.equals(localnet.ID)) 
 //		{
@@ -56,31 +46,34 @@ public class command
 		String command_0=CommandFJ.fj(command,0);
 //		message.info("开始解析:"+command);
 		//这里判断几个系统指令
-		switch(command_0)
+		if(User==localnet.server_sl)
 		{
-			case "cmdList":
+			switch(command_0)
 			{
-				String re = cmd_list.toString();
-				re="\n".concat(re);
-				re=re.replace('=','\n');
-				re=re.replace(',', '\n');
-				message.show(re);
-				return;
-			}
-			case "connect":
-			{
-				String IP= CommandFJ.fj(command,1);
-				int Port = Integer.parseInt(CommandFJ.fj(command,2));
-				try {localnet.server_TCP=new Server_sl(new Socket(IP,Port));} catch (IOException e) {message.warning("连接至服务器\""+IP+":"+Port+"\"时出错！");e.printStackTrace();}
-				return;
-			}
-			case "help":
-			{
-				message.show("请使用cmdList来列出指令映射表！");
-				return;
+				case "cmdList":
+				{
+					String re = cmd_list.toString();
+					re="\n".concat(re);
+					re=re.replace('=','\n');
+					re=re.replace(',', '\n');
+					message.show(re);
+					return;
+				}
+				case "connect":
+				{
+					String IP= CommandFJ.fj(command,1);
+					int Port = Integer.parseInt(CommandFJ.fj(command,2));
+					try {localnet.server_TCP=new Server_sl(new Socket(IP,Port));} catch (IOException e) {message.warning("连接至服务器\""+IP+":"+Port+"\"时出错！");e.printStackTrace();}
+					return;
+				}
+				case "help":
+				{
+					message.show("请使用cmdList来列出指令映射表！");
+					return;
+				}
 			}
 		}
-		if(cmd_list.containsKey(command_0)==false) {message.show("未知指令！\n请使用cmdList列出指令列表");return;};
+		if(cmd_list.containsKey(command_0)==false) {User.Smsg("未知指令！\n请使用cmdList列出指令列表");return;};
 		try
 		{
 			Method re = (Method) cmd_list.get(command_0);

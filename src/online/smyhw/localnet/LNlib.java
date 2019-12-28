@@ -1,5 +1,7 @@
 package online.smyhw.localnet;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -69,5 +71,25 @@ public class LNlib
 		if(!ID_repeat(UserName) && ID_rightful(UserName)) {return true;}
 		else {return false;}
 	}
+	
+}
+
+class lnStream extends OutputStream
+{
+
+	@Override
+	public void write(byte[] b) throws IOException 
+	{
+		String Sdata;
+		Sdata=new String(b,"UTF-8").trim();
+		message.show(Sdata);
+	}
+
+	@Override
+	public void write(int b) throws IOException 
+	{
+		message.warning("本地虚拟输出流的方法“write(int b)”被调用了，但是这个方法是空的，它不应该被调用！");	
+	}
+
 	
 }

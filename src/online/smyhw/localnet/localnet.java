@@ -5,6 +5,8 @@ import java.net.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import online.smyhw.localnet.event.chat_Event;
 import online.smyhw.localnet.lib.TCP_LK;
 
 /**
@@ -58,7 +60,7 @@ public class localnet
 			plugin.start();//初始化指令
 			try {server_sl = new Client_sl(new Socket());}catch (Exception e) {}
 			message.info("本地虚拟客户端实例开始创建");
-			server_sl.s_out=System.out;
+			server_sl.s_out=new lnStream();
 			server_sl.ID=localnet.ID;
 //			server_sl.ISln=true;
 			online.doclient(1, server_sl, 0);
@@ -89,13 +91,14 @@ public class localnet
 	 * @param msg
 	 */
 	static LinkedList<String> msgList = new LinkedList<String>();
-	public static void mdata(String UserID,String msg)
+	public static void mdata(Client_sl User,String msg)
 	{
+		if(new chat_Event(User,msg).Cancel) {return;}
 		switch(localnet.mdata_mod)
 		{
 		case 1:
 		{
-			msg=UserID+"："+msg;
+			msg=User.ID+"："+msg;
 			msgList.add(msg);
 			if(msgList.size()>=localnet.mdata_hc_num) {msgList.removeFirst();}
 			Iterator<String> dd = msgList.iterator();
@@ -110,8 +113,9 @@ public class localnet
 		}
 		case 2:
 		{
-			msg=UserID+"："+msg;
+			msg=User.ID+"："+msg;
 			LNlib.SendAll(msg);
+			break;
 		}
 		
 		}
@@ -237,10 +241,13 @@ class input extends Thread
 				switch(input.substring(0, 1))
 				{
 				case "/":
-					command.ln(input.substring(1));
+					command.ln(localnet.server_sl,input.substring(1));
 					break;
+				case "!":
+					input=input.substring(2);
+					input="/"+input;
 				default:
-					if(localnet.server_TCP==null) {localnet.mdata(localnet.ID, input);}
+					if(localnet.server_TCP==null) {localnet.mdata(localnet.server_sl, input);}
 					else{localnet.server_TCP.Smsg(input);}
 					break;
 				}
