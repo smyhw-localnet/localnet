@@ -1,6 +1,6 @@
 package online.smyhw.localnet.event;
 
-import online.smyhw.localnet.Client_sl;
+import online.smyhw.localnet.network.Client_sl;
 
 public class chat_Event 
 {

@@ -5,6 +5,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import online.smyhw.localnet.network.Client_sl;
+
 public class LNlib 
 {
 	/**
@@ -20,7 +22,7 @@ public class LNlib
 	public static void SendAll(String msg)
 	{
 		message.info("sendALL:"+msg);
-		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) localnet.client_list.clone();
+		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 		Iterator<Client_sl> temp2 = temp1.iterator();
 		while(temp2.hasNext())
 		{
@@ -38,7 +40,7 @@ public class LNlib
 	 */
 	public static boolean ID_repeat(String UserName)
 	{
-		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) localnet.client_list.clone();
+		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 		Iterator<Client_sl> temp2 = temp1.iterator();
 		while(temp2.hasNext())
 		{

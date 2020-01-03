@@ -16,14 +16,14 @@ public class message
 	 */
 	public static void show(String input)
 	{
-		if(localnet.set_re==1){re=re.concat("\n"+input);}
+		if(LN.set_re==1){re=re.concat("\n"+input);}
 		System.out.println(input);
 		log(input);
 	}
 	public static void info(String input)
 	{
 //		if(localnet.set_re==1){re=re.concat("\n"+input);}
-		if(localnet.set_debug==1)
+		if(LN.set_debug==1)
 		{
 			input = "[info]"+"["+Thread.currentThread().getStackTrace()[2].getClassName()+":"+Thread.currentThread().getStackTrace()[2].getMethodName()+":"+Thread.currentThread().getStackTrace()[2].getLineNumber()+"]"+input;
 			System.out.println(input);
@@ -37,7 +37,7 @@ public class message
 	}
 	public static void warning(String input)
 	{
-		if(localnet.set_debug==1)
+		if(LN.set_debug==1)
 		{
 			input = "[warning]"+"["+Thread.currentThread().getStackTrace()[2].getClassName()+":"+Thread.currentThread().getStackTrace()[2].getMethodName()+":"+Thread.currentThread().getStackTrace()[2].getLineNumber()+"]"+input;
 		}
@@ -51,7 +51,7 @@ public class message
 	public static void error(String input)
 	{
 
-		if(localnet.set_debug==1)
+		if(LN.set_debug==1)
 		{
 			input="[error]"+"["+Thread.currentThread().getStackTrace()[2].getClassName()+":"+Thread.currentThread().getStackTrace()[2].getMethodName()+":"+Thread.currentThread().getStackTrace()[2].getLineNumber()+"]"+input;
 		}
