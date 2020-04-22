@@ -5,7 +5,6 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
-import online.smyhw.localnet.*;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 /**
@@ -120,7 +119,7 @@ public abstract class TCP_LK
 			byte[] temp4 = new byte[temp3.length+b_msg.length];
 			System.arraycopy(temp3, 0, temp4, 0, temp3.length);
 			System.arraycopy(b_msg, 0, temp4, temp3.length, b_msg.length);
-			message.info("发送数据:"+new String(temp4,"UTF-8").trim());
+//			message.info("发送数据:"+new String(temp4,"UTF-8").trim());
 			SendMessage(temp4);
 		}
 		catch(TCP_LK_Exception e)
@@ -252,7 +251,7 @@ class LK_Receive extends Thread
 			{
 				if(ba.isERROR) {return;}
 				String Sdata = ba.Rmsg();
-				message.info("TCP_LK接到原始消息:"+Sdata);
+//				message.info("TCP_LK接到原始消息:"+Sdata);
 				if(Sdata.startsWith("#")) 
 				{	
 					if(type==1){continue;}
