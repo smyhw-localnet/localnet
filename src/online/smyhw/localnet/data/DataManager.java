@@ -23,6 +23,7 @@ public class DataManager
 		File file = new File(URL);
 		try 
 		{
+			if(!file.exists()) {file.createNewFile();}
 			List<String> flist = Files.readAllLines(Paths.get(URL));
 			HashMap<String,String> temp1 = (HashMap<String, String>) data.main_data.clone();
 			temp1.forEach
