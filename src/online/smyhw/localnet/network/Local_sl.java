@@ -4,6 +4,7 @@ import java.net.Socket;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.event.DataDecryptEvent;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 public class Local_sl extends Client_sl
@@ -37,4 +38,8 @@ public class Local_sl extends Client_sl
 	
 	public synchronized String Rmsg() throws TCP_LK_Exception {return null;}
 
+	public synchronized byte[] encryption(byte[] input,int type)
+	{
+		return input;
+	}
 }
