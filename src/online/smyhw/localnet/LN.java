@@ -96,6 +96,8 @@ public class LN
 			cmdManager.Initialization();//初始化系统指令
 			message.info("初始化插件");
 			PluginsManager.start();//初始化插件
+			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
+			{message.warning("警告，没有检测到加密插件，localnet的信息将以明文传输！（如果你的数据会经过非安全网络传输，请务必对数据进行加密！）");}
 			message.info("本地虚拟客户端实例开始创建");
 			local_sl = new Local_sl();
 			NetWorkManager.doclient(1, local_sl, 0);
@@ -278,7 +280,7 @@ class input extends Thread
 			}
 			catch(Exception e)
 			{
-				message.warning("获取用户输入出错！");
+				message.warning("获取用户输入出错！",e);
 			}
 		}
 	} 

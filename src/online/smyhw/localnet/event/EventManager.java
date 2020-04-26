@@ -12,6 +12,8 @@ public class EventManager
 	public static ArrayList<Method> ClientDISconnect_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> Chat_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> ChatINFO_Listener = new ArrayList<Method>();
+	public static ArrayList<Method> DataDecrypt_Listener = new ArrayList<Method>();
+	public static ArrayList<Method> ExampleEvent_Listener = new ArrayList<Method>();//添加监听器列表
 	public synchronized static void AddListener(String type,Method ff)
 	{
 		switch(type)
@@ -28,37 +30,19 @@ public class EventManager
 			case "ChatINFO":
 				ChatINFO_Listener.add(ff);
 				break;
+			case "DataDecrypt":
+				DataDecrypt_Listener.add(ff);
+				break;
+			case "ExampleEvent":
+				ExampleEvent_Listener.add(ff);//添加
+				break;
 			default:
 				message.warning("警告,"+type+"不是监听器类型！");
 				return;
 		}
 	}
 	
-	/**
-	 * 
-	 * 该方法被弃用,不再产生任何作用,请勿调用!
-	 * @param type
-	 * @param ff
-	 */
-	public synchronized static void RemoveListener(String type,Method ff)
-	{
-		int a =1 ;if(a==1)return;
-		switch(type)
-		{
-			case "Client_connect":
-				ClientConnect_Listener.remove(ff);
-				break;
-			case "Client_disconnect":
-				ClientDISconnect_Listener.remove(ff);
-				break;
-			case "chat":
-				Chat_Listener.remove(ff);
-				break;
-			default:
-				message.warning("警告,"+type+"不是监听器类型！");
-				return;
-		}
-	}
+
 	
 	public synchronized static void DOevent(LN_Event dd)
 	{
@@ -76,6 +60,12 @@ public class EventManager
 			break;
 		case "ChatINFO":
 			temp1=(ArrayList<Method>)ChatINFO_Listener.clone();
+			break;
+		case "DataDecrypt":
+			temp1=(ArrayList<Method>)DataDecrypt_Listener.clone();
+			break;
+		case "ExampleEvent"://添加
+			temp1=(ArrayList<Method>)ExampleEvent_Listener.clone();
 			break;
 		default:
 			message.warning("警告:"+dd.GetEventName()+"执行事件时发现为未知事件名称");

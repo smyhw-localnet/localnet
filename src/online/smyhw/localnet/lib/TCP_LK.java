@@ -101,7 +101,7 @@ public abstract class TCP_LK
 	 * @param input 需要加密的数据
 	 * @param type 该值为0时解密,为1时加密
 	 */
-	public static synchronized byte[] encryption(byte[] input,int type)
+	public synchronized byte[] encryption(byte[] input,int type)
 	{
 		return input;
 	}
@@ -195,6 +195,7 @@ public abstract class TCP_LK
 				if(s_in.available()<len) {Thread.sleep(1000);continue;}
 				byte[] temp1 = new byte[len];
 				s_in.read(temp1);
+				this.encryption(temp1,0);
 				Sdata = new String(temp1,"UTF-8").trim();
 				break;
 			}

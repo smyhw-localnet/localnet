@@ -4,7 +4,7 @@ import java.net.Socket;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
-import online.smyhw.localnet.event.ClientDISconnect_Event;
+import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
@@ -47,6 +47,13 @@ public class Client_sl extends TCP_LK
 		message.show("客户端<"+this.ID+">断开连接{"+e.type+"}:"+e.getMessage());
 		new ClientDISconnect_Event(this);
 		return;
+	}
+	
+	public synchronized byte[] encryption(byte[] input,int type)
+	{
+		byte[] re=null;
+		re = new DataDecryptEvent(input).output;
+		return re;
 	}
 	
 }
