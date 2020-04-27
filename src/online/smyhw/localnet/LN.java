@@ -32,6 +32,7 @@ public class LN
 	public static Server_sl server_sl;//连接到的服务器
 //	public static char[][] UI = new char[100][62];//缓存用户UI界面
 	public static Local_sl local_sl;//虚拟本机客户端
+	
 	//mdata模式，
 	//1:聊天模式/发送缓存
 	//2:转发模式
@@ -46,6 +47,7 @@ public class LN
 		try
 		{
 			System.out.println("localnet初始化中...");
+			
 			message.info("读取配置文件...");
 			if(!new File("./LN.config").exists())
 			{

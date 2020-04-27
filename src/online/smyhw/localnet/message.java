@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class message
@@ -88,21 +89,26 @@ public class message
 	 * 注意，该方法会自动对传入的消息加上时间标签
 	 * @param input
 	 */
+	static LogThread logthread;
 	static void log(String input)
 	{
-		if(LN_log==null) {start_log();}
-		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
-		input = "["+df.format(new Date())+"]"+input;
-		LN_log.println(input);
-		LN_log.flush();
+		if(logthread==null)
+		{
+			LogThread temp = new LogThread();
+			temp.start();
+			logthread = temp;
+		}
+		logthread.msgList.add(input);
 	}
-	
-	/**
-	 * 用于初始化log
-	 * @return
-	 */
-	protected static PrintWriter LN_log;
-	static void start_log()
+}
+
+
+
+class LogThread extends Thread
+{
+	public ArrayList<String> msgList = new ArrayList();
+	protected PrintWriter LN_log;
+	LogThread()
 	{
 		if(!new File("./logs").exists())
 		{
@@ -117,5 +123,30 @@ public class message
 		try {LN_log = new PrintWriter(new File((log_name)));} 
 		catch (FileNotFoundException e) 
 		{System.out.println("日志文件不存在且创建后仍然无法写入，程序退出！");e.printStackTrace();System.exit(1);}
+	}
+	
+	public void run()
+	{
+		while(true)
+		{
+			
+			if(msgList.isEmpty()) 
+			{
+				try {Thread.sleep(500);} catch (InterruptedException e) {message.warning("log线程被强杀，程序退出", e);System.exit(1);}
+				continue;
+			}
+			String temp = msgList.get(0);
+			DoLog(temp);
+			msgList.remove(0);
+		}
+	}
+	
+	
+	protected void DoLog(String input)
+	{
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+		input = "["+df.format(new Date())+"]"+input;
+		LN_log.println(input);
+		LN_log.flush();
 	}
 }
