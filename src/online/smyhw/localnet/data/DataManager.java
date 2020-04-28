@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.io.*;
 
+import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
 
 public class DataManager 
@@ -115,8 +116,7 @@ public class DataManager
 		}
 		catch (Exception e) 
 		{
-			message.info("文件"+URL+"读取出错,LoadConfig方法将返回空实例,错误如下");
-			e.printStackTrace();
+			message.warning("文件"+URL+"读取出错,LoadConfig方法将返回空实例,错误如下",e);
 			return new config();
 		}
 //		return null;
@@ -159,5 +159,54 @@ public class DataManager
 			return new data();
 		}
 //		return new data();
+	}
+	
+	/**
+	 * 检查目录完整性
+	 */
+	public static void CheckIntegrity()
+	{
+		try {
+			if(!new File("./plugins").exists())
+			{
+				message.info("插件目录不存在，将创建...");
+				new File("./plugins").mkdir();
+			}
+			
+			if(!new File("./configs").exists())
+			{
+				message.info("配置文件目录不存在，将创建...");
+				new File("./configs").mkdir();
+			}
+			
+			if(!new File("./LN.config").exists())
+			{
+				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
+				InputStream is = LN.class.getResourceAsStream("/data/example_config/LN.config");
+				BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
+				File new_file = new File("./LN.config");
+				PrintWriter pw;
+				pw = new PrintWriter(new_file);
+				while(true)
+				{
+					String temp = br.readLine();
+					if(temp==null) 
+					{
+						System.out.println("新配置文件创建完毕,请重启程序！");
+						pw.close();
+						br.close();
+						System.exit(0);
+					}
+					pw.println(temp);
+					pw.flush();
+				}
+//				pw.close();
+			}
+			message.info("目录完整性检查完毕");
+		}
+		catch (Exception e) 
+		{
+			message.error("目录完整性处理失败，程序将退出，请检查异常",e);
+		}
 	}
 }

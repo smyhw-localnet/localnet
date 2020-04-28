@@ -44,6 +44,7 @@ public class EventManager
 	
 
 	
+	@SuppressWarnings("unchecked")
 	public synchronized static void DOevent(LN_Event dd)
 	{
 		ArrayList<Method> temp1 = null;

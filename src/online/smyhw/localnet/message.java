@@ -18,7 +18,7 @@ public class message
 	{
 		log("[show]"+input);
 		LN.LNconfig.toString();
-		if(LN.LNconfig.get_boolean("data_for_show", false))
+		if(LN.LNconfig.get_boolean("data_for_show", true))
 		{
 			SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 			input = "["+df.format(new Date())+"]"+"[show]"+input;
@@ -29,7 +29,7 @@ public class message
 	public static void info(String input)//info信息仅在debug模式开启时输出
 	{
 		log("[info]"+input);
-		if(LN.set_debug!=1) {return;}
+		if(LN.LNconfig.get_int("debug",1)!=1) {return;}
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		input = "["+df.format(new Date())+"]"+"[info]"+input;
 		System.out.println(input);

@@ -39,6 +39,7 @@ public class WebAPI// extends HttpURLConnection
 //                    sbf.append("\r\n");
                 }
                 re = sbf.toString();
+                br.close();
                 return re;
 			}
 			else

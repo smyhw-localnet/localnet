@@ -24,7 +24,6 @@ public class LN
 	public static String ID;//用户唯识别代号
 	public static OnlineThread online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
-	public static int set_debug=1;//设置，1=开启debug输出
 //	public static int set_test=0;//
 //	public static int set_re=0;//是否记录指令回显
 	public static BufferedReader input;//主输入流
@@ -40,72 +39,41 @@ public class LN
 	//mdata 缓存大小/行
 	public static int mdata_hc_num=10;
 	//主配置文件
-	public static config LNconfig;
+	public static config LNconfig = new config();
 	
 	public static void main(String args[])
 	{
 		try
 		{
-			System.out.println("localnet初始化中...");
-			System.out.println("实例化日志线程...");
 			message.startLogThread();
+			message.info("localnet初始化中...");
+			message.info("实例化日志线程...");
+			//实例化日志线程
+			message.info("检查目录完整性...");
+			DataManager.CheckIntegrity();
 			message.info("读取配置文件...");
-			if(!new File("./LN.config").exists())
-			{
-				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
-				InputStream is = LN.class.getResourceAsStream("/data/example_config/LN.config");
-				BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
-				File new_file = new File("./LN.config");
-				PrintWriter pw = new PrintWriter(new_file);
-				while(true)
-				{
-					String temp = br.readLine();
-					if(temp==null) 
-					{
-						System.out.println("新配置文件创建完毕,请重启程序！");
-						System.exit(0);
-					}
-					pw.println(temp);
-					pw.flush();
-				}
-			}
 			LNconfig=DataManager.LoadConfig("./LN.config");
 			DataManager.SaveConfig("./LN.config", LNconfig);
-			ID = LNconfig.get_String("ID");
+			ID = LNconfig.get_String("ID","awa");
 			message.info("读取配置文件:ID="+ID);
-			set_debug = LNconfig.get_int("debug");
-			message.info("读取配置文件:debug="+set_debug);
-			message.info("检查目录完整性...");
-			if(!new File("./plugins").exists())
-			{
-				message.info("插件目录不存在，将创建...");
-				new File("./plugins").mkdir();
-			}
-			
-			if(!new File("./configs").exists())
-			{
-				message.info("配置文件目录不存在，将创建...");
-				new File("./configs").mkdir();
-			}
-			message.info("目录完整性检查完毕");
+			message.info("读取配置文件:debug="+LNconfig.get_int("debug",1));
 			message.info("加载lib...");
 			LNlib.call_back();
 			message.info("初始化用户输入流");
 			input = new BufferedReader(new InputStreamReader(System.in));//初始化用户输入流
-			message.show("为了保证安全性，联机进程默认未启用，请使用nwm手动启动！");
 			message.info("实例化用户输入进程");
 			user_input=new input(input);//实例化用户主输入进程
 			message.info("初始化系统指令");
 			cmdManager.Initialization();//初始化系统指令
 			message.info("初始化插件");
 			PluginsManager.start();//初始化插件
-			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
-			{message.warning("警告，没有检测到加密插件，localnet的信息将以明文传输！（如果你的数据会经过非安全网络传输，请务必对数据进行加密！）");}
 			message.info("本地虚拟客户端实例开始创建");
 			local_sl = new Local_sl();
 			NetWorkManager.doclient(1, local_sl, 0);
 			message.info("本地虚拟客户端实例完成创建");
-			
+			message.show("为了保证安全性，联机进程默认未启用，请使用nwm手动启动！");
+			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
+			{message.warning("警告，没有检测到加密插件，localnet的信息将以明文传输！（如果你的数据会经过非安全网络传输，请务必对数据进行加密！）");}
 			message.info("localnet初始化完成!");
 			smyhw.main();//awa
 		}

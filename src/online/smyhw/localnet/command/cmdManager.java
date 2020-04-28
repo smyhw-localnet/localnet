@@ -57,7 +57,7 @@ public class cmdManager
 				cmdManager.cmd_list.put(cmd, mff);
 			}
 			else{message.warning("添加指令\""+cmd+"\"失败，该指令已存在");}
-			message.info("指令\""+cmd+"\"添加完成\n"+cmd_list.containsKey(cmd));
+			message.info("指令\""+cmd+"\"添加完成{"+cmd_list.containsKey(cmd)+"}");
 			message.info(cmd_list.toString());
 		} 
 		catch (Exception e) 
