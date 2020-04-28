@@ -47,7 +47,8 @@ public class LN
 		try
 		{
 			System.out.println("localnet初始化中...");
-			
+			System.out.println("实例化日志线程...");
+			message.startLogThread();
 			message.info("读取配置文件...");
 			if(!new File("./LN.config").exists())
 			{

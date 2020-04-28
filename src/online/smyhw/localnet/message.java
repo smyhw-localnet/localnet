@@ -85,6 +85,14 @@ public class message
 		System.out.print(input);
 	}
 	
+	
+	public static void startLogThread()
+	{
+		LogThread temp = new LogThread();
+		temp.start();
+		logthread = temp;
+	}
+	
 	/**
 	 * 注意，该方法会自动对传入的消息加上时间标签
 	 * @param input
@@ -92,12 +100,6 @@ public class message
 	static LogThread logthread;
 	static void log(String input)
 	{
-		if(logthread==null)
-		{
-			LogThread temp = new LogThread();
-			temp.start();
-			logthread = temp;
-		}
 		logthread.msgList.add(input);
 	}
 }
