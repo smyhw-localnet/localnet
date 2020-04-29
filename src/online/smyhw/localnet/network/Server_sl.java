@@ -5,6 +5,8 @@ import java.net.Socket;
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.LNlib;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.event.ConnectServerEvent;
+import online.smyhw.localnet.event.DataDecryptEvent;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
@@ -14,11 +16,13 @@ public class Server_sl extends TCP_LK
 	public Server_sl(Socket s)
 	{
 		super(s,2);//这里，调用父类构造方法
+		
 		try
 		{
 //			byte[] temp = new byte[1024];
 //			s.getInputStream().read(temp);
 //			ID=new String(temp,"UTF-8");
+			new ConnectServerEvent(this);
 			this.Smsg("&"+LN.ID);//发送自身ID
 
 		}catch(Exception e){message.info("服务器\""+ID+"\"连接异常！丢弃线程");e.printStackTrace();return;}
@@ -57,6 +61,15 @@ public class Server_sl extends TCP_LK
 	{
 		message.warning("连接到服务器出错，丢弃连接",e);
 		return;
+	}
+	
+	public byte[] encryption(byte[] input,int type)
+	{
+		byte[] re=null;
+		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,this);
+		re = temp1.output;
+		if(temp1.Error) {return null;}
+		return re;
 	}
 }
 

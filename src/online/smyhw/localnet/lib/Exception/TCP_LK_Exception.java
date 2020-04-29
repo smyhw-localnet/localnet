@@ -12,6 +12,7 @@ public class TCP_LK_Exception extends Exception
 	 * type=5	收到的数据包无法解码（utf-8解编码错误）
 	 * type=6	未知异常
 	 * type=7	延时错误（sleep函数抛出的异常：线程在休眠中被其他线程终止）
+	 * type=8	加解密错误
 	 */
 	public int type = 6;
 	public Exception upEXP;
@@ -39,6 +40,16 @@ public class TCP_LK_Exception extends Exception
 		
 		this.tcp_lk=tcp_lk;
 		this.upEXP=upEXP;
+		this.type=type;
+		tcp_lk.Serr_u(this);
+		tcp_lk.isERROR=true;
+	}
+	
+	public TCP_LK_Exception(String message,TCP_LK tcp_lk,int type) 
+	{
+		super(message+"{"+"type="+type+";"+"}");
+		
+		this.tcp_lk=tcp_lk;
 		this.type=type;
 		tcp_lk.Serr_u(this);
 		tcp_lk.isERROR=true;

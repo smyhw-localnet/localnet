@@ -17,6 +17,7 @@ public class Client_sl extends TCP_LK
 	public Client_sl(Socket s)
 	{
 		super(s,1);//这里，调用父类构造方法
+		new ClientConnect_Event(this);
 		try
 		{
 			this.sendto("&"+LN.ID);//发送自身ID
@@ -49,10 +50,12 @@ public class Client_sl extends TCP_LK
 		return;
 	}
 	
-	public synchronized byte[] encryption(byte[] input,int type)
+	public byte[] encryption(byte[] input,int type)
 	{
 		byte[] re=null;
-		re = new DataDecryptEvent(input).output;
+		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,this);
+		re = temp1.output;
+		if(temp1.Error) {return null;}
 		return re;
 	}
 	

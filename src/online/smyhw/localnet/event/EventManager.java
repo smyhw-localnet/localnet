@@ -9,17 +9,22 @@ import online.smyhw.localnet.message;
 public class EventManager 
 {
 	public static ArrayList<Method> ClientConnect_Listener = new ArrayList<Method>();
+	public static ArrayList<Method> ClientConnected_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> ClientDISconnect_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> Chat_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> ChatINFO_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> DataDecrypt_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> ExampleEvent_Listener = new ArrayList<Method>();//添加监听器列表
+	public static ArrayList<Method> ConnectServerEvent_Listener = new ArrayList<Method>();
 	public synchronized static void AddListener(String type,Method ff)
 	{
 		switch(type)
 		{
 			case "Client_connect":
 				ClientConnect_Listener.add(ff);
+				break;
+			case "Client_connected":
+				ClientConnected_Listener.add(ff);
 				break;
 			case "Client_disconnect":
 				ClientDISconnect_Listener.add(ff);
@@ -35,6 +40,9 @@ public class EventManager
 				break;
 			case "ExampleEvent":
 				ExampleEvent_Listener.add(ff);//添加
+				break;
+			case "ConnectServerEvent":
+				ConnectServerEvent_Listener.add(ff);
 				break;
 			default:
 				message.warning("警告,"+type+"不是监听器类型！");
@@ -53,6 +61,9 @@ public class EventManager
 		case "ClientConnect":
 			temp1=(ArrayList<Method>)ClientConnect_Listener.clone();
 			break;
+		case "ClientConnected":
+			temp1=(ArrayList<Method>)ClientConnected_Listener.clone();
+			break;
 		case "ClientDISconnect":
 			temp1=(ArrayList<Method>)ClientDISconnect_Listener.clone();
 			break;
@@ -67,6 +78,9 @@ public class EventManager
 			break;
 		case "ExampleEvent"://添加
 			temp1=(ArrayList<Method>)ExampleEvent_Listener.clone();
+			break;
+		case "ConnectServerEvent":
+			temp1=(ArrayList<Method>)ConnectServerEvent_Listener.clone();
 			break;
 		default:
 			message.warning("警告:"+dd.GetEventName()+"执行事件时发现为未知事件名称");

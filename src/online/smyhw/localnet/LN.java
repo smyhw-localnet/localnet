@@ -184,7 +184,7 @@ public class LN
 			message.show("终端<"+User.ID+">完成握手");
 //			System.out.println("aaa");
 			NetWorkManager.doclient(1, User, 0);
-			new ClientConnect_Event(User);//激发事件
+			new ClientConnected_Event(User);//激发事件
 			return;
 		}
 		default:

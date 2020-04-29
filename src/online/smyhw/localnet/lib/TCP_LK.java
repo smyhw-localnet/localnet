@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 
+import online.smyhw.localnet.message;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 /**
@@ -115,6 +116,7 @@ public abstract class TCP_LK
 		{
 			byte[] b_msg = msg.getBytes("UTF-8");
 			b_msg = encryption(b_msg,1);//加密
+			if(b_msg==null) {message.info("加密操作出错");return;}
 			byte[] temp3 = (b_msg.length+"|").getBytes("UTF-8"); 
 			byte[] temp4 = new byte[temp3.length+b_msg.length];
 			System.arraycopy(temp3, 0, temp4, 0, temp3.length);
@@ -195,12 +197,18 @@ public abstract class TCP_LK
 				if(s_in.available()<len) {Thread.sleep(1000);continue;}
 				byte[] temp1 = new byte[len];
 				s_in.read(temp1);
-				this.encryption(temp1,0);
+				temp1 = encryption(temp1,0);
+				if(temp1==null) 
+				{
+					message.info("解密操作出错");
+					throw new TCP_LK_Exception("[TCP_LK]:客户端<"+s.getInetAddress()+">发回的数据解密错误！",this,8);
+				}
 				Sdata = new String(temp1,"UTF-8").trim();
 				break;
 			}
 			
 			return Sdata;
+			
 		}
 		catch(java.net.SocketTimeoutException e)
 		{
