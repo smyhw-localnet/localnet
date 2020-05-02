@@ -16,6 +16,7 @@ public class EventManager
 	public static ArrayList<Method> DataDecrypt_Listener = new ArrayList<Method>();
 	public static ArrayList<Method> ExampleEvent_Listener = new ArrayList<Method>();//添加监听器列表
 	public static ArrayList<Method> ConnectServerEvent_Listener = new ArrayList<Method>();
+	public static ArrayList<Method> DoCommandEvent_Listener = new ArrayList<Method>();
 	public synchronized static void AddListener(String type,Method ff)
 	{
 		switch(type)
@@ -43,6 +44,9 @@ public class EventManager
 				break;
 			case "ConnectServerEvent":
 				ConnectServerEvent_Listener.add(ff);
+				break;
+			case "DoCommandEvent":
+				DoCommandEvent_Listener.add(ff);
 				break;
 			default:
 				message.warning("警告,"+type+"不是监听器类型！");
@@ -81,6 +85,9 @@ public class EventManager
 			break;
 		case "ConnectServerEvent":
 			temp1=(ArrayList<Method>)ConnectServerEvent_Listener.clone();
+			break;
+		case "DoCommandEvent":
+			temp1=(ArrayList<Method>)DoCommandEvent_Listener.clone();
 			break;
 		default:
 			message.warning("警告:"+dd.GetEventName()+"执行事件时发现为未知事件名称");

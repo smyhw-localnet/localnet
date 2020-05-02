@@ -3,6 +3,7 @@ package online.smyhw.localnet.command;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.event.DoCommandEvent;
 import online.smyhw.localnet.lib.*;
 import online.smyhw.localnet.network.Client_sl;
 import java.lang.reflect.Method;
@@ -80,6 +81,8 @@ public class cmdManager
 //			{}
 //			else {message.show("Insufficient authority\n权限不足");return;}
 //		}
+		//触发事件
+		if(new DoCommandEvent(User,command).Cancel) {message.info("终端<"+User.ID+">使用指令<"+command+">因事件处理而被拒绝执行");return;}
 		String command_0=CommandFJ.fj(command,0);
 		message.info("开始解析:"+command);
 		if(cmd_list.containsKey(command_0)==false) {User.Smsg("未知指令！\n请使用cmdList列出指令列表");return;};
