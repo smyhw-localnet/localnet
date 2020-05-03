@@ -1,0 +1,8 @@
+###localnet插件开发文档###
+
+ClientData:
+	Client_sl.GetClientData(String PluginID,String DataID) ;
+	Client_sl.PutClientData(String PluginID,String DataID,Object Data); 
+	ClientDATA可以给每一个终端实例(Client_sl实例)提供一个存储插件自定义数据的空间
+	这里的数据在实例失效时将被存储至硬盘，在下次同ID实例创建完成时将被还原
+	注意：请存储可以序列化的数据，否则将无法存储
