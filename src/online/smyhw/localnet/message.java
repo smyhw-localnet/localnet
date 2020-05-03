@@ -108,7 +108,7 @@ public class message
 
 class LogThread extends Thread
 {
-	public ArrayList<String> msgList = new ArrayList();
+	public ArrayList<String> msgList = new ArrayList<String>();
 	protected PrintWriter LN_log;
 	LogThread()
 	{

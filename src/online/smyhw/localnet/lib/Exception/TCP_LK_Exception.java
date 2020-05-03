@@ -4,6 +4,9 @@ import online.smyhw.localnet.lib.TCP_LK;
 
 public class TCP_LK_Exception extends Exception 
 {
+	
+	private static final long serialVersionUID = 7;
+	
 	/**
 	 * type=1	 未知客户端类型
 	 * type=2	无法获取输入输出流

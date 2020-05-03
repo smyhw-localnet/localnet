@@ -1,9 +1,11 @@
 package online.smyhw.localnet.network;
 
 import java.net.Socket;
+import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
@@ -11,7 +13,7 @@ import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 public class Client_sl extends TCP_LK
 {
 	
-//	Boolean ISln = false;
+	public  data ClientData;
 	
 	public String ID;
 	public Client_sl(Socket s)
@@ -57,6 +59,40 @@ public class Client_sl extends TCP_LK
 		re = temp1.output;
 		if(temp1.Error) {return null;}
 		return re;
+	}
+	
+	
+	//ClientData存取方法
+	
+	/**
+	 * 从ClientData中获取相应的信息
+	 * @param pluginID 插件ID；当然，您也可以访问其他插件的数据
+	 * @param DataID 信息ID
+	 * @return 如果信息ID不存在，则返回null；如果信息存在，则返回信息
+	 */
+	public Object GetClientData(String PluginID,String DataID) 
+	{
+		Hashtable<String,Object> PluginData = (Hashtable<String,Object>)ClientData.get(PluginID);
+		if(PluginData==null) {return null;}
+		Object re = PluginData.get(DataID);
+		return re;
+	}
+	
+	/**
+	 * 向ClientData里存放指定的信息，如果信息已经存在，则覆盖
+	 * @param pluginID 插件ID；当然，您也可以访问其他插件的数据
+	 * @param DataID 信息ID
+	 * @param Data 需要存放的信息
+	 */
+	public void PutClientData(String PluginID,String DataID,Object Data)
+	{
+		Hashtable<String,Object> PluginData = (Hashtable<String,Object>)ClientData.get(PluginID);
+		if(PluginData==null) 
+		{//该插件ID从未创建过信息，创建HashMap
+			ClientData.set(PluginID, new Hashtable<String,Object>());
+			PluginData = (Hashtable<String,Object>)ClientData.get(PluginID);
+		}
+		PluginData.put(DataID,Data);
 	}
 	
 }

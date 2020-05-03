@@ -7,6 +7,7 @@ public class config implements java.io.Serializable
 {
 	protected HashMap<String,String> main_data = new HashMap<String,String>();
 	
+	private static final long serialVersionUID = 7;
 	
 	/**
 	 * 

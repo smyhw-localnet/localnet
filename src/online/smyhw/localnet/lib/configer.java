@@ -45,6 +45,7 @@ public class configer
 	 * 
 	 * 放弃内存中的配置表，从磁盘中重新读取
 	 * @return 如果返回false，则读取失败！
+	 * 
 	 */
 	public boolean reload()
 	{
