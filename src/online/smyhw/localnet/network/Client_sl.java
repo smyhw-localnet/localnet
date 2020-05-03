@@ -1,5 +1,6 @@
 package online.smyhw.localnet.network;
 
+import java.io.Serializable;
 import java.net.Socket;
 import java.util.Hashtable;
 
@@ -84,8 +85,14 @@ public class Client_sl extends TCP_LK
 	 * @param DataID 信息ID
 	 * @param Data 需要存放的信息
 	 */
-	public void PutClientData(String PluginID,String DataID,Object Data)
+	public Boolean PutClientData(String PluginID,String DataID,Object Data)
 	{
+		if(Data instanceof Serializable) {}
+		else
+		{
+			message.warning("插件<"+PluginID+">尝试存储不能序列化的数据！");
+			return false;
+		}
 		Hashtable<String,Object> PluginData = (Hashtable<String,Object>)ClientData.get(PluginID);
 		if(PluginData==null) 
 		{//该插件ID从未创建过信息，创建HashMap
@@ -93,6 +100,7 @@ public class Client_sl extends TCP_LK
 			PluginData = (Hashtable<String,Object>)ClientData.get(PluginID);
 		}
 		PluginData.put(DataID,Data);
+		return true;
 	}
 	
 }
