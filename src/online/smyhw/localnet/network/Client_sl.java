@@ -14,7 +14,8 @@ import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 public class Client_sl extends TCP_LK
 {
 	
-	public  data ClientData;
+	public  data ClientData = new data();
+	public  data TempClientData = new data();
 	
 	public String ID;
 	public Client_sl(Socket s)
@@ -80,10 +81,14 @@ public class Client_sl extends TCP_LK
 	}
 	
 	/**
-	 * 向ClientData里存放指定的信息，如果信息已经存在，则覆盖
+	 * 向ClientData里存放指定的信息，如果信息已经存在，则覆盖</br>
+	 * 注意，你不能存储<b>不能序列化</b>的数据，如果需要存储这些数据，请使用TempClientData系列方法(PutTempClientData/GetTempClientData)</br>
+	 * 与TempClientData不同，这里的数据在客户端断开重连后仍然存在，关闭或重启服务器也不会影响这里的数据，他们会被存储到硬盘上</br>
+	 * (强制中断服务器进程可能会导致这里的数据无法及时保存)</br>
 	 * @param pluginID 插件ID；当然，您也可以访问其他插件的数据
 	 * @param DataID 信息ID
 	 * @param Data 需要存放的信息
+	 * @return 如果存储失败(存储的数据不可序列化),则返回false
 	 */
 	public Boolean PutClientData(String PluginID,String DataID,Object Data)
 	{
@@ -101,6 +106,41 @@ public class Client_sl extends TCP_LK
 		}
 		PluginData.put(DataID,Data);
 		return true;
+	}
+	
+	//TempClientData存取方法
+	
+	/**
+	 * 从TempClientData中获取相应的信息
+	 * @param pluginID 插件ID；当然，您也可以访问其他插件的数据
+	 * @param DataID 信息ID
+	 * @return 如果信息ID不存在，则返回null；如果信息存在，则返回信息
+	 */
+	public Object GetTempClientData(String PluginID,String DataID) 
+	{
+		Hashtable<String,Object> PluginData = (Hashtable<String,Object>)TempClientData.get(PluginID);
+		if(PluginData==null) {return null;}
+		Object re = PluginData.get(DataID);
+		return re;
+	}
+	
+	/**
+	 * 向TempClientData里存放指定的信息，如果信息已经存在，则覆盖</br>
+	 * 注意，这里的信息将在客户端断开后被清空
+	 * @param pluginID 插件ID；当然，您也可以访问其他插件的数据
+	 * @param DataID 信息ID
+	 * @param Data 需要存放的信息
+	 */
+	public void PutTempClientData(String PluginID,String DataID,Object Data)
+	{
+		Hashtable<String,Object> PluginData = (Hashtable<String,Object>)TempClientData.get(PluginID);
+		if(PluginData==null) 
+		{//该插件ID从未创建过信息，创建HashMap
+			TempClientData.set(PluginID, new Hashtable<String,Object>());
+			PluginData = (Hashtable<String,Object>)TempClientData.get(PluginID);
+		}
+		PluginData.put(DataID,Data);
+		return;
 	}
 	
 }
