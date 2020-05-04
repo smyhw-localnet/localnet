@@ -182,6 +182,8 @@ public class LN
 			}
 			User.ID=msg;
 			message.show("终端<"+User.ID+">完成握手");
+			message.info("读取终端<"+User.ID+">的ClientData");
+			User.ClientData=DataManager.LoadData("./TerminalData/"+User.ID);
 //			System.out.println("aaa");
 			NetWorkManager.doclient(1, User, 0);
 			new ClientConnected_Event(User);//激发事件
