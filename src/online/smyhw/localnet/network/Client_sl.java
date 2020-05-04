@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.TCP_LK;
@@ -50,6 +51,7 @@ public class Client_sl extends TCP_LK
 //		message.info("客户端<"+this.ID+">连接出错，位置："+temp2.getFileName()+":"+temp2.getClassName()+":"+temp2.getMethodName()+":"+temp2.getLineNumber());
 		NetWorkManager.doclient(0, this, 0);
 		message.show("客户端<"+this.ID+">断开连接{"+e.type+"}:"+e.getMessage());
+		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
 		new ClientDISconnect_Event(this);
 		return;
 	}

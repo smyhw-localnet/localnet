@@ -122,7 +122,7 @@ public class DataManager
 //		return null;
 	}
 	
-	public static boolean SaveData(String URL,String data)
+	public static boolean SaveData(String URL,data data)
 	{
 		File file = new File(URL);
 		ObjectOutputStream oos;
