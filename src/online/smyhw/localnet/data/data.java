@@ -108,4 +108,10 @@ public class data
 		Object sre = get(key);
 		return (boolean)sre;
 	}
+	
+	public HashMap<String,Object> GetClone()
+	{
+		HashMap<String,Object> re  = (HashMap<String, Object>) main_data.clone();
+		return re;
+	}
 }
