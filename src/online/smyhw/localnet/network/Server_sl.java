@@ -59,6 +59,7 @@ public class Server_sl extends TCP_LK
 	}
 	public void Serr_u( TCP_LK_Exception e)
 	{
+		LN.server_sl = null;
 		message.warning("连接到服务器出错，丢弃连接",e);
 		return;
 	}
