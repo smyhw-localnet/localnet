@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 import online.smyhw.localnet.message;
 
-public class data 
+public class data implements java.io.Serializable
 {
 	protected HashMap<String,Object> main_data = new HashMap<String,Object>();
 	
@@ -18,7 +18,7 @@ public class data
 	 * @param value
 	 * 
 	 */
-	protected synchronized void p_set(String key,String value)
+	protected synchronized void p_set(String key,Object value)
 	{
 		if(value==null) 
 		{
@@ -29,7 +29,7 @@ public class data
 	
 	public void set(String key,Object value)
 	{
-		 p_set(key,value.toString());
+		 p_set(key,value);
 	}
 	
 	/**
