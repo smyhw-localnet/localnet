@@ -50,7 +50,7 @@ public class NetWorkManager
 	 * type==4	根据索引插入信息</br>
 	 * type==7	根据索引移除信息</br>
 	 * </br>
-	 * !如果任何一个参数不需要,则该参数可以为任何值</br>
+	 * !如果任何一个参数不需要,则该参数可以为任何值(可以为null)</br>
 	 * @param lj
 	 */
 	public synchronized static Client_sl doclient(int type,Client_sl lj,int sy)

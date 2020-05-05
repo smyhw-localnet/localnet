@@ -31,6 +31,10 @@ public class Client_sl extends TCP_LK
 
 	}
 	
+	/**
+	 * 向该客户端发送信息
+	 * @param msg
+	 */
 	public void sendto(String msg)
 	{
 		message.info("[网络动向]发送消息<"+msg+">至客户端<"+this.ID+">");
