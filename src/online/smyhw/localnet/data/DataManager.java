@@ -179,6 +179,12 @@ public class DataManager
 				new File("./configs").mkdir();
 			}
 			
+			if(!new File("./TerminalData").exists())
+			{
+				message.info("终端数据目录不存在，将创建...");
+				new File("./TerminalData").mkdir();
+			}
+			
 			if(!new File("./LN.config").exists())
 			{
 				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
