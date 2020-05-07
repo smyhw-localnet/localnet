@@ -1,8 +1,12 @@
 package online.smyhw.localnet.lib;
 
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+
+import online.smyhw.localnet.message;
 
 /**
  * 该类被设计为处理标准Json信息</br>
@@ -11,6 +15,57 @@ import java.util.List;
  */
 public class Json 
 {
+	
+	public static Hashtable Parse(String input)
+	{
+		Hashtable re = new Hashtable();
+		if(!input.startsWith("{")) {return null;};
+		input = input.substring(1);
+		input = input.substring(0, input.length()-2);
+		char[] str = input.toCharArray();
+		String key="",value="";
+		int type = 0;
+		for(int i=0;i<str.length;i++)
+		{
+			if(type==0) 
+			{
+				if(str[i]!=':') {key=key+str[i];}
+				else {type=1;}
+			}
+			else
+			{
+				if(str[i]!=',') {value=value+str[i];}
+				else 
+				{
+					type=1;
+					key = Encoded(key);
+					value = Encoded(value);
+					re.put(key, value);
+				}
+			}
+		}
+		return re;
+	}
+	
+	public static String Create(Hashtable input)
+	{
+		String re = "{";
+		Enumeration keys = input.keys();
+		while( keys. hasMoreElements() )
+		{
+			String key = (String) keys.nextElement();
+			String value = (String) input.get(key);
+			message.info(key+"+"+value);
+			key = Decoded(key);
+			value = Decoded(value);
+			re = re+key+":"+value+",";
+		}
+		re = re.substring(0, re.length()-2);
+		re = re+"}";
+		return re;
+	}
+	
+	
 	
 	/**
 	 * 用于转义特殊字符</br>
@@ -81,10 +136,11 @@ public class Json
 			}
 			out_str.add(str[i]);
 		}
+		message.info(out_str.toString());
 		String re = "";
 		for(int i = 0 ;i<out_str.size();i++)
 		{
-			re.concat(out_str.get(i)+"");
+			re = re.concat(out_str.get(i)+"");
 		}
 		
 		return re;

@@ -26,6 +26,7 @@ public class cmdManager
 			cmdManager.add_cmd("help", SYScmd_help.class.getMethod("cmd", Client_sl.class,String.class));
 			cmdManager.add_cmd("kick", SYScmd_kick.class.getMethod("cmd", Client_sl.class,String.class));
 			cmdManager.add_cmd("list", SYScmd_list.class.getMethod("cmd", Client_sl.class,String.class));
+			cmdManager.add_cmd("test", SYScmd_test.class.getMethod("cmd", Client_sl.class,String.class));
 		} 
 		catch (Exception e) 
 		{
