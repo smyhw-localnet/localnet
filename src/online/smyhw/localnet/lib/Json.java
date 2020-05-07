@@ -21,6 +21,8 @@ public class Json
 	 * end-object = ws %x7D ws ; } 右大括号</br>
 	 * name-separator = ws %x3A ws ; : 冒号</br>
 	 * value-separator = ws %x2C ws ; , 逗号</br>
+	 * 以及转义字符“\”(反斜杠)</br>
+	 * 都会被转义</br>
 	 * @param input 未转义的字符串
 	 * @return 转义后的字符串
 	 */
@@ -36,6 +38,7 @@ public class Json
 		key_word.add(']');
 		key_word.add(';');
 		key_word.add(':');
+		key_word.add('\\');
 		for(int i=0;i<str.length;i++)
 		{
 			if(key_word.contains(str[i])) 
@@ -60,6 +63,30 @@ public class Json
 	 */
 	public static String Decoded(String input)
 	{
-		return null;
+		char[] str = input.toCharArray();
+		ArrayList<Character> out_str = new ArrayList();
+		ArrayList<Character> key_word = new ArrayList();
+		key_word.add('{');
+		key_word.add('}');
+		key_word.add('[');
+		key_word.add(']');
+		key_word.add(';');
+		key_word.add(':');
+		key_word.add('\\');
+		for(int i=0;i<str.length;i++)
+		{
+			if(str[i]=='\\' && key_word.contains(str[i+1])) 
+			{
+				i=i+1;
+			}
+			out_str.add(str[i]);
+		}
+		String re = "";
+		for(int i = 0 ;i<out_str.size();i++)
+		{
+			re.concat(out_str.get(i)+"");
+		}
+		
+		return re;
 	}
 }
