@@ -26,7 +26,7 @@ public class Client_sl extends TCP_LK
 		new ClientConnect_Event(this);
 		try
 		{
-			this.sendMsg("&"+LN.ID);//发送自身ID
+			this.Smsg("{type=auth,ID="+LN.ID+"}");//发送自身ID
 
 		}catch(Exception e){message.info(" 客户端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());e.printStackTrace();return;}
 
