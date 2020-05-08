@@ -105,7 +105,7 @@ public class Json
 		String re = "";
 		for(int i = 0 ;i<out_str.size();i++)
 		{
-			re.concat(out_str.get(i)+"");
+			re = re.concat(out_str.get(i)+"");
 		}
 		return re;
 	}
