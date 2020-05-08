@@ -21,7 +21,7 @@ public class Json
 		Hashtable re = new Hashtable();
 		if(!input.startsWith("{")) {return null;};
 		input = input.substring(1);
-		input = input.substring(0, input.length()-2);
+		input = input.substring(0, input.length()-1);
 		char[] str = input.toCharArray();
 		String key="",value="";
 		int type = 0;
@@ -37,16 +37,19 @@ public class Json
 				if(str[i]!=',') {value=value+str[i];}
 				else 
 				{
-					type=1;
-					key = Encoded(key);
-					value = Encoded(value);
+					type=0;
+					key = Decoded(key);
+					value = Decoded(value);
 					re.put(key, value);
+					key="";
+					value="";
 				}
 			}
 		}
-		key = Encoded(key);
-		value = Encoded(value);
+		key = Decoded(key);
+		value = Decoded(value);
 		re.put(key, value);
+		message.show(re.toString());
 		return re;
 	}
 	
@@ -58,12 +61,11 @@ public class Json
 		{
 			String key = (String) keys.nextElement();
 			String value = (String) input.get(key);
-			message.info(key+"+"+value);
-			key = Decoded(key);
-			value = Decoded(value);
+			key = Encoded(key);
+			value = Encoded(value);
 			re = re+key+":"+value+",";
 		}
-		re = re.substring(0, re.length()-2);
+		re = re.substring(0, re.length()-1);
 		re = re+"}";
 		return re;
 	}
@@ -86,7 +88,7 @@ public class Json
 	 */
 	public static String Encoded(String input)
 	{
-		
+//		message.info("en++"+input);
 		char[] str = input.toCharArray();
 		ArrayList<Character> out_str = new ArrayList();
 		ArrayList<Character> key_word = new ArrayList();
@@ -110,6 +112,7 @@ public class Json
 		{
 			re = re.concat(out_str.get(i)+"");
 		}
+//		message.info("en--"+re);
 		return re;
 	}
 	
@@ -121,6 +124,7 @@ public class Json
 	 */
 	public static String Decoded(String input)
 	{
+//		message.info("de++"+input);
 		char[] str = input.toCharArray();
 		ArrayList<Character> out_str = new ArrayList();
 		ArrayList<Character> key_word = new ArrayList();
@@ -139,13 +143,12 @@ public class Json
 			}
 			out_str.add(str[i]);
 		}
-		message.info(out_str.toString());
 		String re = "";
 		for(int i = 0 ;i<out_str.size();i++)
 		{
 			re = re.concat(out_str.get(i)+"");
 		}
-		
+//		message.info("de--"+re);
 		return re;
 	}
 }

@@ -25,20 +25,12 @@ public class LN
 	public static String ID;//用户唯识别代号
 	public static OnlineThread online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
-//	public static int set_test=0;//
-//	public static int set_re=0;//是否记录指令回显
 	public static BufferedReader input;//主输入流
 	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//客户端列表
 	public static Server_sl server_sl;//连接到的服务器
-//	public static char[][] UI = new char[100][62];//缓存用户UI界面
 	public static Local_sl local_sl;//虚拟本机客户端
 	
-	//mdata模式，
-	//1:聊天模式/发送缓存
-	//2:转发模式
-	public static int mdata_mod=2;
-	//mdata 缓存大小/行
-	public static int mdata_hc_num=10;
+
 	//主配置文件
 	public static config LNconfig = new config();
 	
@@ -120,10 +112,16 @@ public class LN
 			//触发聊天事件
 			if(new Chat_Event(User,message).Cancel) {return;}
 			if(LN.server_sl!=null) 
-			{//如果连接到了服务器，直接发送至服务器即可
+			{//如果连接到了服务器，检查是否是服务器发来的
+				if(User==LN.server_sl) 
+				{
+					online.smyhw.localnet.message.show("["+User.ID+"]:"+message);
+					return;
+				}
 				LN.server_sl.Smsg(Json.Create(msg));
 				return;	
 			}
+			online.smyhw.localnet.message.show("["+User.ID+"]:"+message);//注意，别忘了自己本身也要打印这个消息
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 			Iterator<Client_sl> temp2 = temp1.iterator();
 			while(temp2.hasNext())
@@ -132,7 +130,10 @@ public class LN
 				if(temp3==User) {continue;}
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
 				Hashtable send = new Hashtable();
-				send.put("type", "forward_message");
+				if(User==LN.local_sl)
+				{send.put("type", "message");}
+				else
+				{send.put("type", "forward_message");}
 				send.put("message", message);
 				temp3.sendData(send);
 			}

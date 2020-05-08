@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
+import online.smyhw.localnet.LNlib;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.data;
@@ -20,16 +21,25 @@ public class Client_sl extends TCP_LK
 	public  data TempClientData = new data();
 	
 	public String ID;
+	public Client_sl(Socket s, int type)
+	{
+		super(s,type);//这里，调用父类构造方法
+		Begin();
+	}
 	public Client_sl(Socket s)
 	{
 		super(s,1);//这里，调用父类构造方法
+		Begin();
+	}
+	
+	public void Begin()
+	{
 		new ClientConnect_Event(this);
 		try
 		{
-			this.Smsg("{type=auth,ID="+LN.ID+"}");//发送自身ID
+			this.Smsg("{type:auth,ID:"+LN.ID+"}");//发送自身ID
 
 		}catch(Exception e){message.info(" 客户端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());e.printStackTrace();return;}
-
 	}
 	
 	/**
@@ -56,7 +66,7 @@ public class Client_sl extends TCP_LK
 	public void sendNote(String NoteType,String noteMsg)
 	{
 		Hashtable send = new Hashtable();
-		send.put("type", "Note");
+		send.put("type", "note");
 		send.put("NoteType", NoteType);
 		send.put("NoteText", noteMsg);
 		this.sendData(send);
@@ -66,15 +76,18 @@ public class Client_sl extends TCP_LK
 	{	
 		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
 		Hashtable re = Json.Parse(msg);
+		if(!LNlib.CheckMapNode(re))
+		{
+			message.info("接收到来自客户端<"+this.ID+">的消息缺少必要消息节点");
+			this.sendNote("4", "消息缺失必要节点");
+			return;
+		}
 		if(re==null) {message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息Json解码错误");return;}
-		if(ID==null && re.get("type")!="auth"){this.sendNote("1","客户端，请先报告你的ID!");return;}
+		if(ID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
 		LN.mdata(this, re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
-//		StackTraceElement[] temp=Thread.currentThread().getStackTrace();
-//		StackTraceElement temp2=(StackTraceElement)temp[3];
-//		message.info("客户端<"+this.ID+">连接出错，位置："+temp2.getFileName()+":"+temp2.getClassName()+":"+temp2.getMethodName()+":"+temp2.getLineNumber());
 		NetWorkManager.doclient(0, this, 0);
 		message.show("客户端<"+this.ID+">断开连接{"+e.type+"}:"+e.getMessage());
 		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据

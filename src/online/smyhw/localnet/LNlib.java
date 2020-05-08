@@ -1,6 +1,7 @@
 package online.smyhw.localnet;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
 
 import online.smyhw.localnet.network.Client_sl;
@@ -115,5 +116,34 @@ public class LNlib
 			if(temp3.ID.equals(ID)) {return temp3;}
 		}
 		return null;
+	}
+	
+	
+	public static Boolean CheckMapNode(Hashtable input)
+	{
+		String type = (String) input.get("type");
+		if(type==null) {return false;}
+		switch(type)
+		{
+		case"auth":
+			if(!input.containsKey("ID")) {return false;}
+			break;
+		case"note":
+			if(!input.containsKey("NoteType")) {return false;}
+			if(!input.containsKey("NoteText")) {return false;}
+			break;
+		case"command":
+			if(!input.containsKey("CmdText")) {return false;}
+			break;
+		case"connect":
+			if(!input.containsKey("operation")) {return false;}
+			break;
+		case"message":
+			if(!input.containsKey("message")) {return false;}
+			break;
+		default:
+			return true;
+		}
+		return true;
 	}
 }	

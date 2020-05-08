@@ -1,6 +1,7 @@
 package online.smyhw.localnet.network;
 
 import java.net.Socket;
+import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.LNlib;
@@ -11,9 +12,8 @@ import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
-public class Server_sl extends TCP_LK
+public class Server_sl extends Client_sl
 {
-	public String ID;
 	public Server_sl(Socket s)
 	{
 		super(s,2);//这里，调用父类构造方法
@@ -21,17 +21,17 @@ public class Server_sl extends TCP_LK
 		try
 		{
 			new ConnectServerEvent(this);
-			this.Smsg("{type=auth,ID="+LN.ID+"}");
-
 		}catch(Exception e){message.info("服务器\""+ID+"\"连接异常！丢弃线程");e.printStackTrace();return;}
 
 	}
 	public void CLmsg(String msg)
 	{
 		message.info("收到来自服务器的原始消息："+msg);
-		if(ID==null && !Json.Parse(msg).get("type").equals("auth"))
+		Hashtable map = Json.Parse(msg);
+		if(ID==null && !map.get("type").equals("auth"))
 		{message.warning("此服务器尝试在未发送身份信息的情况下发送其他消息，不安全，断开连接！");return;}
-		else {ID = (String) Json.Parse(msg).get("ID");}
+		if(ID==null) {ID = (String) map.get("ID");return;}
+		LN.mdata(this, map);
 	}
 	public void Serr_u( TCP_LK_Exception e)
 	{
@@ -40,14 +40,6 @@ public class Server_sl extends TCP_LK
 		return;
 	}
 	
-	public byte[] encryption(byte[] input,int type)
-	{
-		byte[] re=null;
-		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,this);
-		re = temp1.output;
-		if(temp1.Error) {return null;}
-		return re;
-	}
 }
 
 
