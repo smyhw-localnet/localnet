@@ -26,7 +26,7 @@ public class Local_sl extends Client_sl
 		return;
 	}
 	
-	public void sendto(String msg)
+	public void sendMsg(String msg)
 	{
 		msg="[local-SL]"+msg;
 		message.show(msg);

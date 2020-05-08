@@ -19,7 +19,7 @@ public class SYScmd_list
 			Client_sl temp3 = temp2.next();
 			re=re+temp3.ID+"\n";
 		}
-		User.sendto(re);
+		User.sendMsg(re);
 		return;
 	}
 }

@@ -44,6 +44,9 @@ public class Json
 				}
 			}
 		}
+		key = Encoded(key);
+		value = Encoded(value);
+		re.put(key, value);
 		return re;
 	}
 	

@@ -6,6 +6,7 @@ import online.smyhw.localnet.command.*;
 import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.config;
 import online.smyhw.localnet.event.*;
+import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.network.*;
 import online.smyhw.localnet.plugins.PluginsManager;
 
@@ -95,102 +96,73 @@ public class LN
 	 * @param msg
 	 */
 	static LinkedList<String> msgList = new LinkedList<String>();
-	public static void mdata(Client_sl User,String msg)
+	public static void mdata(Client_sl User,Hashtable<String,String> msg)
 	{
-		char keyword = msg.charAt(0);
-		switch(keyword)
+		String type = (String) msg.get("type");
+		switch(type)
 		{
-		case '/':
+		case "command":
 		{
-			if(msg.charAt(1)=='/')
-			{//将指令发送到远程服务器
-				msg=msg.substring(1);
-				if(LN.server_sl==null) {User.sendto("!3未连接到远程服务器，不能向远程服务器发送指令！");}
-				else{LN.server_sl.Smsg(msg);}
-			}
-			else
-			{//在本地处理消息
-				msg=msg.substring(1);
-				cmdManager.ln(User,msg);
-				return;
-			}
-		}
-		case '!':
-		{
-			msg=msg.substring(1);
-			char temp1=msg.charAt(0);
-			msg=msg.substring(1);
-			message.warning("来自终端<"+User.ID+">的警告(类型码{"+temp1+"}):"+msg.substring(2));
+			String CmdText = (String) msg.get("CmdText");
+			cmdManager.ln(User,CmdText);
 			return;
 		}
-		case '*':
+		case "note":
 		{
+			String NoteType = (String) msg.get("NoteType");
+			String NoteText = (String)msg.get("NoteText");
+			message.warning("来自终端<"+User.ID+">的警告{"+NoteType+"}:"+NoteText);
+			return;
+		}
+		case "message":
+		{
+			String message = (String) msg.get("message");
 			//触发聊天事件
-			if(new Chat_Event(User,msg).Cancel) {return;}
-			if(LN.server_sl!=null) {LN.server_sl.Smsg(msg);return;}//如果连接到了服务器，直接发送至服务器即可
-			switch(LN.mdata_mod)
-			{
-			case 1://禁止使用的方法
-			{
-				msg=User.ID+":"+msg;
-				msgList.add(msg);
-				if(msgList.size()>=LN.mdata_hc_num) {msgList.removeFirst();}
-				Iterator<String> dd = msgList.iterator();
-//				localnet.online_thread.SendAll(localnet.ID+"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-				String finmsg = "\r\n";
-				while(dd.hasNext())
-				{
-					finmsg=finmsg+dd.next()+"\n";
-				}
-				LNlib.SendAll(finmsg);
-				break;
+			if(new Chat_Event(User,message).Cancel) {return;}
+			if(LN.server_sl!=null) 
+			{//如果连接到了服务器，直接发送至服务器即可
+				LN.server_sl.Smsg(Json.Create(msg));
+				return;	
 			}
-			case 2:
+			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
+			Iterator<Client_sl> temp2 = temp1.iterator();
+			while(temp2.hasNext())
 			{
-				msg=msg.substring(1);
-				msg=User.ID+":"+msg;
-				ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
-				Iterator<Client_sl> temp2 = temp1.iterator();
-				while(temp2.hasNext())
-				{
-					Client_sl temp3 = temp2.next();
-					if(temp3==User) {continue;}
-					if(new ChatINFO_Event(User,temp3,msg).Cancel) {continue;}
-					temp3.sendto("*"+msg);
-				}
-				break;
+				Client_sl temp3 = temp2.next();
+				if(temp3==User) {continue;}
+				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
+				Hashtable send = new Hashtable();
+				send.put("type", "forward_message");
+				send.put("message", message);
+				temp3.sendData(send);
 			}
-			
-			}
-			
 			return;
 		}
-		case '&':
+		case "auth":
 		{
-			if(User.ID!=null) {User.sendto("!1请误重复鉴权!");return;}
-			msg=msg.substring(1);
+			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
+			ID = msg.get("ID");
 			LNlib.XT_sendall();
-			if(LNlib.ID_repeat(msg)) 
+			if(LNlib.ID_repeat(ID)) 
 			{
-				User.sendto("!1ID重复！");
+				User.sendNote("1","ID重复！");
 				return;
 			}
-			if(!LNlib.ID_rightful(msg))
+			if(!LNlib.ID_rightful(ID))
 			{
-				User.sendto("!1ID不合法！");
+				User.sendNote("1","ID不合法");
 				return;
 			}
-			User.ID=msg;
+			User.ID=ID;
 			message.show("终端<"+User.ID+">完成握手");
 			message.info("读取终端<"+User.ID+">的ClientData");
 			User.ClientData=DataManager.LoadData("./TerminalData/"+User.ID);
-//			System.out.println("aaa");
 			NetWorkManager.doclient(1, User, 0);
 			new ClientConnected_Event(User);//激发事件
 			return;
 		}
 		default:
-			User.sendto("!2未知消息类型");
+			User.sendNote("2","未知消息类型");
 			return;
 		}
 
@@ -235,6 +207,24 @@ class input extends Thread
 	{
 		
 	}
+	
+	public static Hashtable ToMap(String input)
+	{
+		Hashtable re = new Hashtable();
+		if(input.startsWith("/"))
+		{
+			String msg  = input.substring(1);
+			re.put("CmdText", msg);
+			re.put("type","command");
+		}
+		else
+		{
+			re.put("type", "message");
+			re.put("message",input);
+		}
+		return re;
+	}
+	
 	public void run()
 	{
 		while(true)
@@ -247,8 +237,8 @@ class input extends Thread
 				
 				input = LN.input.readLine();
 				message.info("取得用户输入："+input);
-
-				LN.mdata(LN.local_sl,input);
+				Hashtable map = ToMap(input);
+				LN.mdata(LN.local_sl,map);
 				
 			}
 			catch(Exception e)

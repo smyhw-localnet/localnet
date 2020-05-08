@@ -43,11 +43,17 @@ public abstract class TCP_LK
 	public OutputStream s_out;
 	public LK_Receive lkr;
 	public xt_sender xts;
+	public String XT="{type=connect,operation=xt}";
 	public boolean isERROR = false;//如果该值为true,则表示连接已经中断
 	
 	
 	public TCP_LK(Socket s,int type)
 	{
+		gz(s,type);
+	}
+	public TCP_LK(Socket s,int type,String XT)
+	{
+		this.XT=XT;
 		gz(s,type);
 	}
 	public void gz(Socket s,int type)
@@ -70,12 +76,12 @@ public abstract class TCP_LK
 		}
 		if(type==1)
 		{
-			lkr = new LK_Receive(this,1);
-			xts = new xt_sender(kt,this);
+			lkr = new LK_Receive(this,1,this.XT);
+			xts = new xt_sender(kt,this,this.XT);
 		}
 		if(type==2)
 		{
-			lkr = new LK_Receive(this,2);
+			lkr = new LK_Receive(this,2,this.XT);
 		}
 	}
 	
@@ -245,8 +251,10 @@ class LK_Receive extends Thread
 {
 	TCP_LK ba;
 	int type;
-	LK_Receive(TCP_LK ba,int type)
+	String XT;
+	LK_Receive(TCP_LK ba,int type,String XT)
 	{
+		this.XT=XT;
 		this.ba =ba;
 		this.type=type;
 		this.start();
@@ -261,10 +269,10 @@ class LK_Receive extends Thread
 				if(ba.isERROR) {return;}
 				String Sdata = ba.Rmsg();
 //				message.info("TCP_LK接到原始消息:"+Sdata);
-				if(Sdata.startsWith("#")) 
+				if(Sdata.equals(XT)) 
 				{	
 					if(type==1){continue;}
-					if(type==2) {ba.Smsg("#xt");continue;}
+					if(type==2) {ba.Smsg(this.XT);continue;}
 				}
 				ba.CLmsg(Sdata);
 			}
@@ -279,10 +287,12 @@ class LK_Receive extends Thread
 
 class xt_sender extends Thread
 {
+	String XT;
 	int Stime;
 	TCP_LK ba;
-	xt_sender(int Stime,TCP_LK ba)
+	xt_sender(int Stime,TCP_LK ba,String XT)
 	{
+		this.XT = XT;
 		this.Stime=Stime;
 		this.ba=ba;
 		this.start();
@@ -291,7 +301,7 @@ class xt_sender extends Thread
 	{
 		while(true)
 		{
-			ba.Smsg("#xt");
+			ba.Smsg(this.XT);
 			try {sleep(Stime);} catch (InterruptedException e) {new TCP_LK_Exception("[TCP_LK]:心跳包延迟出错",ba);}
 		}
 	}

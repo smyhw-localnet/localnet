@@ -10,6 +10,47 @@ localnet字符聊天室网络通信协议
 整个数据包使用byte传输，编码方式为utf-8(即从String转为byte时，编码格式为utf-8)
 
 数据部分：
+数据部分为一个Json字串
+
+例子：
+1.向对方发送聊天信息"hello！"
+{type=message,message=hello！}
+2.向对方发送自己的终端ID
+{type=auth,ID=smyhw}
+3.向对方报告断开连接
+{type=connect,operation=disonnect}
+
+具体列表
+{type=connect,operation=XT}	#心跳包
+operation=disconnect	#断开连接
+{type=auth,ID=smyhw}	#鉴权信息
+{type=message,message=聊天信息}	#聊天信息
+{type=note,NoteType=0x2333,NoteText=提示信息}	#提示信息
+NoteType=1	#鉴权错误
+NoteType=2	#未知消息类型
+{type=command,CmdText=list}	#指令信息
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+######以下内容以过时，存档######
+数据部分：
 <标识符><数据>
 标识符为一个char字符：
 	标识符：

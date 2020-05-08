@@ -10,15 +10,15 @@ public class SYScmd_kick
 	{
 		if(CommandFJ.js(cmd)<2) 
 		{
-			User.sendto("参数错误!请指定需要断开的终端ID");
+			User.sendMsg("参数错误!请指定需要断开的终端ID");
 			return;
 		}
 		String ID = CommandFJ.fj(cmd, 1);
-		User.sendto("该指令使用断开socket的方式断开与制定终端的连接!");
+		User.sendMsg("该指令使用断开socket的方式断开与制定终端的连接!");
 		Client_sl tUS = LNlib.Find_Client(ID);
 		if(tUS==null) 
 		{
-			User.sendto("指定的终端ID不存在!");
+			User.sendMsg("指定的终端ID不存在!");
 			return;
 		}
 		try 
@@ -27,7 +27,7 @@ public class SYScmd_kick
 		}
 		catch (Exception e) 
 		{
-			User.sendto("踢出失败,异常见主机终端");
+			User.sendMsg("踢出失败,异常见主机终端");
 			e.printStackTrace();
 		}
 		return;

@@ -34,7 +34,7 @@ public class SYScmd_doc
 		{
 			for(String temp="<localnet>文档:";temp!=null;temp=br.readLine())
 			{
-				User.sendto(temp);
+				User.sendMsg(temp);
 			}
 		} 
 		catch (IOException e) 

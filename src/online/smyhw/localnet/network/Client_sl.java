@@ -9,6 +9,7 @@ import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
+import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
@@ -25,7 +26,7 @@ public class Client_sl extends TCP_LK
 		new ClientConnect_Event(this);
 		try
 		{
-			this.sendto("&"+LN.ID);//发送自身ID
+			this.sendMsg("&"+LN.ID);//发送自身ID
 
 		}catch(Exception e){message.info(" 客户端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());e.printStackTrace();return;}
 
@@ -35,18 +36,41 @@ public class Client_sl extends TCP_LK
 	 * 向该客户端发送信息
 	 * @param msg
 	 */
-	public void sendto(String msg)
+	public void sendMsg(String msg)
 	{
 		message.info("[网络动向]发送消息<"+msg+">至客户端<"+this.ID+">");
-		Smsg(msg);
+		Hashtable Hmsg = new Hashtable();
+		Hmsg.put("type", "message");
+		Hmsg.put("message", msg);
+		String send = Json.Create(Hmsg);
+		Smsg(send);
+	}
+	
+	
+	public void sendData(Hashtable input)
+	{
+		String send = Json.Create(input);
+		Smsg(send);
+	}
+	
+	public void sendNote(String NoteType,String noteMsg)
+	{
+		Hashtable send = new Hashtable();
+		send.put("type", "Note");
+		send.put("NoteType", NoteType);
+		send.put("NoteText", noteMsg);
+		this.sendData(send);
 	}
 	
 	public void CLmsg(String msg)
 	{
 		if(ID==null && !(msg.startsWith("&")))
-		{this.sendto("!1客户端，请先报告你的ID!");return;}
+		
 		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
-		LN.mdata(this, msg);
+		Hashtable re = Json.Parse(msg);
+		if(re==null) {message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息Json解码错误");return;}
+		if(ID==null && re.get("type")!="auth"){this.sendMsg("!1客户端，请先报告你的ID!");return;}
+		LN.mdata(this, re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
