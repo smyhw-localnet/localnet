@@ -35,8 +35,7 @@ public class configer
 			}
 			catch (Exception e)
 			{
-				message.error("严重警告！配置文件\""+file.getPath()+"\""+"不存在且创建失败(发生异常)！配置表将为空！");
-				e.printStackTrace();
+				message.error("严重警告！配置文件\""+file.getPath()+"\""+"不存在且创建失败(发生异常)！配置表将为空！",e);
 			}
 		}
 	}
