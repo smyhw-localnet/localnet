@@ -63,13 +63,11 @@ public class Client_sl extends TCP_LK
 	}
 	
 	public void CLmsg(String msg)
-	{
-		if(ID==null && !(msg.startsWith("&")))
-		
+	{	
 		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
 		Hashtable re = Json.Parse(msg);
 		if(re==null) {message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息Json解码错误");return;}
-		if(ID==null && re.get("type")!="auth"){this.sendMsg("!1客户端，请先报告你的ID!");return;}
+		if(ID==null && re.get("type")!="auth"){this.sendNote("1","客户端，请先报告你的ID!");return;}
 		LN.mdata(this, re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
