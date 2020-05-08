@@ -12,6 +12,7 @@ public class DataDecryptEvent extends LN_Event
 	{
 		this.EventName="DataDecrypt";
 		this.input=input;
+		this.output=input;
 		this.tcp_lk = tcp_lk;
 		this.Decrypt_type=type;
 		EventManager.DOevent(this);
