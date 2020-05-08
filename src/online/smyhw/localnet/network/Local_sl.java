@@ -18,7 +18,6 @@ public class Local_sl extends Client_sl
 	
 	public void CLmsg(String msg)
 	{
-		message.info("[网络动向(本地虚拟)]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
 		message.show(msg);
 	}
 	
@@ -29,7 +28,6 @@ public class Local_sl extends Client_sl
 	
 	public void sendto(String msg)
 	{
-		message.info("[网络动向(本地虚拟)]发送消息<"+msg+">至客户端<"+this.ID+">");
 		msg="[local-SL]"+msg;
 		message.show(msg);
 	}

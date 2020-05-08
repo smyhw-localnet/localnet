@@ -95,7 +95,6 @@ public class DataManager
 			while(true)
 			{
 				String temp1 = br.readLine();
-				message.info("[config]+"+temp1);
 				if(temp1==null) {break;}
 				if(temp1.startsWith("//")||temp1.startsWith("#")){continue;}//如果是注释，则跳过
 				String temp2[] = temp1.split("=");

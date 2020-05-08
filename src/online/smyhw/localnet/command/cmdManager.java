@@ -30,8 +30,7 @@ public class cmdManager
 		} 
 		catch (Exception e) 
 		{
-			message.warning("警告！加载系统指令时出错，可能会造成不可预知的问题！");
-			e.printStackTrace();
+			message.warning("警告！加载系统指令时出错，可能会造成不可预知的问题！",e);
 		}
 		
 		
@@ -52,15 +51,12 @@ public class cmdManager
 	{
 		try
 		{
-			message.info("添加指令"+cmd);
 			if(cmd_list.containsKey(cmd)==false)
 			{
-				message.info("实际添加指令"+cmd);
 				cmdManager.cmd_list.put(cmd, mff);
 			}
 			else{message.warning("添加指令\""+cmd+"\"失败，该指令已存在");}
 			message.info("指令\""+cmd+"\"添加完成{"+cmd_list.containsKey(cmd)+"}");
-			message.info(cmd_list.toString());
 		} 
 		catch (Exception e) 
 		{
@@ -72,20 +68,10 @@ public class cmdManager
 	
 	public static void ln(Client_sl User,String command)
 	{
-//		if(UserID.equals(localnet.ID)) 
-//		{
-//			message.info("本地用户，最高权限!");
-//		}
-//		else
-//		{
-//			if(localnet.security(UserID, CommandFJ.fj(command, 0)))//判断是否有权运行该指令
-//			{}
-//			else {message.show("Insufficient authority\n权限不足");return;}
-//		}
 		//触发事件
 		if(new DoCommandEvent(User,command).Cancel) {message.info("终端<"+User.ID+">使用指令<"+command+">因事件处理而被拒绝执行");return;}
 		String command_0=CommandFJ.fj(command,0);
-		message.info("开始解析:"+command);
+		message.info("处理指令<"+command+">");
 		if(cmd_list.containsKey(command_0)==false) {User.Smsg("未知指令！\n请使用cmdList列出指令列表");return;};
 		try
 		{
