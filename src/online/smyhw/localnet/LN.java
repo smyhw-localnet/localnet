@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import online.smyhw.localnet.command.*;
 import online.smyhw.localnet.data.DataManager;
+import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.config;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
@@ -88,7 +89,7 @@ public class LN
 	 * @param msg
 	 */
 	static LinkedList<String> msgList = new LinkedList<String>();
-	public static void mdata(Client_sl User,HashMap<String,String> msg)
+	public static void mdata(Client_sl User,DataPack msg)
 	{
 		String type = (String) msg.get("type");
 		switch(type)
@@ -111,17 +112,6 @@ public class LN
 			String message = (String) msg.get("message");
 			//触发聊天事件
 			if(new Chat_Event(User,message).Cancel) {return;}
-			if(LN.server_sl!=null) 
-			{//如果连接到了服务器，检查是否是服务器发来的
-				if(User==LN.server_sl) 
-				{
-					online.smyhw.localnet.message.show("["+User.ID+"]:"+message);
-					return;
-				}
-				LN.server_sl.Smsg(Json.Create(msg));
-				return;	
-			}
-//			online.smyhw.localnet.message.show("["+User.ID+"]:"+message);//注意，别忘了自己本身也要打印这个消息
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 			Iterator<Client_sl> temp2 = temp1.iterator();
 			while(temp2.hasNext())
@@ -129,7 +119,7 @@ public class LN
 				Client_sl temp3 = temp2.next();
 				if(temp3==User) {continue;}
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
-				HashMap send = new HashMap();
+				HashMap<String,String> send = new HashMap<String,String>();
 				if(User==LN.local_sl)
 				{send.put("type", "message");}
 				else
@@ -208,9 +198,9 @@ class input extends Thread
 		
 	}
 	
-	public static HashMap ToMap(String input)
+	public static DataPack ToPack(String input)
 	{
-		HashMap re = new HashMap();
+		HashMap<String,String> re = new HashMap<String,String>();
 		if(input.startsWith("/"))
 		{
 			String msg  = input.substring(1);
@@ -222,7 +212,7 @@ class input extends Thread
 			re.put("type", "message");
 			re.put("message",input);
 		}
-		return re;
+		return new DataPack( re);
 	}
 	
 	public void run()
@@ -237,7 +227,7 @@ class input extends Thread
 				
 				input = LN.input.readLine();
 				message.info("取得用户输入："+input);
-				HashMap map = ToMap(input);
+				DataPack map = ToPack(input);
 				LN.mdata(LN.local_sl,map);
 				
 			}

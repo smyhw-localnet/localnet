@@ -19,24 +19,19 @@ public class DataPack implements java.io.Serializable
 	private static final long serialVersionUID = 7;
 	HashMap<String,String> DataMap = new HashMap<String,String>();
 	
-	public DataPack(String data)
-	{
-		
-	}
-	
-	public DataPack(HashMap data)
+	public DataPack(HashMap<String,String> data)
 	{
 		DataMap=data;
 	}
 	
 	public void add(String key,String value)
 	{
-		
+		DataMap.put(key, value);
 	}
 	
 	public void del(String key)
 	{
-		
+		DataMap.remove(key);
 	}
 	
 	public String getStr()
@@ -44,8 +39,13 @@ public class DataPack implements java.io.Serializable
 		return Json.Create(DataMap);
 	}
 	
-	public HashMap getMap()
+	public HashMap<String,String> getMap()
 	{
-		return (HashMap) DataMap.clone();
+		return (HashMap<String,String>) DataMap.clone();
+	}
+	
+	public String get(String key)
+	{
+		return DataMap.get(key);
 	}
 }

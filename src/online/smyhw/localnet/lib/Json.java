@@ -3,6 +3,8 @@ package online.smyhw.localnet.lib;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map.Entry;
+
 import online.smyhw.localnet.message;
 
 /**
@@ -13,9 +15,9 @@ import online.smyhw.localnet.message;
 public class Json 
 {
 	
-	public static HashMap Parse(String input)
+	public static HashMap<String,String> Parse(String input)
 	{
-		HashMap re = new HashMap();
+		HashMap<String,String> re = new HashMap<String,String>();
 		if(!input.startsWith("{")) {return null;};
 		input = input.substring(1);
 		input = input.substring(0, input.length()-1);
@@ -50,7 +52,7 @@ public class Json
 		return re;
 	}
 	
-	public static String Create(HashMap input)
+	public static String Create(HashMap<String,String> input)
 	{
 		String re = "{";
 		Iterator temp1 = input.entrySet().iterator();
@@ -87,8 +89,8 @@ public class Json
 	{
 //		message.info("en++"+input);
 		char[] str = input.toCharArray();
-		ArrayList<Character> out_str = new ArrayList();
-		ArrayList<Character> key_word = new ArrayList();
+		ArrayList<Character> out_str = new ArrayList<Character>();
+		ArrayList<Character> key_word = new ArrayList<Character>();
 		key_word.add('{');
 		key_word.add('}');
 		key_word.add('[');
@@ -123,8 +125,8 @@ public class Json
 	{
 //		message.info("de++"+input);
 		char[] str = input.toCharArray();
-		ArrayList<Character> out_str = new ArrayList();
-		ArrayList<Character> key_word = new ArrayList();
+		ArrayList<Character> out_str = new ArrayList<Character>();
+		ArrayList<Character> key_word = new ArrayList<Character>();
 		key_word.add('{');
 		key_word.add('}');
 		key_word.add('[');

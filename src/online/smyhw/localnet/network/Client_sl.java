@@ -9,6 +9,7 @@ import online.smyhw.localnet.LN;
 import online.smyhw.localnet.LNlib;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataManager;
+import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
@@ -49,7 +50,7 @@ public class Client_sl extends TCP_LK
 	public void sendMsg(String msg)
 	{
 		message.info("[网络动向]发送消息<"+msg+">至终端<"+this.ID+">");
-		HashMap Hmsg = new HashMap();
+		HashMap<String,String> Hmsg = new HashMap<String,String>();
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
@@ -57,7 +58,7 @@ public class Client_sl extends TCP_LK
 	}
 	
 	
-	public void sendData(HashMap input)
+	public void sendData(HashMap<String,String> input)
 	{
 		String send = Json.Create(input);
 		Smsg(send);
@@ -65,7 +66,7 @@ public class Client_sl extends TCP_LK
 	
 	public void sendNote(String NoteType,String noteMsg)
 	{
-		HashMap send = new HashMap();
+		HashMap<String,String> send = new HashMap<String,String>();
 		send.put("type", "note");
 		send.put("NoteType", NoteType);
 		send.put("NoteText", noteMsg);
@@ -75,7 +76,7 @@ public class Client_sl extends TCP_LK
 	public void CLmsg(String msg)
 	{	
 		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
-		HashMap re = Json.Parse(msg);
+		HashMap<String,String> re = Json.Parse(msg);
 		if(!LNlib.CheckMapNode(re))
 		{
 			message.info("接收到来自客户端<"+this.ID+">的消息缺少必要消息节点");
@@ -84,7 +85,7 @@ public class Client_sl extends TCP_LK
 		}
 		if(re==null) {message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息Json解码错误");return;}
 		if(ID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
-		LN.mdata(this, re);
+		LN.mdata(this, new DataPack(re));
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{

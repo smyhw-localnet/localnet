@@ -108,7 +108,7 @@ public class LNlib
 	}
 	
 	
-	public static Boolean CheckMapNode(HashMap input)
+	public static Boolean CheckMapNode(HashMap<String,String> input)
 	{
 		String type = (String) input.get("type");
 		if(type==null) {return false;}
