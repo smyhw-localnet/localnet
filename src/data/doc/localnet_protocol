@@ -21,7 +21,7 @@ localnet字符聊天室网络通信协议
 {type=connect,operation=disonnect}
 
 具体列表
-{type:connect,operation:XT}	#心跳包
+{type:connect,operation:xt}	#心跳包
 operation:disconnect	#断开连接
 {type:auth,ID:smyhw}	#鉴权信息
 {type:message,message:聊天信息}	#主机聊天信息

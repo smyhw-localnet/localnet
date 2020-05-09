@@ -80,8 +80,7 @@ public class cmdManager
 		}
 		catch(Exception e) 
 		{
-			message.error("执行指令\""+command+"\"时出现错误",e);
-			e.printStackTrace();
+			message.warning("执行指令\""+command+"\"时出现错误",e);
 		}
 	}
 }
