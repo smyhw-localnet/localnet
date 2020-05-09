@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-
-import online.smyhw.localnet.message;
-
 /**
  * 该类被设计为处理标准Json信息</br>
  * 
@@ -48,18 +45,19 @@ public class Json
 		key = Decoded(key);
 		value = Decoded(value);
 		re.put(key, value);
-		message.show(re.toString());
+//		message.show(re.toString());
 		return re;
 	}
 	
 	public static String Create(HashMap<String,String> input)
 	{
 		String re = "{";
-		Iterator temp1 = input.entrySet().iterator();
+		Iterator<Entry<String, String>> temp1 = input.entrySet().iterator();
 		while( temp1. hasNext() )
 		{
-			String key = (String) temp1.next();
-			String value = (String) input.get(key);
+			Entry<String, String> temp2 =temp1.next();
+			String key = temp2.getKey();
+			String value = temp2.getValue();
 			key = Encoded(key);
 			value = Encoded(value);
 			re = re+key+":"+value+",";

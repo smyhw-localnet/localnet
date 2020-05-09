@@ -43,7 +43,7 @@ public abstract class TCP_LK
 	public OutputStream s_out;
 	public LK_Receive lkr;
 	public xt_sender xts;
-	public String XT="{type=connect,operation=xt}";
+	public String XT="{type:connect,operation:xt}";
 	public boolean isERROR = false;//如果该值为true,则表示连接已经中断
 	
 	
@@ -85,6 +85,7 @@ public abstract class TCP_LK
 		}
 	}
 	
+
 	
 	/**
 	 * @author smyhw
