@@ -1,9 +1,12 @@
 package online.smyhw.localnet.network;
 
 import java.net.Socket;
+import java.util.HashMap;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.data.DataPack;
+import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 public class Local_sl extends Client_sl
@@ -15,15 +18,10 @@ public class Local_sl extends Client_sl
 		this.ID=LN.ID;
 	}
 	
-	public void CLmsg(String msg)
+	public void Smsg(String msg)
 	{
-		message.show(msg);
-	}
-		
-	public void sendMsg(String msg)
-	{
-		msg="[local-SL]"+msg;
-		message.show(msg);
+		DataPack temp = new DataPack(Json.Parse(msg));
+		LN.mdata(this, temp);
 	}
 	
 	public void Serr_u(TCP_LK_Exception e) {}

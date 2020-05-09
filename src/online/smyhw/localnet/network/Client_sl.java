@@ -49,11 +49,11 @@ public class Client_sl extends TCP_LK
 	 */
 	public void sendMsg(String msg)
 	{
-		message.info("[网络动向]发送消息<"+msg+">至终端<"+this.ID+">");
 		HashMap<String,String> Hmsg = new HashMap<String,String>();
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
+		message.info("[网络动向]发送消息<"+send+">至终端<"+this.ID+">");
 		Smsg(send);
 	}
 	
@@ -61,6 +61,7 @@ public class Client_sl extends TCP_LK
 	public void sendData(HashMap<String,String> input)
 	{
 		String send = Json.Create(input);
+		message.info("[网络动向]发送消息<"+send+">至终端<"+this.ID+">");
 		Smsg(send);
 	}
 	

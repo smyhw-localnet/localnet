@@ -123,7 +123,10 @@ public class LN
 				if(User==LN.local_sl)
 				{send.put("type", "message");}
 				else
-				{send.put("type", "forward_message");}
+				{
+					send.put("type", "forward_message");
+					send.put("From", User.ID);
+				}
 				send.put("message", message);
 				temp3.sendData(send);
 			}
@@ -137,7 +140,7 @@ public class LN
 		case "auth":
 		{
 			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
-			ID = msg.get("ID");
+			String ID = msg.get("ID");
 			LNlib.XT_sendall("{type:connect,operation:XT}");
 			if(LNlib.ID_repeat(ID)) 
 			{
@@ -232,7 +235,7 @@ class input extends Thread
 				message.input(LN.ID+"@"+server+">");
 				
 				input = LN.input.readLine();
-				message.info("取得用户输入："+input);
+//				message.info("取得用户输入："+input);
 				DataPack map = ToPack(input);
 				LN.mdata(LN.local_sl,map);
 				
