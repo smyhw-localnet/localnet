@@ -72,7 +72,7 @@ public class cmdManager
 		if(new DoCommandEvent(User,command).Cancel) {message.info("终端<"+User.ID+">使用指令<"+command+">因事件处理而被拒绝执行");return;}
 		String command_0=CommandFJ.fj(command,0);
 		message.info("处理指令<"+command+">");
-		if(cmd_list.containsKey(command_0)==false) {User.Smsg("未知指令！\n请使用cmdList列出指令列表");return;};
+		if(cmd_list.containsKey(command_0)==false) {User.sendMsg("未知指令！\n请使用cmdList列出指令列表");return;};
 		try
 		{
 			Method re = (Method) cmd_list.get(command_0);

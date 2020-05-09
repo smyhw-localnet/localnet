@@ -21,6 +21,11 @@ public class Local_sl extends Client_sl
 	public void Smsg(String msg)
 	{
 		DataPack temp = new DataPack(Json.Parse(msg));
+		if(temp.getValue("type").equals("message"))
+		{
+			temp.add("type", "forward_message");
+			temp.add("From", "本地信息");
+		}
 		LN.mdata(this, temp);
 	}
 	

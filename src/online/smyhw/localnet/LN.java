@@ -121,7 +121,9 @@ public class LN
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
 				HashMap<String,String> send = new HashMap<String,String>();
 				if(User==LN.local_sl)
-				{send.put("type", "message");}
+				{
+					send.put("type", "message");
+				}
 				else
 				{
 					send.put("type", "forward_message");
