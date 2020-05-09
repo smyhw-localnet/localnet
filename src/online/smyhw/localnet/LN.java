@@ -129,6 +129,11 @@ public class LN
 			}
 			return;
 		}
+		case "forward_message":
+		{
+			message.show("["+msg.get("From")+"]:"+msg.get("message"));
+			return;
+		}
 		case "auth":
 		{
 			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
