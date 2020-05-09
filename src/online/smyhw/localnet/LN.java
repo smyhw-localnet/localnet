@@ -141,7 +141,7 @@ public class LN
 		{
 			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
 			String ID = msg.getValue("ID");
-			LNlib.XT_sendall("{type:connect,operation:XT}");
+			LNlib.XT_sendall("{type:connect,operation:xt}");
 			if(LNlib.ID_repeat(ID)) 
 			{
 				User.sendNote("1","ID重复！");
@@ -163,7 +163,7 @@ public class LN
 		
 		case"connect":
 		{
-			if(msg.getValue("operation").equals("XT"))
+			if(msg.getValue("operation").equals("xt"))
 			return;
 		}
 		default:

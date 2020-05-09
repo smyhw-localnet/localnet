@@ -25,13 +25,12 @@ public class Json
 		{
 			if(type==0) 
 			{
-				if(str[i]!=':') {key=key+str[i];}
-				else {type=1;}
+				if(str[i]==':' && str[i-1]!='\\') {type=1;}
+				else{key=key+str[i];} 
 			}
 			else
 			{
-				if(str[i]!=',') {value=value+str[i];}
-				else 
+				if(str[i]==',' && str[i-1]!='\\')
 				{
 					type=0;
 					key = Decoded(key);
@@ -40,6 +39,7 @@ public class Json
 					key="";
 					value="";
 				}
+				else{value=value+str[i];} 
 			}
 		}
 		key = Decoded(key);
