@@ -2,6 +2,7 @@ package online.smyhw.localnet.network;
 
 import java.io.Serializable;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
@@ -38,8 +39,7 @@ public class Client_sl extends TCP_LK
 		try
 		{
 			this.Smsg("{type:auth,ID:"+LN.ID+"}");//发送自身ID
-
-		}catch(Exception e){message.info(" 客户端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());e.printStackTrace();return;}
+		}catch(Exception e){message.info(" 终端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
 	/**
@@ -48,8 +48,8 @@ public class Client_sl extends TCP_LK
 	 */
 	public void sendMsg(String msg)
 	{
-		message.info("[网络动向]发送消息<"+msg+">至客户端<"+this.ID+">");
-		Hashtable Hmsg = new Hashtable();
+		message.info("[网络动向]发送消息<"+msg+">至终端<"+this.ID+">");
+		HashMap Hmsg = new HashMap();
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
@@ -57,7 +57,7 @@ public class Client_sl extends TCP_LK
 	}
 	
 	
-	public void sendData(Hashtable input)
+	public void sendData(HashMap input)
 	{
 		String send = Json.Create(input);
 		Smsg(send);
@@ -65,7 +65,7 @@ public class Client_sl extends TCP_LK
 	
 	public void sendNote(String NoteType,String noteMsg)
 	{
-		Hashtable send = new Hashtable();
+		HashMap send = new HashMap();
 		send.put("type", "note");
 		send.put("NoteType", NoteType);
 		send.put("NoteText", noteMsg);
@@ -75,7 +75,7 @@ public class Client_sl extends TCP_LK
 	public void CLmsg(String msg)
 	{	
 		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
-		Hashtable re = Json.Parse(msg);
+		HashMap re = Json.Parse(msg);
 		if(!LNlib.CheckMapNode(re))
 		{
 			message.info("接收到来自客户端<"+this.ID+">的消息缺少必要消息节点");

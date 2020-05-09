@@ -6,6 +6,10 @@ import online.smyhw.localnet.message;
 
 public class data implements java.io.Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7;
 	protected HashMap<String,Object> main_data = new HashMap<String,Object>();
 	
 	

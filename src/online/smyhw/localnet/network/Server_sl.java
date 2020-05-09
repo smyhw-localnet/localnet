@@ -1,6 +1,7 @@
 package online.smyhw.localnet.network;
 
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.LN;
@@ -17,17 +18,12 @@ public class Server_sl extends Client_sl
 	public Server_sl(Socket s)
 	{
 		super(s,2);//这里，调用父类构造方法
-		
-		try
-		{
-			new ConnectServerEvent(this);
-		}catch(Exception e){message.info("服务器\""+ID+"\"连接异常！丢弃线程");e.printStackTrace();return;}
-
+		new ConnectServerEvent(this);
 	}
 	public void CLmsg(String msg)
 	{
 		message.info("收到来自服务器的原始消息："+msg);
-		Hashtable map = Json.Parse(msg);
+		HashMap map = Json.Parse(msg);
 		if(ID==null && !map.get("type").equals("auth"))
 		{message.warning("此服务器尝试在未发送身份信息的情况下发送其他消息，不安全，断开连接！");return;}
 		if(ID==null) {ID = (String) map.get("ID");return;}

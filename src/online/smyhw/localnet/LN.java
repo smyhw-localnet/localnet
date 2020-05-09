@@ -88,7 +88,7 @@ public class LN
 	 * @param msg
 	 */
 	static LinkedList<String> msgList = new LinkedList<String>();
-	public static void mdata(Client_sl User,Hashtable<String,String> msg)
+	public static void mdata(Client_sl User,HashMap<String,String> msg)
 	{
 		String type = (String) msg.get("type");
 		switch(type)
@@ -121,7 +121,7 @@ public class LN
 				LN.server_sl.Smsg(Json.Create(msg));
 				return;	
 			}
-			online.smyhw.localnet.message.show("["+User.ID+"]:"+message);//注意，别忘了自己本身也要打印这个消息
+//			online.smyhw.localnet.message.show("["+User.ID+"]:"+message);//注意，别忘了自己本身也要打印这个消息
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 			Iterator<Client_sl> temp2 = temp1.iterator();
 			while(temp2.hasNext())
@@ -129,7 +129,7 @@ public class LN
 				Client_sl temp3 = temp2.next();
 				if(temp3==User) {continue;}
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
-				Hashtable send = new Hashtable();
+				HashMap send = new HashMap();
 				if(User==LN.local_sl)
 				{send.put("type", "message");}
 				else
@@ -143,7 +143,6 @@ public class LN
 		{
 			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
 			ID = msg.get("ID");
-			LNlib.XT_sendall();
 			if(LNlib.ID_repeat(ID)) 
 			{
 				User.sendNote("1","ID重复！");
@@ -209,9 +208,9 @@ class input extends Thread
 		
 	}
 	
-	public static Hashtable ToMap(String input)
+	public static HashMap ToMap(String input)
 	{
-		Hashtable re = new Hashtable();
+		HashMap re = new HashMap();
 		if(input.startsWith("/"))
 		{
 			String msg  = input.substring(1);
@@ -238,7 +237,7 @@ class input extends Thread
 				
 				input = LN.input.readLine();
 				message.info("取得用户输入："+input);
-				Hashtable map = ToMap(input);
+				HashMap map = ToMap(input);
 				LN.mdata(LN.local_sl,map);
 				
 			}

@@ -4,7 +4,6 @@ import java.net.Socket;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
-import online.smyhw.localnet.event.DataDecryptEvent;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 public class Local_sl extends Client_sl
@@ -20,12 +19,7 @@ public class Local_sl extends Client_sl
 	{
 		message.show(msg);
 	}
-	
-	public void Smsg(String msg)
-	{
-		return;
-	}
-	
+		
 	public void sendMsg(String msg)
 	{
 		msg="[local-SL]"+msg;

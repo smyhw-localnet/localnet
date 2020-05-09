@@ -1,11 +1,8 @@
 package online.smyhw.localnet.lib;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-
 import online.smyhw.localnet.message;
 
 /**
@@ -16,9 +13,9 @@ import online.smyhw.localnet.message;
 public class Json 
 {
 	
-	public static Hashtable Parse(String input)
+	public static HashMap Parse(String input)
 	{
-		Hashtable re = new Hashtable();
+		HashMap re = new HashMap();
 		if(!input.startsWith("{")) {return null;};
 		input = input.substring(1);
 		input = input.substring(0, input.length()-1);
@@ -53,13 +50,13 @@ public class Json
 		return re;
 	}
 	
-	public static String Create(Hashtable input)
+	public static String Create(HashMap input)
 	{
 		String re = "{";
-		Enumeration keys = input.keys();
-		while( keys. hasMoreElements() )
+		Iterator temp1 = input.entrySet().iterator();
+		while( temp1. hasNext() )
 		{
-			String key = (String) keys.nextElement();
+			String key = (String) temp1.next();
 			String value = (String) input.get(key);
 			key = Encoded(key);
 			value = Encoded(value);

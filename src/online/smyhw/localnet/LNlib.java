@@ -1,7 +1,7 @@
 package online.smyhw.localnet;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import online.smyhw.localnet.network.Client_sl;
@@ -45,17 +45,6 @@ public class LNlib
 		}
 	}
 	
-	public static void XT_sendall()
-	{
-		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
-		Iterator<Client_sl> temp2 = temp1.iterator();
-		while(temp2.hasNext())
-		{
-			Client_sl temp3 = temp2.next();
-			if(temp3==LN.local_sl) {continue;}
-			temp3.Smsg("#xt");
-		}
-	}
 	
 	/**
 	 * 
@@ -119,7 +108,7 @@ public class LNlib
 	}
 	
 	
-	public static Boolean CheckMapNode(Hashtable input)
+	public static Boolean CheckMapNode(HashMap input)
 	{
 		String type = (String) input.get("type");
 		if(type==null) {return false;}
