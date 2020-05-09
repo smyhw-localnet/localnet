@@ -152,9 +152,13 @@ public class DataManager
 			ois.close();
 			return re;
 		}
+		catch(java.io.FileNotFoundException ee)
+		{
+			return new data();
+		}
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			message.warning("读取文件<"+URL+">时出错，返回新实例", e);
 			return new data();
 		}
 //		return new data();
