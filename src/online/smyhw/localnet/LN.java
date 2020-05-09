@@ -63,7 +63,6 @@ public class LN
 			PluginsManager.start();//初始化插件
 			message.info("本地虚拟客户端实例开始创建");
 			local_sl = new Local_sl();
-			NetWorkManager.doclient(1, local_sl, 0);
 			message.info("本地虚拟客户端实例完成创建");
 			message.show("为了保证安全性，联机进程默认未启用，请使用nwm手动启动！");
 			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
