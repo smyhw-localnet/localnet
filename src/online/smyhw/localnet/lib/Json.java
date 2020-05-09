@@ -93,7 +93,7 @@ public class Json
 		key_word.add('}');
 		key_word.add('[');
 		key_word.add(']');
-		key_word.add(';');
+		key_word.add(',');
 		key_word.add(':');
 		key_word.add('\\');
 		for(int i=0;i<str.length;i++)
@@ -129,7 +129,7 @@ public class Json
 		key_word.add('}');
 		key_word.add('[');
 		key_word.add(']');
-		key_word.add(';');
+		key_word.add(',');
 		key_word.add(':');
 		key_word.add('\\');
 		for(int i=0;i<str.length;i++)

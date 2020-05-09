@@ -91,25 +91,25 @@ public class LN
 	static LinkedList<String> msgList = new LinkedList<String>();
 	public static void mdata(Client_sl User,DataPack msg)
 	{
-		String type = (String) msg.get("type");
+		String type = (String) msg.getValue("type");
 		switch(type)
 		{
 		case "command":
 		{
-			String CmdText = (String) msg.get("CmdText");
+			String CmdText = (String) msg.getValue("CmdText");
 			cmdManager.ln(User,CmdText);
 			return;
 		}
 		case "note":
 		{
-			String NoteType = (String) msg.get("NoteType");
-			String NoteText = (String)msg.get("NoteText");
+			String NoteType = (String) msg.getValue("NoteType");
+			String NoteText = (String)msg.getValue("NoteText");
 			message.warning("来自终端<"+User.ID+">的警告{"+NoteType+"}:"+NoteText);
 			return;
 		}
 		case "message":
 		{
-			String message = (String) msg.get("message");
+			String message = (String) msg.getValue("message");
 			//触发聊天事件
 			if(new Chat_Event(User,message).Cancel) {return;}
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
@@ -134,13 +134,13 @@ public class LN
 		}
 		case "forward_message":
 		{
-			message.show("["+msg.get("From")+"]:"+msg.get("message"));
+			message.show("["+msg.getValue("From")+"]:"+msg.getValue("message"));
 			return;
 		}
 		case "auth":
 		{
 			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
-			String ID = msg.get("ID");
+			String ID = msg.getValue("ID");
 			LNlib.XT_sendall("{type:connect,operation:XT}");
 			if(LNlib.ID_repeat(ID)) 
 			{
@@ -160,8 +160,14 @@ public class LN
 			new ClientConnected_Event(User);//激发事件
 			return;
 		}
+		
+		case"connect":
+		{
+			if(msg.getValue("operation").equals("XT"))
+			return;
+		}
 		default:
-			User.sendNote("2","未知消息类型");
+			User.sendNote("2","未知消息类型{"+msg.getStr()+"}");
 			return;
 		}
 

@@ -44,7 +44,7 @@ public class DataPack implements java.io.Serializable
 		return (HashMap<String,String>) DataMap.clone();
 	}
 	
-	public String get(String key)
+	public String getValue(String key)
 	{
 		return DataMap.get(key);
 	}
