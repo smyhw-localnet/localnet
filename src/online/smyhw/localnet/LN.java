@@ -22,7 +22,7 @@ import online.smyhw.localnet.plugins.PluginsManager;
  */
 public class LN
 {
-
+	public static final int Version = 777;
 	public static String ID;//用户唯识别代号
 	public static OnlineThread online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
