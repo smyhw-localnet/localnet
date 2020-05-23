@@ -1,5 +1,6 @@
 package online.smyhw.localnet.network;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashMap;
@@ -95,6 +96,16 @@ public class Client_sl extends TCP_LK
 		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
 		new ClientDISconnect_Event(this);
 		return;
+	}
+	
+	public void Disconnect()
+	{
+		this.Smsg("{type:connect,operation:disconnect}");
+		try 
+		{
+			this.s.close();
+		}
+		catch (IOException e) {message.warning("断开与客户端<"+this.ID+">的连接时发生IO异常", e);}
 	}
 	
 	public byte[] encryption(byte[] input,int type)

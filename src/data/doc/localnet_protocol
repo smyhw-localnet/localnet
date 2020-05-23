@@ -30,6 +30,7 @@ operation:disconnect	#断开连接
 NoteType:1	#鉴权错误
 NoteType:2	#未知消息类型
 NoteType:4	#消息缺失必要节点
+NoteType:5	#连接操作未知(type:connect时的operation节点未知)
 {type:command,CmdText:list}	#指令信息
 
 

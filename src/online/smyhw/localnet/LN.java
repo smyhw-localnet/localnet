@@ -164,7 +164,18 @@ public class LN
 		
 		case"connect":
 		{
-			if(msg.getValue("operation").equals("xt"))
+			switch(msg.getValue("operation"))
+			{
+			case "xt":
+				//能到这的都是向TM本地客户端发的心跳包，不用管
+				
+				break;
+			case "disconnect":
+				User.Disconnect();
+				break;
+			default:
+				User.sendNote("5","未知的连接操作{"+msg.getValue("operation")+"}");
+			}
 			return;
 		}
 		default:
