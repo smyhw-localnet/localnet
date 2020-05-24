@@ -91,21 +91,17 @@ public class Client_sl extends TCP_LK
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
-		NetWorkManager.doclient(0, this, 0);
-		message.show("客户端<"+this.ID+">断开连接{"+e.type+"}:"+e.getMessage());
-		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
-		new ClientDISconnect_Event(this);
+		Disconnect(e.type+"->"+e.getMessage());
 		return;
 	}
 	
-	public void Disconnect()
+	public void Disconnect(String msg)
 	{
-		this.Smsg("{type:connect,operation:disconnect}");
-		try 
-		{
-			this.s.close();
-		}
-		catch (IOException e) {message.warning("断开与客户端<"+this.ID+">的连接时发生IO异常", e);}
+		NetWorkManager.doclient(0, this, 0);
+		message.show("客户端<"+this.ID+">断开连接{"+msg+"}");
+		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
+		this.isERROR=true;
+		new ClientDISconnect_Event(this);
 	}
 	
 	public byte[] encryption(byte[] input,int type)

@@ -171,7 +171,7 @@ public class LN
 				
 				break;
 			case "disconnect":
-				User.Disconnect();
+				User.Disconnect("客户端主动断开连接");
 				break;
 			default:
 				User.sendNote("5","未知的连接操作{"+msg.getValue("operation")+"}");
@@ -249,7 +249,7 @@ class input extends Thread
 			try
 			{
 				Thread.sleep(1000);
-				if(LN.server_sl!=null) {server=LN.server_sl.ID.trim();}
+				try{if(LN.server_sl!=null) {server=LN.server_sl.ID.trim();}}catch(Exception e) {server = "localnet";}
 				message.input(LN.ID+"@"+server+">");
 				
 				input = LN.input.readLine();
