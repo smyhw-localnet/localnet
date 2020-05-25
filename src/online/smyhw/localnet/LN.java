@@ -53,10 +53,6 @@ public class LN
 			message.info("读取配置文件:debug="+LNconfig.get_int("debug",1));
 			message.info("加载lib...");
 			LNlib.call_back();
-			message.info("初始化用户输入流");
-			input = new BufferedReader(new InputStreamReader(System.in));//初始化用户输入流
-			message.info("实例化用户输入进程");
-			user_input=new input(input);//实例化用户主输入进程
 			message.info("初始化系统指令");
 			cmdManager.Initialization();//初始化系统指令
 			message.info("初始化插件");
@@ -67,6 +63,12 @@ public class LN
 			message.show("为了保证安全性，联机进程默认未启用，请使用nwm手动启动！");
 			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
 			{message.warning("警告，没有检测到加密插件，localnet的信息将以明文传输！（如果你的数据会经过非安全网络传输，请务必对数据进行加密！）");}
+			message.info("初始化用户输入流");
+			input = new BufferedReader(new InputStreamReader(System.in));//初始化用户输入流
+			message.info("实例化用户输入进程");
+			user_input=new input(input);//实例化用户主输入进程
+			message.info("执行自动脚本...");
+			user_input.DoBegin();
 			message.info("localnet初始化完成!");
 			smyhw.main();//awa
 		}
@@ -140,7 +142,7 @@ public class LN
 		}
 		case "auth":
 		{
-			if(User.ID!=null) {User.sendMsg("!1请误重复鉴权!");return;}
+			if(User.ID!=null) {User.sendNote("1","鉴权重复");return;}
 			String ID = msg.getValue("ID");
 			LNlib.XT_sendall("{type:connect,operation:xt}");
 			if(LNlib.ID_repeat(ID)) 
@@ -220,9 +222,36 @@ class input extends Thread
 {
 	String server = "localnet";//连接到的服务器
 	String input;//用户输入的数据
+	boolean lock = true;
 	input(BufferedReader input) throws Exception
 	{
 		
+	}
+	
+	public static void DoBegin()
+	{
+		File BeginFile = new File("./StartupScript");
+		if(!BeginFile.exists()) {return;}
+		try 
+		{
+			BufferedReader br = new BufferedReader(new FileReader("./StartupScript"));
+			while(true)
+			{
+				String temp1 = br.readLine();
+				if(temp1==null) {return;}
+				DoInput(temp1);
+			}
+		}
+		catch (Exception e) 
+		{
+			message.warning("执行启动脚本时出错",e);
+		}
+	}
+	
+	public synchronized static void DoInput(String input)
+	{
+		DataPack map = ToPack(input);
+		LN.mdata(LN.local_sl,map);
 	}
 	
 	public static DataPack ToPack(String input)
@@ -249,13 +278,13 @@ class input extends Thread
 			try
 			{
 				Thread.sleep(1000);
+				if(this.lock) {continue;}
 				try{if(LN.server_sl!=null) {server=LN.server_sl.ID.trim();}}catch(Exception e) {server = "localnet";}
 				message.input(LN.ID+"@"+server+">");
 				
 				input = LN.input.readLine();
 //				message.info("取得用户输入："+input);
-				DataPack map = ToPack(input);
-				LN.mdata(LN.local_sl,map);
+				DoInput(input);
 				
 			}
 			catch(Exception e)
