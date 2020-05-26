@@ -69,6 +69,7 @@ public class LN
 			user_input=new input(input);//实例化用户主输入进程
 			message.info("执行自动脚本...");
 			user_input.DoBegin();
+			user_input.lock=false;
 			message.info("localnet初始化完成!");
 			smyhw.main();//awa
 		}
