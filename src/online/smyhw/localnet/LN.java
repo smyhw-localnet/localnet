@@ -144,7 +144,7 @@ public class LN
 		{
 			if(User.ID!=null) {User.sendNote("1","鉴权重复");return;}
 			String ID = msg.getValue("ID");
-			LNlib.XT_sendall("{type:connect,operation:xt}");
+			LNlib.XT_sendall("{\"type\":\"connect\",\"operation\":\"xt\"}");
 			if(LNlib.ID_repeat(ID)) 
 			{
 				User.sendNote("1","ID重复！");
