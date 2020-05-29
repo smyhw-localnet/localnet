@@ -100,7 +100,10 @@ public class message
 	static LogThread logthread;
 	static void log(String input)
 	{
-		logthread.msgList.add(input);
+		if(!LN.LibMod)
+		{
+			logthread.msgList.add(input);
+		}
 	}
 }
 

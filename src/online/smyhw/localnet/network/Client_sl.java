@@ -35,12 +35,20 @@ public class Client_sl extends TCP_LK
 		Begin();
 	}
 	
+	public Client_sl(Socket s,int type,String ID)
+	{
+		super(s,type);//这里，调用父类构造方法
+		this.ID=ID;
+		Begin();
+	}
+	
 	public void Begin()
 	{
 		new ClientConnect_Event(this);
+		if(ID==null) {this.ID=LN.ID;}
 		try
 		{
-			this.Smsg("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}");//发送自身ID
+			this.Smsg("{\"type\":\"auth\",\"ID\":\""+ID+"\"}");//发送自身ID
 		}catch(Exception e){message.info(" 终端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
