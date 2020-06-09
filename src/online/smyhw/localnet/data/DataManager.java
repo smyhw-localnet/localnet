@@ -24,6 +24,9 @@ public class DataManager
 		File file = new File(URL);
 		try 
 		{
+			//如果目录不存在，则创建目录
+			file.getParentFile().mkdirs();
+			//如果文件不存在，则创建文件
 			if(!file.exists()) {file.createNewFile();}
 			List<String> flist = Files.readAllLines(Paths.get(URL));
 			HashMap<String,String> temp1 = (HashMap<String, String>) data.main_data.clone();
