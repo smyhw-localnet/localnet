@@ -1,10 +1,10 @@
 package online.smyhw.localnet.network;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.LNlib;
@@ -16,40 +16,23 @@ import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
+import online.smyhw.localnet.network.protocol.*;
 
-public class Client_sl extends TCP_LK
+public class Client_sl
 {
 	
 	public  data ClientData = new data();
 	public  data TempClientData = new data();
 	
 	public String ID;
-	public Client_sl(Socket s, int type)
+	public String protocolType;
+	public StandardProtocol protocolClass;
+	public Client_sl(String protocol,List args)
 	{
-		super(s,type);//这里，调用父类构造方法
-		Begin();
-	}
-	public Client_sl(Socket s)
-	{
-		super(s,1);//这里，调用父类构造方法
-		Begin();
-	}
-	
-	public Client_sl(Socket s,int type,String ID)
-	{
-		super(s,type);//这里，调用父类构造方法
-		this.ID=ID;
-		Begin();
-	}
-	
-	public void Begin()
-	{
+		args.add(this);
+		//TODO 动态协议列表
+		protocolClass = new localnetTCP(args);
 		new ClientConnect_Event(this);
-		if(ID==null) {this.ID=LN.ID;}
-		try
-		{
-			this.Smsg("{\"type\":\"auth\",\"ID\":\""+ID+"\"}");//发送自身ID
-		}catch(Exception e){message.info(" 终端\""+ID+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
 	/**
@@ -63,15 +46,18 @@ public class Client_sl extends TCP_LK
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
 		message.info("[网络动向]发送消息<"+send+">至终端<"+this.ID+">");
-		Smsg(send);
+		sendData(Hmsg);
 	}
 	
-	
+	/**
+	 * 发送原始HashMap信息
+	 * @param input
+	 */
 	public void sendData(HashMap<String,String> input)
 	{
-		String send = Json.Create(input);
-		message.info("[网络动向]发送消息<"+send+">至终端<"+this.ID+">");
-		Smsg(send);
+//		String send = Json.Create(input);
+		message.info("[网络动向]发送消息<"+input.toString()+">至终端<"+this.ID+">");
+		protocolClass.SendData(input);
 	}
 	
 	public void sendNote(String NoteType,String noteMsg)
@@ -108,19 +94,9 @@ public class Client_sl extends TCP_LK
 		NetWorkManager.doclient(0, this, 0);
 		message.show("客户端<"+this.ID+">断开连接{"+msg+"}");
 		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
-		this.isERROR=true;
+		this.protocolClass.Disconnect();
 		new ClientDISconnect_Event(this);
 	}
-	
-	public byte[] encryption(byte[] input,int type)
-	{
-		byte[] re=null;
-		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,this);
-		re = temp1.output;
-		if(temp1.Error) {return null;}
-		return re;
-	}
-	
 	
 	//ClientData存取方法
 	

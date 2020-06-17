@@ -1,24 +1,20 @@
 package online.smyhw.localnet.network;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
-
 import online.smyhw.localnet.LN;
-import online.smyhw.localnet.LNlib;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.event.ConnectServerEvent;
-import online.smyhw.localnet.event.DataDecryptEvent;
 import online.smyhw.localnet.lib.Json;
-import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
 public class Server_sl extends Client_sl
 {
 	public Server_sl(Socket s)
 	{
-		super(s,2);//这里，调用父类构造方法
+		super("localnetTCP",new ArrayList(){{this.add(s);}});//这里，调用父类构造方法
 		new ConnectServerEvent(this);
 	}
 	public void CLmsg(String msg)

@@ -7,7 +7,6 @@ import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.config;
 import online.smyhw.localnet.event.*;
-import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.network.*;
 import online.smyhw.localnet.plugins.PluginsManager;
 

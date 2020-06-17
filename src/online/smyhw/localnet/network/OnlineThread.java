@@ -3,6 +3,8 @@ package online.smyhw.localnet.network;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import online.smyhw.localnet.message;
 
@@ -25,7 +27,9 @@ public class OnlineThread extends Thread
 			{
 				connect = server_connect.accept();
 				message.info("接收到一个新连接。。。");
-				new Client_sl(connect);
+				List temp = new ArrayList();
+				temp.add(connect);
+				new Client_sl("localnetTCP",temp);
 			}catch(IOException e){}catch(Exception e){}
 		}
 	}
