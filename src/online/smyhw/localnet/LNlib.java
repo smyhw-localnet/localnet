@@ -27,7 +27,7 @@ public class LNlib
 		{
 			Client_sl temp3 = temp2.next();
 			message.info("SENDALL_ID:"+temp3.ID);
-			temp3.Smsg(msg);
+			temp3.sendMsg(msg);
 		}
 	}
 	
@@ -41,21 +41,10 @@ public class LNlib
 			Client_sl temp3 = temp2.next();
 			message.info("SENDALL_ID:"+temp3.ID);
 			if(temp3==Sender) {continue;}
-			temp3.Smsg(msg);
+			temp3.sendMsg(msg);
 		}
 	}
 	
-	public static void XT_sendall(String XTmsg)
-	{
-		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
-		Iterator<Client_sl> temp2 = temp1.iterator();
-		while(temp2.hasNext())
-		{
-			Client_sl temp3 = temp2.next();
-			if(temp3==LN.local_sl) {continue;}
-			temp3.Smsg(XTmsg);
-		}
-	}
 	
 	
 	/**

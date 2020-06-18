@@ -26,7 +26,7 @@ public class OnlineThread extends Thread
 			try 
 			{
 				connect = server_connect.accept();
-				message.info("接收到一个新连接。。。");
+				message.info("socket连接<"+connect.getInetAddress()+">");
 				List temp = new ArrayList();
 				temp.add(connect);
 				new Client_sl("localnetTCP",temp);

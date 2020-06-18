@@ -29,9 +29,18 @@ public class Client_sl
 	public StandardProtocol protocolClass;
 	public Client_sl(String protocol,List args)
 	{
-		args.add(this);
-		//TODO 动态协议列表
-		protocolClass = new localnetTCP(args);
+		switch(protocol)
+		{
+		case "localnetTCP":
+			protocolClass = new localnetTCP(args,this);
+			break;
+		case "local":
+			protocolClass = new local(args,this);
+			break;
+		default:
+			message.warning("一个协议类型未知的客户端被拒绝创建");
+			return;
+		}
 		new ClientConnect_Event(this);
 	}
 	
@@ -69,17 +78,15 @@ public class Client_sl
 		this.sendData(send);
 	}
 	
-	public void CLmsg(String msg)
+	public void CLmsg(HashMap<String,String> re)
 	{	
-		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+msg+">");
-		HashMap<String,String> re = Json.Parse(msg);
+		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+re.toString()+">");
 		if(!LNlib.CheckMapNode(re))
 		{
 			message.info("接收到来自客户端<"+this.ID+">的消息缺少必要消息节点");
 			this.sendNote("4", "消息缺失必要节点");
 			return;
 		}
-		if(re==null) {message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息Json解码错误");return;}
 		if(ID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
 		LN.mdata(this, new DataPack(re));
 	}

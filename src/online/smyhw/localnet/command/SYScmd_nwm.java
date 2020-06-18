@@ -11,7 +11,7 @@ public class SYScmd_nwm
 	
 	public static void cmd(Client_sl User,String cmd)
 	{
-		if(User!=LN.local_sl) {User.Smsg("抱歉,您不能使用服务器的关键指令!");}
+		if(User!=LN.local_sl) {User.sendMsg("抱歉,您不能使用服务器的关键指令!");}
 		switch(CommandFJ.fj(cmd, 1))
 		{
 		case "set":

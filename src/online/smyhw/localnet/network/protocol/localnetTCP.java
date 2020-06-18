@@ -23,10 +23,10 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	
 	public Client_sl client; 
 	
-	public localnetTCP(List input)
+	public localnetTCP(List input,Client_sl sy)
 	{
 		super((Socket) input.get(0),1);//这里，调用父类构造方法
-		this.client = (Client_sl) input.get(1);
+		this.client = sy;
 		Begin();
 	}
 	
@@ -45,8 +45,10 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	}
 	
 	public void CLmsg(String msg)
-	{	
-		this.client.CLmsg(msg);
+	{
+		//这里要将接收到的信息以HashMap的形式回传给上游
+		HashMap<String,String> re = Json.Parse(msg);
+		this.client.CLmsg(re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
