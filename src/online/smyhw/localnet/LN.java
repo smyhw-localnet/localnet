@@ -116,6 +116,12 @@ public class LN
 			String message = (String) msg.getValue("message");
 			//触发聊天事件
 			if(new Chat_Event(User,message).Cancel) {return;}
+			if(User.ID.equals(LN.ID) && msg.getValue("isSend")==null)
+			{
+				if(new ChatINFO_Event(User,User,message).Cancel) {return;}
+				online.smyhw.localnet.message.show("[本地]:"+msg.getValue("message"));
+				return;
+			}
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 			Iterator<Client_sl> temp2 = temp1.iterator();
 			while(temp2.hasNext())
@@ -124,9 +130,9 @@ public class LN
 				if(temp3==User) {continue;}
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
 				HashMap<String,String> send = new HashMap<String,String>();
-				if(User==LN.local_sl)
+				if(User.ID.equals(LN.ID))
 				{
-					send.put("type", "message");
+						send.put("type", "message");
 				}
 				else
 				{
@@ -254,6 +260,7 @@ class input extends Thread
 	public synchronized static void DoInput(String input)
 	{
 		DataPack map = ToPack(input);
+		map.add("isSend", "true");
 		LN.mdata(LN.local_sl,map);
 	}
 	
