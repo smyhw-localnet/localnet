@@ -31,6 +31,13 @@ public class LNlib
 		}
 	}
 	
+	/**
+	 * 指定一个发送终端</br>
+	 * 信息将被发送为以这个终端为发送者的转发(forward)消息</br>
+	 * 同时，指定的终端并不会收到这个消息
+	 * @param msg
+	 * @param Sender
+	 */
 	public static void SendAll(String msg,Client_sl Sender)
 	{
 		message.info("sendALL:"+msg);
@@ -39,9 +46,12 @@ public class LNlib
 		while(temp2.hasNext())
 		{
 			Client_sl temp3 = temp2.next();
-			message.info("SENDALL_ID:"+temp3.ID);
 			if(temp3==Sender) {continue;}
-			temp3.sendMsg(msg);
+			HashMap<String,String> send = new HashMap<String,String>();
+			send.put("type", "forward_message");
+			send.put("From", Sender.ID);
+			send.put("message", msg);
+			temp3.sendData(send);
 		}
 	}
 	
