@@ -14,6 +14,6 @@ public class Local_sl extends Client_sl
 	public Local_sl()
 	{
 		super("local",new ArrayList());
-		this.ID=LN.ID;
+		this.remoteID=LN.ID;
 	}
 }

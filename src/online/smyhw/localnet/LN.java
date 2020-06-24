@@ -108,7 +108,7 @@ public class LN
 		{
 			String NoteType = (String) msg.getValue("NoteType");
 			String NoteText = (String)msg.getValue("NoteText");
-			message.warning("来自终端<"+User.ID+">的警告{"+NoteType+"}:"+NoteText);
+			message.warning("来自终端<"+User.remoteID+">的警告{"+NoteType+"}:"+NoteText);
 			return;
 		}
 		case "message":
@@ -116,7 +116,7 @@ public class LN
 			String message = (String) msg.getValue("message");
 			//触发聊天事件
 			if(new Chat_Event(User,message).Cancel) {return;}
-			if(User.ID.equals(LN.ID) && msg.getValue("isSend")==null)
+			if(User.remoteID.equals(LN.ID) && msg.getValue("isSend")==null)
 			{
 				if(new ChatINFO_Event(User,User,message).Cancel) {return;}
 				online.smyhw.localnet.message.show("[本地]:"+msg.getValue("message"));
@@ -130,14 +130,14 @@ public class LN
 				if(temp3==User) {continue;}
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
 				HashMap<String,String> send = new HashMap<String,String>();
-				if(User.ID.equals(LN.ID))
+				if(User.remoteID.equals(LN.ID))
 				{
 						send.put("type", "message");
 				}
 				else
 				{
 					send.put("type", "forward_message");
-					send.put("From", User.ID);
+					send.put("From", User.remoteID);
 				}
 				send.put("message", message);
 				temp3.sendData(send);
@@ -151,7 +151,7 @@ public class LN
 		}
 		case "auth":
 		{
-			if(User.ID!=null) {User.sendNote("1","鉴权重复");return;}
+			if(User.remoteID!=null) {User.sendNote("1","鉴权重复");return;}
 			String ID = msg.getValue("ID");
 //			LNlib.XT_sendall("{\"type\":\"connect\",\"operation\":\"xt\"}");
 			if(LNlib.ID_repeat(ID)) 
@@ -164,10 +164,10 @@ public class LN
 				User.sendNote("1","ID不合法");
 				return;
 			}
-			User.ID=ID;
-			message.show("终端<"+User.ID+">完成握手");
-			message.info("读取终端<"+User.ID+">的ClientData");
-			User.ClientData=DataManager.LoadData("./TerminalData/"+User.ID);
+			User.remoteID=ID;
+			message.show("终端<"+User.remoteID+">完成握手");
+			message.info("读取终端<"+User.remoteID+">的ClientData");
+			User.ClientData=DataManager.LoadData("./TerminalData/"+User.remoteID);
 			NetWorkManager.doclient(1, User, 0);
 			new ClientConnected_Event(User);//激发事件
 			return;
@@ -289,7 +289,7 @@ class input extends Thread
 			{
 				Thread.sleep(1000);
 				if(this.lock) {continue;}
-				try{if(LN.server_sl!=null) {server=LN.server_sl.ID.trim();}}catch(Exception e) {server = "localnet";}
+				try{if(LN.server_sl!=null) {server=LN.server_sl.remoteID.trim();}}catch(Exception e) {server = "localnet";}
 				message.input(LN.ID+"@"+server+">");
 				
 				input = LN.input.readLine();

@@ -60,11 +60,11 @@ public class NetWorkManager
 		{
 		case 0:
 			LN.client_list.remove(lj);
-			message.info("[列表]终端<"+lj.ID+">删除");
+			message.info("[列表]终端<"+lj.remoteID+">删除");
 			break;
 		case 1:
 			LN.client_list.add(lj);
-			message.info("[列表]终端<"+lj.ID+">添加");
+			message.info("[列表]终端<"+lj.remoteID+">添加");
 			break;
 		case 2:
 			re=LN.client_list.get(sy);

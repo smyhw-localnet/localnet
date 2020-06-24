@@ -24,7 +24,7 @@ public class Client_sl
 	public  data ClientData = new data();
 	public  data TempClientData = new data();
 	
-	public String ID;
+	public String remoteID;
 	public String protocolType;
 	public StandardProtocol protocolClass;
 	public Client_sl(String protocol,List args)
@@ -54,7 +54,7 @@ public class Client_sl
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
-		message.info("[网络动向]发送消息<"+send+">至终端<"+this.ID+">");
+		message.info("[网络动向]发送消息<"+send+">至终端<"+this.remoteID+">");
 		sendData(Hmsg);
 	}
 	
@@ -65,7 +65,7 @@ public class Client_sl
 	public void sendData(HashMap<String,String> input)
 	{
 //		String send = Json.Create(input);
-		message.info("[网络动向]发送消息<"+input.toString()+">至终端<"+this.ID+">");
+		message.info("[网络动向]发送消息<"+input.toString()+">至终端<"+this.remoteID+">");
 		protocolClass.SendData(input);
 	}
 	
@@ -80,14 +80,14 @@ public class Client_sl
 	
 	public void CLmsg(HashMap<String,String> re)
 	{	
-		message.info("[网络动向]接收到来自客户端<"+this.ID+">的消息<"+re.toString()+">");
+		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.toString()+">");
 		if(!LNlib.CheckMapNode(re))
 		{
-			message.info("接收到来自客户端<"+this.ID+">的消息缺少必要消息节点");
+			message.info("接收到来自客户端<"+this.remoteID+">的消息缺少必要消息节点");
 			this.sendNote("4", "消息缺失必要节点");
 			return;
 		}
-		if(ID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
+		if(remoteID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
 		LN.mdata(this, new DataPack(re));
 	}
 	public void Serr_u(TCP_LK_Exception e)
@@ -99,8 +99,8 @@ public class Client_sl
 	public void Disconnect(String msg)
 	{
 		NetWorkManager.doclient(0, this, 0);
-		message.show("客户端<"+this.ID+">断开连接{"+msg+"}");
-		DataManager.SaveData("./TerminalData/"+this.ID, ClientData);//保存数据
+		message.show("客户端<"+this.remoteID+">断开连接{"+msg+"}");
+		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
 		this.protocolClass.Disconnect();
 		new ClientDISconnect_Event(this);
 	}

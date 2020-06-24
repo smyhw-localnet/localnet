@@ -26,7 +26,7 @@ public class LNlib
 		while(temp2.hasNext())
 		{
 			Client_sl temp3 = temp2.next();
-			message.info("SENDALL_ID:"+temp3.ID);
+			message.info("SENDALL_ID:"+temp3.remoteID);
 			temp3.sendMsg(msg);
 		}
 	}
@@ -49,7 +49,7 @@ public class LNlib
 			if(temp3==Sender) {continue;}
 			HashMap<String,String> send = new HashMap<String,String>();
 			send.put("type", "forward_message");
-			send.put("From", Sender.ID);
+			send.put("From", Sender.remoteID);
 			send.put("message", msg);
 			temp3.sendData(send);
 		}
@@ -70,7 +70,7 @@ public class LNlib
 		while(temp2.hasNext())
 		{
 			Client_sl temp3 = temp2.next();
-			if(temp3.ID.equalsIgnoreCase(UserName)) {return true;}
+			if(temp3.remoteID.equalsIgnoreCase(UserName)) {return true;}
 		}
 		return false;
 	}
@@ -113,7 +113,7 @@ public class LNlib
 		while(temp2.hasNext())
 		{
 			Client_sl temp3 = temp2.next();
-			if(temp3.ID.equals(ID)) {return temp3;}
+			if(temp3.remoteID.equals(ID)) {return temp3;}
 		}
 		return null;
 	}

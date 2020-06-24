@@ -17,7 +17,7 @@ public class SYScmd_list
 		while(temp2.hasNext())
 		{
 			Client_sl temp3 = temp2.next();
-			re=re+temp3.ID+"\n";
+			re=re+temp3.remoteID+"\n";
 		}
 		User.sendMsg(re);
 		return;
