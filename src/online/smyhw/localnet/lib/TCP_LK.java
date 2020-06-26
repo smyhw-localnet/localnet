@@ -304,6 +304,7 @@ class xt_sender extends Thread
 	{
 		while(true)
 		{
+			if(ba.isERROR) {return;}
 			ba.Smsg(this.XT);
 			System.out.println("send~~~");
 			try {sleep(Stime);} catch (InterruptedException e) {new TCP_LK_Exception("[TCP_LK]:心跳包延迟出错",ba);}
