@@ -33,7 +33,7 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	 */
 	public localnetTCP(List input,Client_sl sy)
 	{
-		super((Socket) input.get(0),input.size()>1 ? (int) input.get(1) : 2);//这里，调用父类构造方法
+		super((Socket) input.get(0),input.size()>1 ? (int) input.get(1) : 1);//这里，调用父类构造方法
 		this.client = sy;
 		
 		try
@@ -57,7 +57,7 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
-		Disconnect();
+		this.client.Serr_u(e);
 		return;
 	}
 	

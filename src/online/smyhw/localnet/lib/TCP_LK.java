@@ -36,7 +36,7 @@ import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
  */
 public abstract class TCP_LK
 {
-	public int kt=10000;
+	public int kt=1000;
 	public int type=0;
 	public Socket s;
 	public InputStream s_in;
@@ -56,6 +56,8 @@ public abstract class TCP_LK
 		this.XT=XT;
 		gz(s,type);
 	}
+	
+	//真正的初始化函数
 	public void gz(Socket s,int type)
 	{
 		this.type=type;
@@ -303,6 +305,7 @@ class xt_sender extends Thread
 		while(true)
 		{
 			ba.Smsg(this.XT);
+			System.out.println("send~~~");
 			try {sleep(Stime);} catch (InterruptedException e) {new TCP_LK_Exception("[TCP_LK]:心跳包延迟出错",ba);}
 		}
 	}

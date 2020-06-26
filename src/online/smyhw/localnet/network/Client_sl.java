@@ -103,6 +103,7 @@ public class Client_sl
 		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
 		this.protocolClass.Disconnect();
 		new ClientDISconnect_Event(this);
+		this.protocolClass.Disconnect();
 	}
 	
 	//ClientData存取方法

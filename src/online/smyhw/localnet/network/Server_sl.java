@@ -14,7 +14,7 @@ public class Server_sl extends Client_sl
 {
 	public Server_sl(Socket s)
 	{
-		super("localnetTCP",new ArrayList(){{this.add(s);this.add(1);}});//这里，调用父类构造方法
+		super("localnetTCP",new ArrayList(){{this.add(s);this.add(2);}});//这里，调用父类构造方法
 		new ConnectServerEvent(this);
 	}
 	public void CLmsg(String msg)

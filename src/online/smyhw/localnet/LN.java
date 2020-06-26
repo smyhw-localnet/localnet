@@ -114,28 +114,29 @@ public class LN
 		case "message":
 		{
 			String message = (String) msg.getValue("message");
-			//触发聊天事件
-			if(new Chat_Event(User,message).Cancel) {return;}
 			if(User.remoteID.equals(LN.ID) && msg.getValue("isSend")==null)
-			{
-				if(new ChatINFO_Event(User,User,message).Cancel) {return;}
+			{//本地发送的，目的地不是外部终端的
+//				if(new ChatINFO_Event(User,User,message).Cancel) {return;}
 				online.smyhw.localnet.message.show("[本地]:"+msg.getValue("message"));
 				return;
 			}
+			//触发聊天事件
+			if(new Chat_Event(User,message).Cancel) {return;}
 			ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 			Iterator<Client_sl> temp2 = temp1.iterator();
 			while(temp2.hasNext())
 			{
 				Client_sl temp3 = temp2.next();
 				if(temp3==User) {continue;}
+				//激发事件
 				if(new ChatINFO_Event(User,temp3,message).Cancel) {continue;}
 				HashMap<String,String> send = new HashMap<String,String>();
 				if(User.remoteID.equals(LN.ID))
-				{
+				{//如果是本地发送，并且目的地不是发给本地的(目的地是本地的已经被上头筛掉了)，则当做正常消息发送出去
 						send.put("type", "message");
 				}
 				else
-				{
+				{//如果来源不是本地，则作为转发消息转发到所有连接到的终端
 					send.put("type", "forward_message");
 					send.put("From", User.remoteID);
 				}
