@@ -11,7 +11,7 @@ public class SYScmd_help
 		re="\n".concat(re);
 		re=re.replace('=','\n');
 		re=re.replace(',', '\n');
-		message.show(re);
+		User.sendMsg(re);
 		return;
 	}
 }
