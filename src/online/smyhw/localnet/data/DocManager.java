@@ -1,6 +1,8 @@
 package online.smyhw.localnet.data;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -21,7 +23,7 @@ public class DocManager
 	 * @param path文档路径
 	 * @return 文档文本,若文档不存在或读取出错，返回null
 	 */
-	public String readFromJar(String path)
+	public static String readFromJar(String path)
 	{
 		String re = "";
 		try 
@@ -46,9 +48,25 @@ public class DocManager
 	 * @param path 文件路径
 	 * @return 文档文本,若文档不存在，返回null
 	 */
-	public String readFromFile(String path)
+	public static String readFromFile(String path)
 	{
-		return new String();
+		String re ="";
+		try 
+		{
+			BufferedReader temp1 = new BufferedReader(new FileReader(path));
+			while(true)
+			{
+				String temp2 = temp1.readLine();
+				if(temp2==null) {break;}
+				re = re + "\n" + temp2;
+			}
+		}
+		catch (Exception e) 
+		{
+			message.warning("从文件<"+path+">中读取文档出错", e);
+			return null;
+		}
+		return re;
 	}
 	
 	/**
@@ -56,7 +74,7 @@ public class DocManager
 	 * @param path 文档名称
 	 * @return 文档文本,若文档不存在，返回null
 	 */
-	public String readFromRunTime(String path)
+	public static String readFromRunTime(String path)
 	{
 		return RunTimeDoc.get(path);
 	}
@@ -69,7 +87,7 @@ public class DocManager
 	 * @param path 文档名称
 	 * @return 如果设置成功即返回true，否则返回false
 	 */
-	public boolean setRunTimeDoc(String doc,String path)
+	public static boolean setRunTimeDoc(String doc,String path)
 	{
 		RunTimeDoc.put(path, doc);
 		return false;
@@ -82,8 +100,14 @@ public class DocManager
 	 * @param path 文档路径
 	 * @return 文档文本,若文档不存在，返回null
 	 */
-	public String getDoc(String path)
+	public static String getDoc(String path)
 	{
-		return new String();
+		String re;
+		re  = readFromRunTime(path);
+		if(re == null)
+		{re = readFromJar(path);}
+		if(re == null)
+		{re = readFromFile(path);}
+		return re;
 	}
 }
