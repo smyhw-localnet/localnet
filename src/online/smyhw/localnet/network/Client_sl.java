@@ -65,7 +65,7 @@ public class Client_sl
 	public void sendData(DataPack input)
 	{
 //		String send = Json.Create(input);
-		message.info("[网络动向]发送消息<"+input.toString()+">至终端<"+this.remoteID+">");
+		message.info("[网络动向]发送消息<"+input.getStr()+">至终端<"+this.remoteID+">");
 		protocolClass.SendData(input);
 	}
 	
@@ -80,7 +80,7 @@ public class Client_sl
 	
 	public void CLmsg(DataPack re)
 	{	
-		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.toString()+">");
+		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
 		if(!LNlib.CheckMapNode(re.getMap()))
 		{
 			message.info("接收到来自客户端<"+this.remoteID+">的消息缺少必要消息节点");
