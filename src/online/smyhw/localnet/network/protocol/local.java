@@ -14,10 +14,6 @@ public class local implements StandardProtocol
 	public local(List input,Client_sl sy)
 	{
 		this.client=sy;
-		HashMap<String,String> authMap = new HashMap<String,String>();
-		authMap.put("type", "auth");
-		authMap.put("ID", LN.ID);
-		sy.CLmsg(new DataPack(authMap));
 	}
 
 	@Override

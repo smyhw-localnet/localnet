@@ -27,8 +27,7 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	/**
 	 * list参数表</br>
 	 * 1. socket实例 </br>
-	 * 2. 参数为1作为服务端，2则为客户端</br>
-	 * 3. 终端ID，不指定则默认为LN.ID(注意，如果作为lib调用，不指定就会boom...)
+	 * 2. 参数为1作为服务端，2则为客户端(该项仅影响心跳包收发)</br>
 	 * @param input
 	 * @param sy
 	 */
@@ -37,11 +36,11 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 		super((Socket) input.get(0),input.size()>1 ? (int) input.get(1) : 1);//这里，调用父类构造方法
 		this.client = sy;
 		
-		try
-		{//发送自身ID
-			if(input.size()>2) {this.Smsg("{\"type\":\"auth\",\"ID\":\""+input.get(2)+"\"}");}
-			else {this.Smsg("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}");}
-		}catch(Exception e){message.info(" 终端\""+this.s.getInetAddress()+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
+//		try
+//		{//发送自身ID
+//			if(input.size()>2) {this.Smsg("{\"type\":\"auth\",\"ID\":\""+input.get(2)+"\"}");}
+//			else {this.Smsg("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}");}
+//		}catch(Exception e){message.info(" 终端\""+this.s.getInetAddress()+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
 	public void SendData(DataPack input)

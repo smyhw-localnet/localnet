@@ -18,22 +18,16 @@ public class Server_sl extends Client_sl
 		super("localnetTCP",new ArrayList(){{this.add(s);this.add(2);}});//这里，调用父类构造方法
 		new ConnectServerEvent(this);
 	}
-	public void CLmsg(String msg)
+	@Override
+	public void CLmsg(DataPack data)
 	{
-		message.info("收到来自服务器的原始消息："+msg);
-		HashMap<String, String> map;
-		try 
-		{
-			map = Json.Parse(msg);
-		} catch (Json_Parse_Exception e) {
-			message.warning("服务器发送了无法解析的消息");
-			return;
-		}
-		if(remoteID==null && !map.get("type").equals("auth"))
+		message.info("收到来自服务器的原始消息："+data.getStr());
+		if(remoteID==null && !data.getValue("type").equals("auth"))
 		{message.warning("此服务器尝试在未发送身份信息的情况下发送其他消息，不安全，断开连接！");return;}
 		if(remoteID==null) {LN.server_sl=this;}
-		LN.mdata(this,new DataPack( map));
+		LN.mdata(this,data);
 	}
+	@Override
 	public void Serr_u( TCP_LK_Exception e)
 	{
 		LN.server_sl = null;

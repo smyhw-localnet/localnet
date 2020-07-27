@@ -15,6 +15,7 @@ import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.TCP_LK;
+import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.protocol.*;
 
@@ -41,6 +42,7 @@ public class Client_sl
 			message.warning("一个协议类型未知的客户端被拒绝创建");
 			return;
 		}
+		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 		new ClientConnect_Event(this);
 	}
 	
