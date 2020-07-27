@@ -141,7 +141,7 @@ public class LN
 					send.put("From", User.remoteID);
 				}
 				send.put("message", message);
-				temp3.sendData(send);
+				temp3.sendData(new DataPack(send));
 			}
 			return;
 		}

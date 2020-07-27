@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import online.smyhw.localnet.lib.Json;
+import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 
 
 /**
@@ -33,8 +34,9 @@ public class DataPack implements java.io.Serializable
 	/**
 	 * 根据Json创建数据包
 	 * @param jsonData
+	 * @throws Json_Parse_Exception 当传入的Json信息无法解析时
 	 */
-	public DataPack(String jsonData)
+	public DataPack(String jsonData) throws Json_Parse_Exception
 	{
 		DataMap = Json.Parse(jsonData);
 	}

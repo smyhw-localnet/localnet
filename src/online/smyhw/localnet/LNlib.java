@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.network.Client_sl;
 
 public class LNlib 
@@ -51,7 +52,7 @@ public class LNlib
 			send.put("type", "forward_message");
 			send.put("From", Sender.remoteID);
 			send.put("message", msg);
-			temp3.sendData(send);
+			temp3.sendData(new DataPack(send));
 		}
 	}
 	

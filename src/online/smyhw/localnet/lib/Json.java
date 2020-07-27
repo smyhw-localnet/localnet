@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
+import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 /**
  * 该类被设计为处理标准Json信息</br>
  * 
@@ -15,9 +17,9 @@ public class Json
 	/**
 	 * 解析JSON字符串
 	 * @param input JSON字符串
-	 * @return
+	 *@throws Json_Parse_Exception 当传入的Json信息无法解析时
 	 */
-	public static HashMap<String,String> Parse(String input)
+	public static HashMap<String,String> Parse(String input) throws Json_Parse_Exception
 	{
 		HashMap<String,String> re = new HashMap<String,String>();
 //		if(!input.startsWith("{")) {return null;};

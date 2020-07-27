@@ -5,6 +5,7 @@ import java.util.List;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.network.Client_sl;
 
 public class local implements StandardProtocol 
@@ -16,13 +17,13 @@ public class local implements StandardProtocol
 		HashMap<String,String> authMap = new HashMap<String,String>();
 		authMap.put("type", "auth");
 		authMap.put("ID", LN.ID);
-		sy.CLmsg(authMap);
+		sy.CLmsg(new DataPack(authMap));
 	}
 
 	@Override
-	public void SendData(HashMap<String, String> msg) 
+	public void SendData(DataPack data) 
 	{
-		this.client.CLmsg(msg);
+		this.client.CLmsg(data);
 	}
 
 	@Override

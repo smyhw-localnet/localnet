@@ -55,14 +55,14 @@ public class Client_sl
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
 		message.info("[网络动向]发送消息<"+send+">至终端<"+this.remoteID+">");
-		sendData(Hmsg);
+		sendData(new DataPack(Hmsg));
 	}
 	
 	/**
-	 * 发送原始HashMap信息
+	 * 发送数据包信息
 	 * @param input
 	 */
-	public void sendData(HashMap<String,String> input)
+	public void sendData(DataPack input)
 	{
 //		String send = Json.Create(input);
 		message.info("[网络动向]发送消息<"+input.toString()+">至终端<"+this.remoteID+">");
@@ -75,20 +75,20 @@ public class Client_sl
 		send.put("type", "note");
 		send.put("NoteType", NoteType);
 		send.put("NoteText", noteMsg);
-		this.sendData(send);
+		this.sendData(new DataPack(send));
 	}
 	
-	public void CLmsg(HashMap<String,String> re)
+	public void CLmsg(DataPack re)
 	{	
 		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.toString()+">");
-		if(!LNlib.CheckMapNode(re))
+		if(!LNlib.CheckMapNode(re.getMap()))
 		{
 			message.info("接收到来自客户端<"+this.remoteID+">的消息缺少必要消息节点");
 			this.sendNote("4", "消息缺失必要节点");
 			return;
 		}
-		if(remoteID==null && !re.get("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
-		LN.mdata(this, new DataPack(re));
+		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
+		LN.mdata(this, re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{

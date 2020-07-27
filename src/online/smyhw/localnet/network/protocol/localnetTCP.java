@@ -15,6 +15,7 @@ import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.TCP_LK;
+import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.Client_sl;
 
@@ -43,16 +44,25 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 		}catch(Exception e){message.info(" 终端\""+this.s.getInetAddress()+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
-	public void SendData(HashMap<String,String> input)
+	public void SendData(DataPack input)
 	{
-		String send = Json.Create(input);
+		String send = input.getStr();
 		Smsg(send);
 	}
 	
 	public void CLmsg(String msg)
 	{
 		//这里要将接收到的信息以HashMap的形式回传给上游
-		HashMap<String,String> re = Json.Parse(msg);
+		DataPack re;
+		try 
+		{
+			re = new DataPack(msg);
+		}
+		catch (Json_Parse_Exception e)
+		{
+			message.warning("客户端发送了无法解析的信息");
+			return;
+		}
 		this.client.CLmsg(re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
