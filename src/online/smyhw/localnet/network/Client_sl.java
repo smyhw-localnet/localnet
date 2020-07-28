@@ -1,6 +1,7 @@
 package online.smyhw.localnet.network;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -30,18 +31,44 @@ public class Client_sl
 	public StandardProtocol protocolClass;
 	public Client_sl(String protocol,List args)
 	{
-		switch(protocol)
+		Class PrC;
+		//协议选择器
+		try 
 		{
-		case "localnetTCP":
-			protocolClass = new localnetTCP(args,this);
-			break;
-		case "local":
-			protocolClass = new local(args,this);
-			break;
-		default:
-			message.warning("一个协议类型未知的客户端被拒绝创建");
+			PrC = Class.forName(protocol);
+		}
+		catch (ClassNotFoundException e1) 
+		{
+			try 
+			{
+				PrC = Class.forName("online.smyhw.localnet.network.protocol."+protocol);
+			}
+			catch (ClassNotFoundException e) 
+			{
+				message.warning("一个协议类型未知的客户端被拒绝创建{"+protocol+"}");
+				return;
+			}
+		}
+		try 
+		{
+			protocolClass = (StandardProtocol) PrC.getConstructors()[0].newInstance(args,this);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
+		{
+			message.warning("网络协议{"+protocol+"}初始化异常");
 			return;
 		}
+//		switch(protocol)
+//		{
+//		case "localnetTCP":
+//			protocolClass = new localnetTCP(args,this);
+//			break;
+//		case "local":
+//			protocolClass = new local(args,this);
+//			break;
+//		default:
+//			message.warning("一个协议类型未知的客户端被拒绝创建");
+//			return;
+//		}
 		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 		new ClientConnect_Event(this);
 	}
