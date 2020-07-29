@@ -61,8 +61,6 @@ public class LN
 			local_sl = new Local_sl();
 			message.info("本地虚拟客户端实例完成创建");
 			message.show("为了保证安全性，联机进程默认未启用，请使用nwm手动启动！");
-			if(EventManager.DataDecrypt_Listener.isEmpty())//检测是否存在插件监听加密事件
-			{message.warning("警告，没有检测到加密插件，localnet的信息将以明文传输！（如果你的数据会经过非安全网络传输，请务必对数据进行加密！）");}
 			message.info("初始化用户输入流");
 			input = new BufferedReader(new InputStreamReader(System.in));//初始化用户输入流
 			message.info("实例化用户输入进程");
