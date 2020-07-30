@@ -13,6 +13,12 @@ public class EventManager
 {
 	public static Hashtable<String,CopyOnWriteArrayList <Method>> EventMap = new Hashtable<String,CopyOnWriteArrayList <Method>>();
 	
+	/**
+	 * 添加事件监听者</br>
+	 * 
+	 * @param type 事件名称
+	 * @param ff  监听的方法
+	 */
 	public synchronized static void AddListener(String type,Method ff)
 	{
 		List<Method>ListenerList = EventMap.get(type);
@@ -20,6 +26,11 @@ public class EventManager
 		ListenerList.add(ff);
 	}
 	
+	/**
+	 * 事件总线，处理发送的事件</br>
+	 * 
+	 * @param dd 要处理的事件
+	 */
 	@SuppressWarnings("unchecked")
 	public synchronized static void DOevent(LN_Event dd)
 	{
@@ -35,7 +46,7 @@ public class EventManager
 			} 
 			catch (Exception e)
 			{
-				message.warning("完蛋警告！事件"+dd.GetEventName()+"在处理时出错！",e);
+				message.warning("事件<"+dd.GetEventName()+">在交由方法<"+temp3.getName()+">处理时出错！",e);
 			}
 		}
 	}
