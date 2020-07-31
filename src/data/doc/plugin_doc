@@ -2,7 +2,16 @@
 
 localnet插件主要为事件监听/处理
 
-1.注册事件监听者
+1.初始化方法
+localnet在加载插件时会优先加载初始化方法
+该方法由<你的插件文件名>+<lnp>+plugin_loaded()方法
+例如,插件文件名为online.smyhw.localnet.plugins.channel.jar
+那么localnet会执行方法<online.smyhw.localnet.plugins.channel.lnp.plugin_loaded()>
+从上面你应该也可以了解，你的插件文件必须为<你插件的包名.jar>，该包下必须有class名为lnp，该class下必须有方法名为plugin_loaded
+在plugin_loaded方法里，执行下列步骤
+
+2.注册事件监听者
+在plugin_loaded方法中注册监听者方法....
 online.smyhw.localnet.event.EventManager.AddListener(String type,Method ff)
 所有localnet自带事件在online.smyhw.localnet.event包内
 注意，注册的方法必须拥有接收LN_Event类实例的参数列表
