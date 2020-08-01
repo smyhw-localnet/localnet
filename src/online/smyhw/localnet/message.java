@@ -8,11 +8,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * 信息发送/显示 以及 日志
+ * @author smyhw
+ */
 public class message
 {
 	/**
-	 * @author smyhw
-	 * @param input
+	 * 发送最普通的，展示给一般用户看的信息</br>
+	 * @param input 需要显示的信息
 	 */
 	public static void show(String input)
 	{
@@ -26,7 +30,13 @@ public class message
 		System.out.println(input);
 	}
 	
-	public static void info(String input)//info信息仅在debug模式开启时输出
+	/**
+	 * 发送info调试信息</br>
+	 * 该信息仅在debug模式开启时输出</br>
+	 * 但是始终会被记录进日志</br>
+	 * @param input 需要发送的信息
+	 */
+	public static void info(String input)
 	{
 		log("[info]"+input);
 		if(LN.LNconfig.get_int("debug",1)!=1) {return;}

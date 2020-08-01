@@ -10,13 +10,13 @@ import online.smyhw.localnet.network.Client_sl;
 public class LNlib 
 {
 	/**
-	 * 初始化
+	 * 初始化回调方法
 	 */
 	public static void call_back(){}
 	
 	/**
 	 * 
-	 * 将信息发送到所有连接到本地的客户端
+	 * 将信息发送到所有连接到本地的客户端</r>
 	 * @param msg 要发送的信息
 	 */
 	public static void SendAll(String msg)
@@ -36,8 +36,8 @@ public class LNlib
 	 * 指定一个发送终端</br>
 	 * 信息将被发送为以这个终端为发送者的转发(forward)消息</br>
 	 * 同时，指定的终端并不会收到这个消息
-	 * @param msg
-	 * @param Sender
+	 * @param msg 要发送的消息
+	 * @param Sender 指定的发送人
 	 */
 	public static void SendAll(String msg,Client_sl Sender)
 	{
@@ -61,7 +61,7 @@ public class LNlib
 	/**
 	 * 
 	 * 检查传入的ID是否已经存在
-	 * @param UserName
+	 * @param UserName 要检查的ID
 	 * @return 如果为true,则已存在
 	 */
 	public static boolean ID_repeat(String UserName)
@@ -78,9 +78,10 @@ public class LNlib
 	
 	/**
 	 * 
-	 * 检查出入的ID是否符合正则
-	 * @param UserName
-	 * @return 
+	 * 检查出入的ID是否符合要求</br>
+	 * [要求]:仅包含大小写字母和数字
+	 * @param UserName 要检查的ID
+	 * @return 如果符合，返回true,不然返回false
 	 */
 	public static boolean ID_rightful(String UserName)
 	{
@@ -119,7 +120,14 @@ public class LNlib
 		return null;
 	}
 	
-	
+	/**
+	 * 检查数据包是否合法</br>
+	 * 即检查是否包含必要节点</br>
+	 * 例如,如果type=auth,那么ID节点必须存在</br>
+	 * 如果type=note,那么NoteType节点和NoteText节点必须存在</br>
+	 * 	@param input 需要检查的数据包
+	 * @return 如果没有问题，则返回true,否则返回false
+	 */
 	public static Boolean CheckMapNode(HashMap<String,String> input)
 	{
 		String type = (String) input.get("type");

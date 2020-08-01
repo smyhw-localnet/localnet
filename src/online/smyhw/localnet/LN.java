@@ -22,11 +22,11 @@ import online.smyhw.localnet.plugins.PluginsManager;
 public class LN
 {
 	public static final int Version = 777;
-	public static String ID;//用户唯识别代号
+	public static String ID;//本地终端ID
 	public static OnlineThread online_thread;//主联机进程
 	public static input user_input;//主用户输入线程
 	public static BufferedReader input;//主输入流
-	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//客户端列表
+	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//终端列表
 	public static Server_sl server_sl;//连接到的服务器
 	public static Local_sl local_sl;//虚拟本机客户端
 	public static boolean LibMod = true; //是否处于lib模式
@@ -68,7 +68,7 @@ public class LN
 			message.info("执行自动脚本...");
 			user_input.DoBegin();
 			user_input.lock=false;
-			
+			//将lib模式置否
 			LibMod = false;
 			message.info("localnet初始化完成!");
 			smyhw.main();//awa
@@ -84,13 +84,11 @@ public class LN
 
 	/**
 	 * 
-	 * 至关重要的一个方法，接受并处理来自所有终端发来的信息
-	 * 
+	 * 核心交换处理方法
 	 * 
 	 * @param UserID
 	 * @param msg
 	 */
-	static LinkedList<String> msgList = new LinkedList<String>();
 	public static void mdata(Client_sl User,DataPack msg)
 	{
 		String type = (String) msg.getValue("type");
@@ -236,6 +234,9 @@ class input extends Thread
 		
 	}
 	
+	/**
+	 * 执行StartupScript脚本
+	 */
 	public static void DoBegin()
 	{
 		File BeginFile = new File("./StartupScript");
@@ -263,6 +264,12 @@ class input extends Thread
 		LN.mdata(LN.local_sl,map);
 	}
 	
+	/**
+	 * 将用户输入的原始信息达成数据包</br>
+	 * 这会将</>开头的语句识别的指令</br>
+	 * @param input 用户输入的信息
+	 * @return 数据包实例
+	 */
 	public static DataPack ToPack(String input)
 	{
 		HashMap<String,String> re = new HashMap<String,String>();
