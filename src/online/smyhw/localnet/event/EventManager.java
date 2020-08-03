@@ -21,9 +21,10 @@ public class EventManager
 	 */
 	public synchronized static void AddListener(String type,Method ff)
 	{
-		List<Method>ListenerList = EventMap.get(type);
+		CopyOnWriteArrayList<Method>ListenerList = EventMap.get(type);
 		if(ListenerList==null) {ListenerList = new CopyOnWriteArrayList<Method>();}
 		ListenerList.add(ff);
+		EventMap.put(type, ListenerList);
 	}
 	
 	/**

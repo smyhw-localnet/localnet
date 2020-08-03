@@ -16,6 +16,7 @@ public class message
 {
 	/**
 	 * 发送最普通的，展示给一般用户看的信息</br>
+	 * 该信息会被记录进日志</br>
 	 * @param input 需要显示的信息
 	 */
 	public static void show(String input)
@@ -46,6 +47,12 @@ public class message
 		
 	}
 	
+	/**
+	 * 显示警告信息</br>
+	 * 无论是否开启debug模式,该信息始终会被发送给用户</br>
+	 * 该信息会被记录进日志
+	 * @param input 需要发送的信息
+	 */
 	public static void warning(String input)//无论debug模式是否开启，总会输出warning信息
 	{
 		log("[warning]"+input);
