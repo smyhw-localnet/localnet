@@ -2,7 +2,6 @@ package online.smyhw.localnet.network;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.net.Socket;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -15,7 +14,6 @@ import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
-import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.protocol.*;
@@ -54,7 +52,7 @@ public class Client_sl
 			protocolClass = (StandardProtocol) PrC.getConstructors()[0].newInstance(args,this);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e)
 		{
-			message.warning("网络协议{"+protocol+"}初始化异常");
+			message.warning("网络协议{"+protocol+"}初始化异常",e);
 			return;
 		}
 //		switch(protocol)

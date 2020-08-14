@@ -1,12 +1,5 @@
 package online.smyhw.localnet.command;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-
-import online.smyhw.localnet.LN;
-import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DocManager;
 import online.smyhw.localnet.lib.CommandFJ;
 import online.smyhw.localnet.network.Client_sl;

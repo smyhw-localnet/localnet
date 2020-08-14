@@ -1,9 +1,7 @@
 package online.smyhw.localnet.network.protocol;
 
-import java.util.HashMap;
 import java.util.List;
 
-import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.network.Client_sl;

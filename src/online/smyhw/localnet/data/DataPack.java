@@ -90,7 +90,7 @@ public class DataPack implements java.io.Serializable
 	/**
 	 * 根据键获取值
 	 * @param key
-	 * @return
+	 * @return 如果键不存在，返回null
 	 */
 	public String getValue(String key)
 	{

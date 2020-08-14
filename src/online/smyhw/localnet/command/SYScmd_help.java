@@ -1,6 +1,5 @@
 package online.smyhw.localnet.command;
 
-import online.smyhw.localnet.message;
 import online.smyhw.localnet.network.Client_sl;
 
 public class SYScmd_help 
