@@ -43,7 +43,10 @@ public class DataManager
 					    	if(temp2.length!=2) {continue;}
 					    	if(temp2[0].equals(key)) 
 					    	{
+					    		int index_num = flist.indexOf(str);
 					    		str=key+"="+value;
+					    		flist.remove(index_num);
+					    		flist.add(index_num, str);
 					    		temp3=true;
 					    		break;
 					    	}
@@ -59,7 +62,7 @@ public class DataManager
 					}
 				}
 			);
-			//遍历完hashmap，将处理过的list写会=回文件里
+			//遍历完hashmap，将处理过的list写回文件里
 			PrintWriter temp4 = new PrintWriter(file);
 		    for (String str : flist) 
 		    {
