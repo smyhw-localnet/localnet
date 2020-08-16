@@ -27,7 +27,6 @@ public class LN
 	public static input user_input;//主用户输入线程
 	public static BufferedReader input;//主输入流
 	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//终端列表
-//	public static Server_sl server_sl;//连接到的服务器
 	public static Local_sl local_sl;//虚拟本机客户端
 	public static boolean LibMod = true; //是否处于lib模式
 	
@@ -226,7 +225,6 @@ class smyhw
 
 class input extends Thread
 {
-//	String server = "localnet";//连接到的服务器
 	String input;//用户输入的数据
 	boolean lock = true;
 	input(BufferedReader input) throws Exception
@@ -295,9 +293,7 @@ class input extends Thread
 			{
 				Thread.sleep(1000);
 				if(this.lock) {continue;}
-//				try{if(LN.server_sl!=null) {server=LN.server_sl.remoteID.trim();}}catch(Exception e) {server = "localnet";}
 				message.input(LN.ID+"@"+LN.ID+">");
-				
 				input = LN.input.readLine();
 //				message.info("取得用户输入："+input);
 				DoInput(input);

@@ -20,6 +20,10 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	 * list参数表</br>
 	 * 1. socket实例 </br>
 	 * 2. 参数为1作为服务端，2则为客户端(该项仅影响心跳包收发)</br>
+	 * 不传入第二个参数则默认为服务端</br>
+	 * tips:</br>
+	 * 服务端仅响应心跳，并在一段时间没有收到心跳后断开连接</br>
+	 * 客户端不会响应心跳，但是会定时发送心跳包</br>
 	 * @param input
 	 * @param sy
 	 */
@@ -27,12 +31,6 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	{
 		super((Socket) input.get(0),input.size()>1 ? (int) input.get(1) : 1);//这里，调用父类构造方法
 		this.client = sy;
-		
-//		try
-//		{//发送自身ID
-//			if(input.size()>2) {this.Smsg("{\"type\":\"auth\",\"ID\":\""+input.get(2)+"\"}");}
-//			else {this.Smsg("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}");}
-//		}catch(Exception e){message.info(" 终端\""+this.s.getInetAddress()+"\"鉴权时异常！丢弃线程"+e.getMessage());return;}
 	}
 	
 	public void SendData(DataPack input)
