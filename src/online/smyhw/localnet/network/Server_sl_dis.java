@@ -8,7 +8,7 @@ import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.event.ConnectServerEvent;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 
-public class Server_sl extends Client_sl
+public class Server_sl_dis extends Client_sl
 {
 	public Server_sl(Socket s)
 	{

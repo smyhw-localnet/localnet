@@ -2,6 +2,8 @@ package online.smyhw.localnet.network;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
@@ -22,11 +24,15 @@ public class NetWorkManager
 	}
 	
 	
-	public static Server_sl connect(String ip,int port)
+	public static Client_sl connect(String ip,int port)
 	{
 		try 
 		{
-			LN.server_sl=new Server_sl(new Socket(ip,port));
+//			LN.server_sl=new Server_sl();
+			List temp = new ArrayList();
+			temp.add(new Socket(ip,port));
+			temp.add(2);
+			return new Client_sl("localnetTCP",temp);
 			
 		} 
 		catch (Exception e) 
