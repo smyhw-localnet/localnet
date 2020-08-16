@@ -28,7 +28,6 @@ public class NetWorkManager
 	{
 		try 
 		{
-//			LN.server_sl=new Server_sl();
 			List temp = new ArrayList();
 			temp.add(new Socket(ip,port));
 			temp.add(2);
@@ -37,7 +36,7 @@ public class NetWorkManager
 		} 
 		catch (Exception e) 
 		{
-			message.warning("连接至服务器\""+ip+":"+port+"\"时出错！");
+			message.warning("连接至终端\""+ip+":"+port+"\"时出错！");
 			e.printStackTrace();
 		}
 		return null;
