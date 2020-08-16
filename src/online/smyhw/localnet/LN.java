@@ -65,7 +65,7 @@ public class LN
 			message.info("实例化用户输入进程");
 			user_input=new input(input);//实例化用户主输入进程
 			message.info("执行自动脚本...");
-			user_input.DoBegin();
+			user_input.DoScript();
 			user_input.lock=false;
 			//将lib模式置否
 			LibMod = false;
@@ -233,29 +233,43 @@ class input extends Thread
 	}
 	
 	/**
-	 * 执行StartupScript脚本
+	 * 执行指定脚本
 	 */
-	public static void DoBegin()
+	public void DoScript(List<String> Script)
+	{
+		for(String i:Script)
+		{
+			DoInput(i);
+		}
+	}
+	
+	/**
+	 * 不指定参数则默认执行启动脚本
+	 */
+	public void DoScript()
 	{
 		File BeginFile = new File("./StartupScript");
 		if(!BeginFile.exists()) {return;}
+		List<String> StartupScript =new ArrayList<String>();
 		try 
 		{
 			BufferedReader br = new BufferedReader(new FileReader("./StartupScript"));
 			while(true)
 			{
 				String temp1 = br.readLine();
-				if(temp1==null) {return;}
-				DoInput(temp1);
+				if(temp1==null) {break;}
+				StartupScript.add(temp1);
 			}
+			DoScript(StartupScript);
 		}
 		catch (Exception e) 
 		{
 			message.warning("执行启动脚本时出错",e);
 		}
+		
 	}
 	
-	public synchronized static void DoInput(String input)
+	public synchronized void DoInput(String input)
 	{
 		DataPack map = ToPack(input);
 		map.add("isSend", "true");
@@ -268,7 +282,7 @@ class input extends Thread
 	 * @param input 用户输入的信息
 	 * @return 数据包实例
 	 */
-	public static DataPack ToPack(String input)
+	public DataPack ToPack(String input)
 	{
 		HashMap<String,String> re = new HashMap<String,String>();
 		if(input.startsWith("/"))
