@@ -28,7 +28,7 @@ public class LN
 	public static BufferedReader input;//主输入流
 	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//终端列表
 	public static Local_sl local_sl;//虚拟本机客户端
-	public static boolean LibMod = true; //是否处于lib模式
+	public static boolean LibMode = true; //是否处于lib模式
 	
 
 	//主配置文件
@@ -68,7 +68,7 @@ public class LN
 			user_input.DoScript();
 			user_input.lock=false;
 			//将lib模式置否
-			LibMod = false;
+			LibMode = false;
 			message.info("localnet初始化完成!");
 			smyhw.main();//awa
 		}

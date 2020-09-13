@@ -117,7 +117,7 @@ public class message
 	static LogThread logthread;
 	static void log(String input)
 	{
-		if(!LN.LibMod)
+		if(!LN.LibMode)
 		{
 			logthread.msgList.add(input);
 		}
