@@ -15,10 +15,17 @@ public class SYScmd_nwm
 		switch(CommandFJ.fj(cmd, 1))
 		{
 		case "bind":
-			if(CommandFJ.js(cmd)<=3) {message.show("参数不足，请使用/nwm help查看使用方法");return;}
+			if(CommandFJ.js(cmd)<=2) {message.show("参数不足，请使用/nwm help查看使用方法");return;}
 			else
 			{
-				NetWorkManager.bind(Integer.parseInt(CommandFJ.fj(cmd, 2)),CommandFJ.fj(cmd, 3));
+				if(CommandFJ.js(cmd)<=3) 
+				{//默认使用localnetTCP协议
+					NetWorkManager.bind(Integer.parseInt(CommandFJ.fj(cmd, 2)),"localnetTCP");
+				}
+				else
+				{
+					NetWorkManager.bind(Integer.parseInt(CommandFJ.fj(cmd, 2)),CommandFJ.fj(cmd, 3));
+				}
 			}
 			return;
 		case "connect":
