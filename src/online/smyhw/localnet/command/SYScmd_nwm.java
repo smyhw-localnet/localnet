@@ -15,10 +15,10 @@ public class SYScmd_nwm
 		switch(CommandFJ.fj(cmd, 1))
 		{
 		case "bind":
-			if(CommandFJ.js(cmd)<=2) {message.show("参数不足，请使用/nwm help查看使用方法");return;}
+			if(CommandFJ.js(cmd)<=3) {message.show("参数不足，请使用/nwm help查看使用方法");return;}
 			else
 			{
-				NetWorkManager.bind(Integer.parseInt(CommandFJ.fj(cmd, 2)));
+				NetWorkManager.bind(Integer.parseInt(CommandFJ.fj(cmd, 2)),CommandFJ.fj(cmd, 3));
 			}
 			return;
 		case "connect":
@@ -28,10 +28,14 @@ public class SYScmd_nwm
 				NetWorkManager.connect(CommandFJ.fj(cmd, 2),Integer.parseInt(CommandFJ.fj(cmd, 3)));
 			}
 			return;
+//		case "lp":
+			
+//			return;
 		case "help":
 			message.info("+++NWM(NetWorkManager)+++");
 			message.info("nwm help --显示此列表");
-			message.info("nwm bind [Port] ---根据设置的端口开始监听");
+			message.info("nwm bind [Port] [protocol]---根据设置的端口和协议开始监听");
+//			message.info("nwm lp ---输出本终端支持的所有协议");
 			message.info("nwm connect [IP] [Port] ---根据设置的远程IP和端口尝试连接");
 			return;
 		default:

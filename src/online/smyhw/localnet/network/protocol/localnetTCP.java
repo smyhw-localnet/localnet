@@ -65,6 +65,9 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 		this.isERROR=true;
 	}
 	
+	/**
+	 * 这是不推荐使用的，加密的实现应依赖于协议本身
+	 */
 	public byte[] encryption(byte[] input,int type)
 	{
 		byte[] re=null;

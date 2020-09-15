@@ -23,7 +23,7 @@ public class LN
 {
 	public static final int Version = 777;
 	public static String ID;//本地终端ID
-	public static OnlineThread online_thread;//主联机进程
+	public static List<OnlineThread> online_threads = Collections.synchronizedList(new ArrayList<OnlineThread>());//主联机进程
 	public static input user_input;//主用户输入线程
 	public static BufferedReader input;//主输入流
 	public static ArrayList<Client_sl> client_list = new ArrayList< Client_sl>();//终端列表

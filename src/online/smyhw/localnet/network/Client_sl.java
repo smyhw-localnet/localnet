@@ -55,20 +55,8 @@ public class Client_sl
 			message.warning("网络协议{"+protocol+"}初始化异常",e);
 			return;
 		}
-//		switch(protocol)
-//		{
-//		case "localnetTCP":
-//			protocolClass = new localnetTCP(args,this);
-//			break;
-//		case "local":
-//			protocolClass = new local(args,this);
-//			break;
-//		default:
-//			message.warning("一个协议类型未知的客户端被拒绝创建");
-//			return;
-//		}
-		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 		new ClientConnect_Event(this);
+		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	
 	/**

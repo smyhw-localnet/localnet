@@ -12,15 +12,15 @@ public class NetWorkManager
 {
 	
 	
-	public static void bind(int port)
+	public static void bind(int port,String protocol)
 	{
 		try 
 		{
-			ServerSocket ss = new ServerSocket(port);
-			LN.online_thread=new OnlineThread(ss);
-			message.show("开始监听端口："+port);
+			LN.online_threads.add(new OnlineThread(port,protocol));
+		} catch (Exception e) 
+		{
+			message.warning("监听端口失败!", e);
 		}
-		catch (Exception e) {e.printStackTrace();}//申请端口
 	}
 	
 	
@@ -85,5 +85,31 @@ public class NetWorkManager
 			break;
 		}
 		return re;
+	}
+	
+	/**
+	 * 测试协议是否存在
+	 * @param protocol
+	 * @return
+	 */
+	public static boolean testProtocol(String protocol)
+	{
+		try 
+		{
+			Class.forName(protocol);
+			return true;
+		}
+		catch (ClassNotFoundException e1) 
+		{
+			try 
+			{
+				Class.forName("online.smyhw.localnet.network.protocol."+protocol);
+				return true;
+			}
+			catch (ClassNotFoundException e) 
+			{
+				return false;
+			}
+		}	
 	}
 }

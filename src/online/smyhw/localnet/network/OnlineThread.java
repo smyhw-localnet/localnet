@@ -6,17 +6,31 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
 
+/**
+ * @author smyhw
+ * 
+ * 
+ */
 public class OnlineThread extends Thread
 {
 	ServerSocket server_connect;
-	Socket connect;
-	OnlineThread(ServerSocket ss)
+	String protocol;
+	int port;
+	public OnlineThread(int port,String protocol) throws Exception
 	{
+		if(!NetWorkManager.testProtocol(protocol))
+		{
+			message.warning("协议<"+protocol+">未知");
+			return;
+		}
+		ServerSocket ss = new ServerSocket(port);
+		this.protocol = protocol;
+		this.port = port;
 		this.server_connect =ss;
-//		try {server_connect = new ServerSocket(port);}
-//		catch (IOException e) {e.printStackTrace();}//申请端口
+		message.show("监听端口<"+port+">使用协议<"+protocol+">");
 		this.start();
 	}
 	public void run()
@@ -25,12 +39,17 @@ public class OnlineThread extends Thread
 		{
 			try 
 			{
-				connect = server_connect.accept();
+				Socket connect = server_connect.accept();
 				message.info("socket连接<"+connect.getInetAddress()+">");
 				List temp = new ArrayList();
 				temp.add(connect);
-				new Client_sl("localnetTCP",temp);
+				new Client_sl(this.protocol,temp);
 			}catch(IOException e){}catch(Exception e){}
 		}
+	}
+	
+	public ServerSocket getServerSocket()
+	{
+		return this.server_connect;
 	}
 }
