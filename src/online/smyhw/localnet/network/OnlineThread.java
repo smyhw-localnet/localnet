@@ -41,6 +41,7 @@ public class OnlineThread extends Thread
 			{
 				Socket connect = server_connect.accept();
 				message.info("socket连接<"+connect.getInetAddress()+">");
+				
 				List temp = new ArrayList();
 				temp.add(connect);
 				new Client_sl(this.protocol,temp);

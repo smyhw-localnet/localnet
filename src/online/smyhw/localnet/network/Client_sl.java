@@ -113,11 +113,10 @@ public class Client_sl
 	
 	public void Disconnect(String msg)
 	{
+		new ClientDISconnect_Event(this);
 		NetWorkManager.doclient(0, this, 0);
 		message.show("客户端<"+this.remoteID+">断开连接{"+msg+"}");
 		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
-		this.protocolClass.Disconnect();
-		new ClientDISconnect_Event(this);
 		this.protocolClass.Disconnect();
 	}
 	
