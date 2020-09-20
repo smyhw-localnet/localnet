@@ -8,6 +8,7 @@ import java.util.List;
 
 import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.event.SocketConnectEvent;
 
 /**
  * @author smyhw
@@ -41,10 +42,7 @@ public class OnlineThread extends Thread
 			{
 				Socket connect = server_connect.accept();
 				message.info("socket连接<"+connect.getInetAddress()+">");
-				
-				List temp = new ArrayList();
-				temp.add(connect);
-				new Client_sl(this.protocol,temp);
+				new SocketConnectThread(connect,this.protocol);
 			}catch(IOException e){}catch(Exception e){}
 		}
 	}
@@ -52,5 +50,29 @@ public class OnlineThread extends Thread
 	public ServerSocket getServerSocket()
 	{
 		return this.server_connect;
+	}
+	
+}
+
+class  SocketConnectThread extends Thread
+{
+	Socket s;
+	String protocol;
+	public SocketConnectThread(Socket s,String protocol)
+	{
+		this.s = s;
+		this.protocol = protocol;
+		this.start();
+	}
+	public void run()
+	{
+		//触发SocketConnectEvent事件，若该事件被取消，则直接返回
+		if(new SocketConnectEvent(s).getCancel()) {return;}
+		else 
+		{
+			List temp = new ArrayList();
+			temp.add(s);
+			new Client_sl(this.protocol,temp);
+		}
 	}
 }

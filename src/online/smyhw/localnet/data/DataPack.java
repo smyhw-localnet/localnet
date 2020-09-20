@@ -15,9 +15,6 @@ import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
  */
 public class DataPack implements java.io.Serializable
 {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7;
 	HashMap<String,String> DataMap = new HashMap<String,String>();
 	
@@ -40,6 +37,11 @@ public class DataPack implements java.io.Serializable
 	{
 		DataMap = Json.Parse(jsonData);
 	}
+	
+	/**
+	 * 干净的空数据包
+	 */
+	public DataPack() {} 
 	
 	/**
 	 * 添加键值对

@@ -11,10 +11,21 @@ import java.net.Socket;
 public class SocketConnectEvent extends LN_Event 
 {
 	public Socket enSocket;
+	boolean Cancel = false;
 	public SocketConnectEvent(Socket i)
 	{
 		this.enSocket = i;
 		this.EventName="SocketConnectEvent";//修改
 		EventManager.DOevent(this);
+	}
+
+	public void setCancel()
+	{
+		this.Cancel = true;
+	}
+	
+	public boolean getCancel()
+	{
+		return this.Cancel;
 	}
 }

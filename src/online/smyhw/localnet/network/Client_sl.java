@@ -17,6 +17,7 @@ import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.protocol.*;
+import java.net.Socket;
 
 public class Client_sl
 {
@@ -55,7 +56,11 @@ public class Client_sl
 			message.warning("网络协议{"+protocol+"}初始化异常",e);
 			return;
 		}
-		new ClientConnect_Event(this);
+		this.protocolType = protocol;
+		if(new ClientConnect_Event(this).getCancel())
+		{
+			this.Disconnect("事件被取消");
+		}
 		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	
