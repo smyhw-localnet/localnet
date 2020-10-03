@@ -1,5 +1,10 @@
 package online.smyhw.localnet.lib.encryption;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
 import java.security.*;
 import java.security.interfaces.*;
 import java.security.spec.*;
@@ -72,6 +77,75 @@ public class RSA
 		RSAPrivateKey rsa_key = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(key));  
 		cipher.init(Cipher.DECRYPT_MODE, rsa_key);
 		return cipher.doFinal(input);
+	}
+	
+	/**
+	 * 从给定的文件路径里读取RSA公钥</br>
+	 * @param url 文件路径
+	 * @return 如果读取成功，则返回密钥
+	 * @throws Exception 发送任何错误或异常都将抛给上级
+	 */
+	public static byte[] readPublicKey(String url) throws Exception
+	{
+		File keyFile = new File(url);
+		String keyString = "";
+		BufferedReader bf = new BufferedReader(new FileReader(keyFile));
+		while(true)
+		{
+			String line = bf.readLine();
+			if(line == null) {throw new Exception("未读取到密钥开头(-----BEGIN PUBLIC KEY-----)");}
+			if(line.equals("-----BEGIN PUBLIC KEY-----"))
+			{
+				while(true)
+				{
+					String key_line = bf.readLine();
+					if(key_line==null) {throw new Exception("未读取到密钥结尾(-----END PUBLIC KEY-----)");}
+					if(key_line.equals("-----END PUBLIC KEY-----")) {break;}
+					keyString = keyString+key_line;
+				}
+			}
+			//这里应该读到了密钥结尾
+			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
+			KeyFactory kf;
+			kf = KeyFactory.getInstance("RSA");
+			PublicKey tmp2 = kf.generatePublic(spec);
+			return tmp2.getEncoded();
+		}
+	}
+	
+	
+	/**
+	 * 从给定的文件路径里读取RSA私钥</br>
+	 * @param url 文件路径
+	 * @return 如果读取成功，则返回密钥
+	 * @throws Exception 发送任何错误或异常都将抛给上级
+	 */
+	public static byte[] readPrivateKey(String url) throws Exception
+	{
+		File keyFile = new File(url);
+		String keyString = "";
+		BufferedReader bf = new BufferedReader(new FileReader(keyFile));
+		while(true)
+		{
+			String line = bf.readLine();
+			if(line == null) {throw new Exception("未读取到密钥开头(-----BEGIN PRIVATE KEY-----)");}
+			if(line.equals("-----BEGIN PUBLIC KEY-----"))
+			{
+				while(true)
+				{
+					String key_line = bf.readLine();
+					if(key_line==null) {throw new Exception("未读取到密钥结尾(-----END PRIVATE KEY-----)");}
+					if(key_line.equals("-----END PRIVATE KEY-----")) {break;}
+					keyString = keyString+key_line;
+				}
+			}
+			//这里应该读到了密钥结尾
+			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
+			KeyFactory kf;
+			kf = KeyFactory.getInstance("RSA");
+			PrivateKey tmp2 = kf.generatePrivate(spec);
+			return tmp2.getEncoded();
+		}
 	}
 
 }
