@@ -72,7 +72,7 @@ public class RSA
 	 * @return 解密后的明文
 	 * @throws Exception 任何异常都会抛给上一级
 	 */
-	public static byte[] decryption(byte[] input, byte[] key,boolean mode) throws Exception{
+	public static byte[] decryption(byte[] input, byte[] key) throws Exception{
 		Cipher cipher = Cipher.getInstance("RSA");
 		RSAPrivateKey rsa_key = (RSAPrivateKey) KeyFactory.getInstance("RSA").generatePrivate(new PKCS8EncodedKeySpec(key));  
 		cipher.init(Cipher.DECRYPT_MODE, rsa_key);
