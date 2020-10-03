@@ -2,6 +2,7 @@ package online.smyhw.localnet.network;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -28,6 +29,8 @@ public class Client_sl
 	public String remoteID;
 	public String protocolType;
 	public StandardProtocol protocolClass;
+	boolean isReady = false;//该项目指示本Client_sl是否初始化完成(一般会卡在处理ClientConnect_Event这边的样子)
+	public ArrayList<DataPack> reReadyMsg = new ArrayList<DataPack>();//存储在初始化完成之前收到的数据，某些事件的处理器可能会用到
 	public Client_sl(String protocol,List args)
 	{
 		Class PrC;
@@ -60,7 +63,9 @@ public class Client_sl
 		if(new ClientConnect_Event(this).getCancel())
 		{
 			this.Disconnect("事件被取消");
+			return;
 		}
+		this.isReady=true;
 		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	
@@ -100,6 +105,11 @@ public class Client_sl
 	
 	public void CLmsg(DataPack re)
 	{	
+		if(!this.isReady)
+		{//本Client_sl还未初始化完成，不向外部传送信息
+			this.reReadyMsg.add(re);
+			return;
+		}
 		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
 		if(!LNlib.CheckMapNode(re.getMap()))
 		{
