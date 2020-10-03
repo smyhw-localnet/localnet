@@ -12,6 +12,8 @@ import java.util.*;
 import javax.crypto.*;
 import javax.crypto.spec.*;
 
+import online.smyhw.localnet.message;
+
 /**
  * RSA加解密处理</br>
  * @author smyhw
@@ -103,14 +105,15 @@ public class RSA
 					if(key_line.equals("-----END PUBLIC KEY-----")) {break;}
 					keyString = keyString+key_line;
 				}
+				break;
 			}
-			//这里应该读到了密钥结尾
-			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
-			KeyFactory kf;
-			kf = KeyFactory.getInstance("RSA");
-			PublicKey tmp2 = kf.generatePublic(spec);
-			return tmp2.getEncoded();
 		}
+		//这里应该读到了密钥结尾
+		X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
+		KeyFactory kf;
+		kf = KeyFactory.getInstance("RSA");
+		PublicKey tmp2 = kf.generatePublic(spec);
+		return tmp2.getEncoded();
 	}
 	
 	
@@ -129,7 +132,7 @@ public class RSA
 		{
 			String line = bf.readLine();
 			if(line == null) {throw new Exception("未读取到密钥开头(-----BEGIN PRIVATE KEY-----)");}
-			if(line.equals("-----BEGIN PUBLIC KEY-----"))
+			if(line.equals("-----BEGIN PRIVATE KEY-----"))
 			{
 				while(true)
 				{
@@ -138,14 +141,16 @@ public class RSA
 					if(key_line.equals("-----END PRIVATE KEY-----")) {break;}
 					keyString = keyString+key_line;
 				}
+				break;
 			}
-			//这里应该读到了密钥结尾
-			X509EncodedKeySpec spec = new X509EncodedKeySpec(Base64.getDecoder().decode(keyString));
-			KeyFactory kf;
-			kf = KeyFactory.getInstance("RSA");
-			PrivateKey tmp2 = kf.generatePrivate(spec);
-			return tmp2.getEncoded();
 		}
+		//这里应该读到了密钥结尾
+		byte[] tmp3 = Base64.getDecoder().decode(keyString);
+		PKCS8EncodedKeySpec  spec = new PKCS8EncodedKeySpec(tmp3);
+		KeyFactory kf;
+		kf = KeyFactory.getInstance("RSA");
+		PrivateKey tmp2 = kf.generatePrivate(spec);
+		return tmp2.getEncoded();
 	}
 
 }
