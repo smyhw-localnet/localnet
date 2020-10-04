@@ -65,7 +65,15 @@ public class Client_sl
 			this.Disconnect("事件被取消");
 			return;
 		}
+		
 		this.isReady=true;
+		//就绪后应处理积压的消息
+		System.out.println("reReadyMsg:"+reReadyMsg.size());
+//		while(!reReadyMsg.isEmpty())
+//		{
+//			CLmsg(reReadyMsg.get(0));
+//			reReadyMsg.remove(0);
+//		}
 		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	

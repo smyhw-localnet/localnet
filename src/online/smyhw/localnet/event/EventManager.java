@@ -32,7 +32,7 @@ public class EventManager
 	 * @param dd 要处理的事件
 	 */
 	@SuppressWarnings("unchecked")
-	public synchronized static void DOevent(LN_Event dd)
+	public static void DOevent(LN_Event dd)
 	{
 		List<Method>ListenerList = EventMap.get(dd.EventName);
 		if(ListenerList==null) {return;}

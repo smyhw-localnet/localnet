@@ -120,6 +120,7 @@ public abstract class TCP_LK
 	
 	public void Smsg(String msg)
 	{
+		System.out.println("se:"+msg);
 		if(this.isERROR) {return;}
 		try
 		{
@@ -172,51 +173,55 @@ public abstract class TCP_LK
 	{
 		try 
 		{
-			//读取标识位(报文长度)
-			int len=0;
-			String temp2="";
-			while(true)
-			{
-				if(s_in.available()<1) {Thread.sleep(1000);continue;}
-				byte[] temp1 = new byte[1];
-				s_in.read(temp1);
-				String temp3;
-				try {temp3 = new String(temp1,"UTF-8").trim();} 
-				catch (UnsupportedEncodingException e) 
-				{
-					throw new TCP_LK_Exception("[TCP_LK]:客户端<"+s.getInetAddress()+">发回的数据解码错误",this,5,e);
+			while (true) {
+				//读取标识位(报文长度)
+				int len = 0;
+				String temp2 = "";
+				while (true) {
+					if (s_in.available() < 1) {
+						Thread.sleep(1000);
+						continue;
+					}
+					byte[] temp1 = new byte[1];
+					s_in.read(temp1);
+					String temp3;
+					try {
+						temp3 = new String(temp1, "UTF-8").trim();
+					} catch (UnsupportedEncodingException e) {
+						throw new TCP_LK_Exception("[TCP_LK]:客户端<" + s.getInetAddress() + ">发回的数据解码错误", this, 5, e);
+					}
+					if (!temp3.equals("|")) {
+						temp2 = temp2 + temp3;
+						continue;
+					} else {
+						len = Integer.parseInt(temp2);
+						break;
+					}
+
 				}
-				if(!temp3.equals("|")) 
+				String Sdata;
+				//获取报文主体
+				while (true) 
 				{
-					temp2=temp2 + temp3;
-					continue;
+					if (s_in.available() < len) {
+						Thread.sleep(1000);
+						continue;
+					}
+					else {break;}
 				}
-				else
-				{
-					len = Integer.parseInt(temp2);
-					break;
-				}
-				
-			}
-			
-			String Sdata;
-			//获取报文主体
-			while(true)
-			{
-				if(s_in.available()<len) {Thread.sleep(1000);continue;}
 				byte[] temp1 = new byte[len];
 				s_in.read(temp1);
-				temp1 = encryption(temp1,0);
-				if(temp1==null) 
-				{
+				temp1 = encryption(temp1, 0);
+				if (temp1 == null) {
 					message.info("解密操作出错");
-					throw new TCP_LK_Exception("[TCP_LK]:客户端<"+s.getInetAddress()+">发回的数据解密错误！",this,8);
+					//					throw new TCP_LK_Exception("[TCP_LK]:客户端<"+s.getInetAddress()+">发回的数据解密错误！",this,8);
+					continue;
 				}
-				Sdata = new String(temp1,"UTF-8").trim();
-				break;
+				Sdata = new String(temp1, "UTF-8").trim();
+//					break;
+				System.out.println("re:" + Sdata);
+				return Sdata;
 			}
-			
-			return Sdata;
 			
 		}
 		catch(java.net.SocketTimeoutException e)

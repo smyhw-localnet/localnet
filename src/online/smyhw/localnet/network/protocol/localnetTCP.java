@@ -71,7 +71,7 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 	public byte[] encryption(byte[] input,int type)
 	{
 		byte[] re=null;
-		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,this);
+		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,client);
 		re = temp1.output;
 		if(temp1.Error) {return null;}
 		return re;
