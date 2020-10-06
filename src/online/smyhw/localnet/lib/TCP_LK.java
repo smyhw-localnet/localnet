@@ -120,7 +120,6 @@ public abstract class TCP_LK
 	
 	public void Smsg(String msg)
 	{
-		System.out.println("se:"+msg);
 		if(this.isERROR) {return;}
 		try
 		{
@@ -219,7 +218,6 @@ public abstract class TCP_LK
 				}
 				Sdata = new String(temp1, "UTF-8").trim();
 //					break;
-				System.out.println("re:" + Sdata);
 				return Sdata;
 			}
 			
