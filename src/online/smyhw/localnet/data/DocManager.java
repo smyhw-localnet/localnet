@@ -88,7 +88,7 @@ public class DocManager
 	public static boolean setRunTimeDoc(String doc,String path)
 	{
 		RunTimeDoc.put(path, doc);
-		return false;
+		return true;
 	}
 	/**
 	 * 从指定路径获取文档文本</br>
@@ -106,6 +106,8 @@ public class DocManager
 		{re = readFromJar(path);}
 		if(re == null)
 		{re = readFromFile(path);}
+		if(re == null)
+		{re = "无法找到目标文档";}
 		return re;
 	}
 }
