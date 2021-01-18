@@ -1,4 +1,4 @@
-package online.smyhw.localnet.command;
+package online.smyhw.localnet.command.sysCmd;
 
 import online.smyhw.localnet.network.Client_sl;
 

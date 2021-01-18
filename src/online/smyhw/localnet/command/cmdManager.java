@@ -3,6 +3,12 @@ package online.smyhw.localnet.command;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.message;
+import online.smyhw.localnet.command.sysCmd.SYScmd_doc;
+import online.smyhw.localnet.command.sysCmd.SYScmd_help;
+import online.smyhw.localnet.command.sysCmd.SYScmd_kick;
+import online.smyhw.localnet.command.sysCmd.SYScmd_list;
+import online.smyhw.localnet.command.sysCmd.SYScmd_nwm;
+import online.smyhw.localnet.command.sysCmd.SYScmd_test;
 import online.smyhw.localnet.event.DoCommandEvent;
 import online.smyhw.localnet.lib.*;
 import online.smyhw.localnet.network.Client_sl;
