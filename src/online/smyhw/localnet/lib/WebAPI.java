@@ -6,16 +6,48 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.Proxy;
 import java.net.URL;
+import java.net.URLConnection;
 
 import online.smyhw.localnet.message;
 
 //2019.9.23
 //调用webAPI用的
+/**
+ * 
+ * @apiNote java的HTTPAPI很丰富，这里只提供简易方法
+ * @author smyhw
+ * 旨在提供简单的请求方法</br>
+ * 不会提供完整的http操控方法</br>
+ * 因为java原生的方法，太tm多了</br>
+ * 还不能直接定义http头...</br>
+ */
 public class WebAPI// extends HttpURLConnection
 {
+	
+	/**
+	 * 
+	 * 
+	 * @param method 请求方法(get或post)
+	 * @param url 请求的url
+	 * @param proxy 代理，没有请传null
+	 * @param content 若为post请求，这里设置载荷，否则,传任何值都可以
+	 * @return 接口的返回值
+	 * @throws 所有异常将抛出
+	 */
+	@Deprecated
+	public static URLConnection doApi(String method,String url,Proxy proxy,String content) throws Exception
+	{
+		URL tmp1 = new URL(url);
+		HttpURLConnection connection = (HttpURLConnection) tmp1.openConnection(proxy);
+		connection.setRequestMethod(method);
+		connection.connect();
+		return connection;
+	}
 	 //@return 返回调用的结果
 	//如果发生错误则返回error
+	@Deprecated
 	public static String get(String URL_input)
 	{
 		URL url;
@@ -48,5 +80,33 @@ public class WebAPI// extends HttpURLConnection
 			}
 		} catch (IOException e) {message.error("[lib][WebAPI.get]{获取连接后信息出错！}");return "error";}
 //		return "error";
+	}
+
+
+	/**
+	 * 注意，这个方法仅返回载荷，而不论返回头如何
+	 * @param url 请求的url
+	 * @return 返回的http载荷
+	 * @throws 所有异常都将抛出
+	 */
+	public static String simpleGet(String url) throws Exception
+	{
+		URL url_ = new URL(url);
+		HttpURLConnection connection = (HttpURLConnection) url_.openConnection();
+		connection.setRequestMethod("GET");
+		connection.connect();
+		InputStream is = connection.getInputStream();
+       // 封装输入流is，并指定字符集
+		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+       // 存放数据
+       StringBuffer sbf = new StringBuffer();
+       String temp = null;
+       while ((temp = br.readLine()) != null) 
+       {
+           sbf.append(temp);
+       }
+       String re = sbf.toString();
+       br.close();
+       return re;
 	}
 }
