@@ -126,8 +126,22 @@ public class Client_sl
 			return;
 		}
 		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
-		LN.mdata(this, re);
+		if(!this.libCLmsg(re))
+		{
+			LN.mdata(this, re);
+		}
 	}
+	
+	/**
+	 * 作为本类唯一一个回调函数，CLmsg需要有一个用以覆盖的拓展
+	 * @param re 数据包
+	 * @return 如果为true，该消息不会继续被localnet处理
+	 */
+	public boolean libCLmsg(DataPack re)
+	{
+		return false;
+	}
+	
 	public void Serr_u(TCP_LK_Exception e)
 	{
 		Disconnect(e.type+"->"+e.getMessage());
