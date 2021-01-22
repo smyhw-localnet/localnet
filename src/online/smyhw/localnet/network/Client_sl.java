@@ -27,6 +27,7 @@ public class Client_sl
 	public  data TempClientData = new data();
 	
 	public String remoteID;
+	public String localID = LN.ID;
 	public String protocolType;
 	public StandardProtocol protocolClass;
 	boolean isReady = false;//该项目指示本Client_sl是否初始化完成(一般会卡在处理ClientConnect_Event这边的样子)
@@ -74,7 +75,7 @@ public class Client_sl
 			CLmsg(reReadyMsg.get(0));
 			reReadyMsg.remove(0);
 		}
-		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
+		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+localID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	
 	/**
@@ -144,8 +145,20 @@ public class Client_sl
 	
 	public void Serr_u(TCP_LK_Exception e)
 	{
+		this.lib_Serr_u(e);
 		Disconnect(e.type+"->"+e.getMessage());
 		return;
+	}
+	
+	/**
+	 * 用于当此类作为lib使用时，处理错误<br>
+	 * 当此方法被执行时，连接还没有断开
+	 * @param e 发生的错误
+	 * @return 返回值暂时没有意义，默认为false
+	 */
+	public boolean lib_Serr_u(TCP_LK_Exception e)
+	{
+		return false;
 	}
 	
 	public void Disconnect(String msg)
