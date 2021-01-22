@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.Proxy;
@@ -39,9 +40,20 @@ public class WebAPI// extends HttpURLConnection
 	@Deprecated
 	public static URLConnection doApi(String method,String url,Proxy proxy,String content) throws Exception
 	{
+		if(proxy==null)
+		{
+			proxy=Proxy.NO_PROXY;
+		}
 		URL tmp1 = new URL(url);
 		HttpURLConnection connection = (HttpURLConnection) tmp1.openConnection(proxy);
 		connection.setRequestMethod(method);
+		if(content!=null)
+		{
+			connection.setDoOutput(true);
+			OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream(), "UTF-8");
+	        writer.write(content);
+	        writer.close();
+		}
 		connection.connect();
 		return connection;
 	}
