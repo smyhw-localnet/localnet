@@ -224,4 +224,40 @@ public class DataManager
 			message.error("目录完整性处理失败，程序将退出，请检查异常",e);
 		}
 	}
+	
+	/**
+	 * 从JAR包里读出默认配置文件并在指定位置创建这个配置文件</br>
+	 * 这会检查指定文件是否存在，如果存在，不会覆盖
+	 * @param newCfgFileUrl 需要创建的配置文件位置
+	 * @param CfgUrl JAR包内的配置文件位置
+	 * @return 如果创建失败(文件已存在)返回False，正常则返回true
+	 * @throws Exception 任何异常将抛给上一级 
+	 */
+	public static boolean makeNewConfigFile(String newCfgFileUrl,String CfgUrl) throws Exception
+	{
+		if(new File(newCfgFileUrl).exists())
+		{
+			return false;
+		}
+		InputStream is = LN.class.getResourceAsStream(CfgUrl);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
+		File new_file = new File(newCfgFileUrl);
+		PrintWriter pw;
+		pw = new PrintWriter(new_file);
+		while(true)
+		{
+			String temp = br.readLine();
+			if(temp==null) 
+			{
+				pw.close();
+				br.close();
+				break;
+			}
+			pw.println(temp);
+			pw.flush();
+		}
+		return true;
+	}
+	
+	
 }
