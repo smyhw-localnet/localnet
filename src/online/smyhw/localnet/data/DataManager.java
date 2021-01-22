@@ -197,25 +197,8 @@ public class DataManager
 			if(!new File("./LN.config").exists())
 			{
 				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
-				InputStream is = LN.class.getResourceAsStream("/data/example_config/LN.config");
-				BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
-				File new_file = new File("./LN.config");
-				PrintWriter pw;
-				pw = new PrintWriter(new_file);
-				while(true)
-				{
-					String temp = br.readLine();
-					if(temp==null) 
-					{
-						System.out.println("新配置文件创建完毕,请重启程序！");
-						pw.close();
-						br.close();
-						System.exit(0);
-					}
-					pw.println(temp);
-					pw.flush();
-				}
-//				pw.close();
+				makeNewConfigFile("./LN.config","/data/example_config/LN.config");
+				System.out.println("新配置文件创建完毕,请重启程序！");
 			}
 			message.info("目录完整性检查完毕");
 		}
