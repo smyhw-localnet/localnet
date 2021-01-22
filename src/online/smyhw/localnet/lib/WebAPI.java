@@ -84,7 +84,8 @@ public class WebAPI// extends HttpURLConnection
 
 
 	/**
-	 * 注意，这个方法仅返回载荷，而不论返回头如何
+	 * 注意，这个方法仅返回载荷，而不论返回头如何</br>
+	 * 只会返回String类型，载荷类型不会就直接跑异常</br>
 	 * @param url 请求的url
 	 * @return 返回的http载荷
 	 * @throws 所有异常都将抛出
@@ -95,18 +96,50 @@ public class WebAPI// extends HttpURLConnection
 		HttpURLConnection connection = (HttpURLConnection) url_.openConnection();
 		connection.setRequestMethod("GET");
 		connection.connect();
-		InputStream is = connection.getInputStream();
-       // 封装输入流is，并指定字符集
-		BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-       // 存放数据
-       StringBuffer sbf = new StringBuffer();
-       String temp = null;
-       while ((temp = br.readLine()) != null) 
-       {
-           sbf.append(temp);
-       }
-       String re = sbf.toString();
-       br.close();
+		String re = getContent(connection); 
        return re;
+	}
+	
+	/**
+	 * 简单POST请求</br>
+	 * 仅返回载荷，不论状态码</br>
+	 *  载荷仅支持String，否则抛异常</br>
+	 * 没有载荷或发生其他异常，都会直接抛出</br>
+	 * @param url 需要请求的地址
+	 * @param data 需要发送的POST载荷
+	 * @return 返回的载荷
+	 * @throws Exception 任何异常都会抛给上层
+	 */
+	public static String simplePost(String url,String data) throws Exception
+	{
+		HttpURLConnection connection = (HttpURLConnection) doApi("POST", url, null, data);
+		String re = getContent(connection); 
+		return re;
+	}
+	
+	/**
+	 * 
+	 * 根据给定的http连接提取载荷</br>
+	 * 不会判断状态码,载荷类型等信息</br>
+	 * 只会返回String类型，载荷类型不会就直接跑异常</br>
+	 * @param connection 给定的HTTP连接
+	 * @return 返回载荷
+	 * @throws Exception 任何异常都将抛给上级
+	 */
+	public static String getContent(HttpURLConnection connection) throws Exception
+	{
+		InputStream is = connection.getInputStream();
+	       // 封装输入流is，并指定字符集
+			BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+	       // 存放数据
+	       StringBuffer sbf = new StringBuffer();
+	       String temp = null;
+	       while ((temp = br.readLine()) != null) 
+	       {
+	           sbf.append(temp);
+	       }
+	       String re = sbf.toString();
+	       br.close();
+	       return re;
 	}
 }
