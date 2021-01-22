@@ -199,6 +199,7 @@ public class DataManager
 				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
 				makeNewConfigFile("./LN.config","/data/example_config/LN.config");
 				System.out.println("新配置文件创建完毕,请重启程序！");
+				System.exit(0);
 			}
 			message.info("目录完整性检查完毕");
 		}
