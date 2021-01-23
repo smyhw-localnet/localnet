@@ -11,6 +11,7 @@ public class PluginsManager
 {
 	
 	public static ArrayList<String> PluginsList = new ArrayList<String>();//实际加载的插件列表
+	public static ClassLoader cloader;
 	/**
 	 * @author smyhw
 	 * 仅在启动时运行一次，请勿调用！
@@ -32,7 +33,7 @@ public class PluginsManager
 			{
 				PluginsURL[temp]=new URL("file:///"+plugin_dir_t.getAbsolutePath()+"/"+plugins_list[temp].getName());
 			}
-			ClassLoader cloader = new URLClassLoader(PluginsURL);
+			cloader = new URLClassLoader(PluginsURL);
 			for(int temp=0;temp<PluginsURL.length;temp++)
 			{
 				message.info("加载插件:"+plugins_list[temp].getName());

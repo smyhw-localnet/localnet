@@ -18,6 +18,8 @@ import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.protocol.*;
+import online.smyhw.localnet.plugins.PluginsManager;
+
 import java.net.Socket;
 
 public class Client_sl
@@ -38,7 +40,7 @@ public class Client_sl
 		//协议选择器
 		try 
 		{
-			PrC = Class.forName(protocol);
+			PrC = Class.forName(protocol,false, PluginsManager.cloader);
 		}
 		catch (ClassNotFoundException e1) 
 		{
