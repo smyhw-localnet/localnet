@@ -115,7 +115,7 @@ public class DataManager
 //					continue;
 //				}
 //				re.set(temp2[0], temp2[1]);
-				re.set(temp2[0],temp1.substring(temp1.indexOf('=')));
+				re.set(temp2[0],temp1.substring(temp1.indexOf('=')+1));
 			}
 			br.close();
 			return re;
