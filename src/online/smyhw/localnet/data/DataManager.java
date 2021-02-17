@@ -109,12 +109,13 @@ public class DataManager
 					message.info("config行\""+temp1+"\"读取不到分隔符\"=\",跳过行");
 					continue;
 				}
-				if(temp2.length>2) 
-				{
-					message.info("config行\""+temp1+"\"读取到过多的分隔符\"=\",跳过行");
-					continue;
-				}
-				re.set(temp2[0], temp2[1]);
+//				if(temp2.length>2) 
+//				{
+//					message.info("config行\""+temp1+"\"读取到过多的分隔符\"=\",跳过行");
+//					continue;
+//				}
+//				re.set(temp2[0], temp2[1]);
+				re.set(temp2[0],temp1.substring(temp1.indexOf('=')));
 			}
 			br.close();
 			return re;
