@@ -198,7 +198,7 @@ public class DataManager
 			if(!new File("./LN.config").exists())
 			{
 				System.out.println("配置文件不存在，将创建新配置文件，并且本次程序不会启动...");
-				makeNewConfigFile("./LN.config","/data/example_config/LN.config");
+				makeNewConfigFile("./LN.config","/data/example_config/LN.config",LN.class);
 				System.out.println("新配置文件创建完毕,请重启程序！");
 				System.exit(0);
 			}
@@ -217,14 +217,15 @@ public class DataManager
 	 * @param CfgUrl JAR包内的配置文件位置
 	 * @return 如果创建失败(文件已存在)返回False，正常则返回true
 	 * @throws Exception 任何异常将抛给上一级 
+	 * @param plugin 指定插件的Class，这可以防止在不同的类加载器中加载的资源无法被访问的问题
 	 */
-	public static boolean makeNewConfigFile(String newCfgFileUrl,String CfgUrl) throws Exception
+	public static boolean makeNewConfigFile(String newCfgFileUrl,String CfgUrl,Class plugin) throws Exception
 	{
 		if(new File(newCfgFileUrl).exists())
 		{
 			return false;
 		}
-		InputStream is = LN.class.getResourceAsStream(CfgUrl);
+		InputStream is = plugin.getResourceAsStream(CfgUrl);
 		BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
 		File new_file = new File(newCfgFileUrl);
 		PrintWriter pw;
