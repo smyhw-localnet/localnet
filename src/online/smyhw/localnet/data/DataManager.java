@@ -64,7 +64,7 @@ public class DataManager
 				}
 			);
 			//遍历完hashmap，将处理过的list写回文件里
-			PrintWriter temp4 = new PrintWriter(file);
+			PrintWriter temp4 = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file),StandardCharsets.UTF_8));
 		    for (String str : flist) 
 		    {
 		    	temp4.println(str);
