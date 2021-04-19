@@ -1,6 +1,7 @@
 package online.smyhw.localnet.data;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.HashMap;
 import java.util.List;
@@ -229,7 +230,7 @@ public class DataManager
 		BufferedReader br = new BufferedReader(new InputStreamReader(is,"utf-8"));
 		File new_file = new File(newCfgFileUrl);
 		PrintWriter pw;
-		pw = new PrintWriter(new_file);
+		pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new_file),StandardCharsets.UTF_8));
 		while(true)
 		{
 			String temp = br.readLine();
