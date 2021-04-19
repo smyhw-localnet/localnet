@@ -307,11 +307,10 @@ class input extends Thread
 			{
 				Thread.sleep(1000);
 				if(this.lock) {continue;}
-				message.input(LN.ID+"@"+LN.ID+">");
 				input = LN.input.readLine();
 //				message.info("取得用户输入："+input);
+				System.out.print(LN.ID+"@"+LN.ID+">");
 				DoInput(input);
-				
 			}
 			catch(Exception e)
 			{

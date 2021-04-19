@@ -15,6 +15,23 @@ import java.util.Date;
 public class message
 {
 	/**
+	 * 向System.out.println输出,<br>
+	 * 并续写提示符
+	 * @param out_put
+	 */
+	protected static void fin_out(String out_put)
+	{
+		String prompt = LN.ID+"@"+LN.ID+">";
+		String tmp1 = "";
+		for(int i=0;i<=prompt.length();i++) {
+			tmp1 = tmp1+" ";
+		}
+		System.out.print("\r"+tmp1);
+		System.out.print("\r"+out_put+"\n");
+		System.out.print(LN.ID+"@"+LN.ID+">");
+	}
+	
+	/**
 	 * 发送最普通的，展示给一般用户看的信息</br>
 	 * 该信息会被记录进日志</br>
 	 * @param input 需要显示的信息
@@ -28,7 +45,7 @@ public class message
 			SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 			input = "["+df.format(new Date())+"]"+"[show]"+input;
 		}
-		System.out.println(input);
+		fin_out(input);
 	}
 	
 	/**
@@ -43,7 +60,7 @@ public class message
 		if(LN.LNconfig.get_int("debug",1)!=1) {return;}
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		input = "["+df.format(new Date())+"]"+"[info]"+input;
-		System.out.println(input);
+		fin_out(input);
 		
 	}
 	
@@ -58,7 +75,7 @@ public class message
 		log("[warning]"+input);
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		input = "["+df.format(new Date())+"]"+"[warning]"+input;
-		System.out.println(input);
+		fin_out(input);
 	}
 	
 	/**
@@ -92,16 +109,6 @@ public class message
 		e.printStackTrace();
 		error(message);
 	}
-	
-	/**
-	 * 仅在用户输入线程中使用，不换行输出,不计入log
-	 * @param input
-	 */
-	public static void input(String input)
-	{
-		System.out.print(input);
-	}
-	
 	
 	public static void startLogThread()
 	{
