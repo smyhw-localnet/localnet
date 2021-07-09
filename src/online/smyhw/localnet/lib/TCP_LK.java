@@ -125,7 +125,7 @@ public abstract class TCP_LK
 		{
 			byte[] b_msg = msg.getBytes("UTF-8");
 			b_msg = encryption(b_msg,1);//加密
-			if(b_msg==null) {message.info("加密操作出错");return;}
+			if(b_msg==null) {message.info("[TCP_LK]加密操作出错");return;}
 			byte[] temp3 = (b_msg.length+"|").getBytes("UTF-8"); 
 			byte[] temp4 = new byte[temp3.length+b_msg.length];
 			System.arraycopy(temp3, 0, temp4, 0, temp3.length);
@@ -212,7 +212,7 @@ public abstract class TCP_LK
 				s_in.read(temp1);
 				temp1 = encryption(temp1, 0);
 				if (temp1 == null) {
-					message.info("解密操作出错");
+					message.info("[TCP_LK]解密操作出错");
 					//					throw new TCP_LK_Exception("[TCP_LK]:客户端<"+s.getInetAddress()+">发回的数据解密错误！",this,8);
 					continue;
 				}

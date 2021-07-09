@@ -19,7 +19,7 @@ public class NetWorkManager
 			LN.online_threads.add(new OnlineThread(port,protocol));
 		} catch (Exception e) 
 		{
-			message.warning("监听端口失败!", e);
+			message.warning("[网络管理器]监听端口失败!", e);
 		}
 	}
 	
@@ -36,7 +36,7 @@ public class NetWorkManager
 		} 
 		catch (Exception e) 
 		{
-			message.warning("连接至终端\""+ip+":"+port+"\"时出错！");
+			message.warning("[网络管理器]连接至终端\""+ip+":"+port+"\"时出错！");
 			e.printStackTrace();
 		}
 		return null;

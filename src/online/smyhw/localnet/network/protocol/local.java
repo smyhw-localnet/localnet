@@ -23,7 +23,7 @@ public class local implements StandardProtocol
 	@Override
 	public void Disconnect() 
 	{
-		message.warning("有程式试图将本地客户端断开连接，这是不可能的操作.");
+		message.warning("[本地协议]有程式试图将本地客户端断开连接，这是不可能的操作.");
 	}
 
 }

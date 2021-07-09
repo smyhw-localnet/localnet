@@ -24,14 +24,14 @@ public class OnlineThread extends Thread
 	{
 		if(!NetWorkManager.testProtocol(protocol))
 		{
-			message.warning("协议<"+protocol+">未知");
+			message.warning("[网络线程]协议<"+protocol+">未知");
 			return;
 		}
 		ServerSocket ss = new ServerSocket(port);
 		this.protocol = protocol;
 		this.port = port;
 		this.server_connect =ss;
-		message.show("监听端口<"+port+">使用协议<"+protocol+">");
+		message.show("[网络线程]监听端口<"+port+">使用协议<"+protocol+">");
 		this.start();
 	}
 	public void run()
@@ -41,7 +41,7 @@ public class OnlineThread extends Thread
 			try 
 			{
 				Socket connect = server_connect.accept();
-				message.info("socket连接<"+connect.getInetAddress()+">");
+				message.info("[网络线程]socket连接<"+connect.getInetAddress()+">");
 				new SocketConnectThread(connect,this.protocol);
 			}catch(IOException e){}catch(Exception e){}
 		}

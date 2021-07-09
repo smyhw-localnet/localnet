@@ -19,13 +19,13 @@ public class PluginsManager
 	 */
 	public static void start()
 	{
-		message.info("localnet插件系统V1.0");
+		message.info("[插件管理器]localnet插件系统V1.0");
 		File plugin_dir_t = new File("./plugins");
 //		if(plugin_dir.exists()) {message.show("good");}
 		File plugin_dir = new File(plugin_dir_t.getAbsolutePath());
 //		message.show("插件文件夹路径：");
 		File[] plugins_list = plugin_dir.listFiles();
-		message.show("插件总数："+plugins_list.length);
+		message.show("[插件管理器]插件总数："+plugins_list.length);
 		try 
 		{
 			URL[] PluginsURL = new URL[plugins_list.length];
@@ -36,7 +36,7 @@ public class PluginsManager
 			cloader = new URLClassLoader(PluginsURL);
 			for(int temp=0;temp<PluginsURL.length;temp++)
 			{
-				message.info("加载插件:"+plugins_list[temp].getName());
+				message.info("[插件管理器]加载插件:"+plugins_list[temp].getName());
 				String murl =plugins_list[temp].getName().substring(0,plugins_list[temp].getName().length()-4)+".lnp";
 				Class<?> cl = cloader.loadClass(murl);
 				cl.getMethod("plugin_loaded").invoke(null);
@@ -45,7 +45,7 @@ public class PluginsManager
 		} 
 		catch (Exception e) 
 		{
-			message.warning("插件加载出错!请检查发生此错误时正在加载的插件!");
+			message.warning("[插件管理器]插件加载出错!请检查发生此错误时正在加载的插件!");
 			e.printStackTrace();
 		}
 	}

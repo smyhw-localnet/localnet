@@ -90,7 +90,7 @@ public class Client_sl
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
-		message.info("[网络动向]发送消息<"+send+">至终端<"+this.remoteID+">");
+		message.info("[终端]发送字符串消息<"+send+">至终端<"+this.remoteID+">");
 		sendData(new DataPack(Hmsg));
 	}
 	
@@ -101,7 +101,7 @@ public class Client_sl
 	public void sendData(DataPack input)
 	{
 //		String send = Json.Create(input);
-		message.info("[网络动向]发送消息<"+input.getStr()+">至终端<"+this.remoteID+">");
+		message.info("[终端]发送数据包消息<"+input.getStr()+">至终端<"+this.remoteID+">");
 		protocolClass.SendData(input);
 	}
 	
@@ -121,14 +121,14 @@ public class Client_sl
 			this.reReadyMsg.add(re);
 			return;
 		}
-		message.info("[网络动向]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
+		message.info("[终端]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
 		if(!LNlib.CheckMapNode(re.getMap()))
 		{
-			message.info("接收到来自客户端<"+this.remoteID+">的消息缺少必要消息节点");
+			message.info("[终端]来自终端<"+this.remoteID+">的消息缺少必要消息节点");
 			this.sendNote("4", "消息缺失必要节点");
 			return;
 		}
-		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","客户端，请先报告你的ID!");return;}
+		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","请先报告你的ID");return;}
 		if(!this.libCLmsg(re))
 		{
 			LN.mdata(this, re);
@@ -167,7 +167,7 @@ public class Client_sl
 	{
 		new ClientDISconnect_Event(this);
 		NetWorkManager.doclient(0, this, 0);
-		message.show("客户端<"+this.remoteID+">断开连接{"+msg+"}");
+		message.show("[终端]终端<"+this.remoteID+">断开连接{"+msg+"}");
 		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
 		this.protocolClass.Disconnect();
 	}
