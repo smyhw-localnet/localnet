@@ -107,7 +107,7 @@ public class DataManager
 				String temp2[] = temp1.split("=");
 				if(temp2.length<2) 
 				{
-					message.info("config行\""+temp1+"\"读取不到分隔符\"=\",跳过行");
+					message.debug("config行\""+temp1+"\"读取不到分隔符\"=\",跳过行");
 					continue;
 				}
 //				if(temp2.length>2) 

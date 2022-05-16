@@ -3,22 +3,47 @@ package online.smyhw.localnet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.network.Client_sl;
+import online.smyhw.localnet.network.local_sl;
 
-public class LNlib 
+public class helper 
 {
 	/**
 	 * 初始化回调方法
 	 */
 	public static void call_back(){}
 	
+	
+	/**
+	 * 向给定终端发送消息
+	 * @param id 终端ID
+	 * @param msg 消息内容
+	 * @return 返回1时，终端不存在，否则成功执行
+	 */
+	public static int send_to_someone(String id,String msg) {
+		Client_sl tmp1 = Find_Client(id);
+		if(tmp1==null) {return 1;}
+		tmp1.sendMsg(msg);
+		return 0;
+	}
+	
+	/**
+	 * 获取所有的在线终端
+	 * @return
+	 */
+	public static List<Client_sl> get_terminals_list(){
+		return (ArrayList<Client_sl>) LN.client_list.clone();
+	}
+	
 	/**
 	 * 
 	 * 将信息发送到所有连接到本地的客户端</r>
 	 * @param msg 要发送的信息
 	 */
+	@Deprecated
 	public static void SendAll(String msg)
 	{
 		message.info("sendALL:"+msg);
@@ -39,6 +64,7 @@ public class LNlib
 	 * @param msg 要发送的消息
 	 * @param Sender 指定的发送人
 	 */
+	@Deprecated
 	public static void SendAll(String msg,Client_sl Sender)
 	{
 		message.info("sendALL:"+msg);
@@ -66,6 +92,7 @@ public class LNlib
 	 */
 	public static boolean ID_repeat(String UserName)
 	{
+		if(UserName.equalsIgnoreCase(LN.ID)) {return true;}
 		ArrayList<Client_sl> temp1 = (ArrayList<Client_sl>) LN.client_list.clone();
 		Iterator<Client_sl> temp2 = temp1.iterator();
 		while(temp2.hasNext())
@@ -154,5 +181,20 @@ public class LNlib
 			return true;
 		}
 		return true;
+	}
+	
+	static Client_sl local_client;
+	/**
+	 * 获取本地虚终端
+	 * 不存在于终端列表中
+	 * 可以存取ClientData
+	 * 向其发送的message和note会打印到控制台中，但其他类型的消息会报错
+	 * @return 本地虚拟终端
+	 */
+	public static Client_sl get_local_client() {
+		if(local_client==null) {
+			local_client = new local_sl();
+		}
+		return local_client;
 	}
 }	

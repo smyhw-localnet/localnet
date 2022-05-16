@@ -21,14 +21,14 @@ public class message
 	 */
 	protected static void fin_out(String out_put)
 	{
-		String prompt = LN.ID+"@"+LN.ID+">";
+		String prompt = LN.ID+"@localnet>";
 		String tmp1 = "";
 		for(int i=0;i<=prompt.length();i++) {
 			tmp1 = tmp1+" ";
 		}
 		System.out.print("\r"+tmp1);
 		System.out.print("\r"+out_put+"\n");
-		System.out.print(LN.ID+"@"+LN.ID+">");
+		System.out.print(prompt);
 	}
 	
 	/**
@@ -50,18 +50,30 @@ public class message
 	
 	/**
 	 * 发送info调试信息</br>
-	 * 该信息仅在debug模式开启时输出</br>
 	 * 但是始终会被记录进日志</br>
 	 * @param input 需要发送的信息
 	 */
 	public static void info(String input)
 	{
 		log("[info]"+input);
-		if(LN.LNconfig.get_int("debug",1)!=1) {return;}
+		if(LN.LNconfig.get_int("debug",1)<1) {return;}
 		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
 		input = "["+df.format(new Date())+"]"+"[info]"+input;
 		fin_out(input);
 		
+	}
+	
+	/**
+	 * as you know
+	 * @param input
+	 */
+	public static void debug(String input)
+	{
+		log("[debug]"+input);
+		if(LN.LNconfig.get_int("debug",1)<2) {return;}
+		SimpleDateFormat df = new SimpleDateFormat("HH:mm:ss");
+		input = "["+df.format(new Date())+"]"+"[debug]"+input;
+		fin_out(input);
 	}
 	
 	/**
@@ -119,15 +131,12 @@ public class message
 	
 	/**
 	 * 注意，该方法会自动对传入的消息加上时间标签
-	 * @param input
+	 * @param input_reader
 	 */
 	static LogThread logthread;
 	static void log(String input)
 	{
-		if(!LN.LibMode)
-		{
-			logthread.msgList.add(input);
-		}
+		logthread.msgList.add(input);
 	}
 }
 

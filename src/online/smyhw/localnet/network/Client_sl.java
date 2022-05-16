@@ -2,13 +2,12 @@ package online.smyhw.localnet.network;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 
 import online.smyhw.localnet.LN;
-import online.smyhw.localnet.LNlib;
+import online.smyhw.localnet.helper;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.DataPack;
@@ -16,12 +15,18 @@ import online.smyhw.localnet.data.data;
 import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
-import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
 import online.smyhw.localnet.network.protocol.*;
 import online.smyhw.localnet.plugins.PluginsManager;
 
-import java.net.Socket;
 
+/**
+ * 一个客户端实例
+ * localnet和实际协议实现的接口
+ * 该类必须实现和标准协议接口的交互
+ * 协议类和lib库与这个客户端实例做兼容
+ * @author smyhw
+ *
+ */
 public class Client_sl
 {
 	
@@ -29,15 +34,12 @@ public class Client_sl
 	public  data TempClientData = new data();
 	
 	public String remoteID;
-	public String localID = LN.ID;
 	public String protocolType;
 	public StandardProtocol protocolClass;
-	boolean isReady = false;//该项目指示本Client_sl是否初始化完成(一般会卡在处理ClientConnect_Event这边的样子)
-	public ArrayList<DataPack> reReadyMsg = new ArrayList<DataPack>();//存储在初始化完成之前收到的数据，某些事件的处理器可能会用到
 	public Client_sl(String protocol,List args)
 	{
-		Class PrC;
 		//协议选择器
+		Class PrC;
 		try 
 		{
 			PrC = Class.forName(protocol,false, PluginsManager.cloader);
@@ -54,6 +56,9 @@ public class Client_sl
 				return;
 			}
 		}
+		//完成协议选择
+		
+		//初始化协议
 		try 
 		{
 			protocolClass = (StandardProtocol) PrC.getConstructors()[0].newInstance(args,this);
@@ -63,21 +68,10 @@ public class Client_sl
 			return;
 		}
 		this.protocolType = protocol;
-		if(new ClientConnect_Event(this).getCancel())
-		{
-			this.Disconnect("事件被取消");
-			return;
-		}
+		//完成协议初始化
 		
-		this.isReady=true;
-		//就绪后应处理积压的消息
-		System.out.println("reReadyMsg:"+reReadyMsg.size());
-		while(!reReadyMsg.isEmpty())
-		{
-			CLmsg(reReadyMsg.get(0));
-			reReadyMsg.remove(0);
-		}
-		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+localID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
+		//发送身份验证包
+		try {this.sendData(new DataPack("{\"type\":\"auth\",\"ID\":\""+LN.ID+"\"}"));} catch (Json_Parse_Exception e) {e.printStackTrace();}//这不该出现异常
 	}
 	
 	/**
@@ -90,7 +84,7 @@ public class Client_sl
 		Hmsg.put("type", "message");
 		Hmsg.put("message", msg);
 		String send = Json.Create(Hmsg);
-		message.info("[终端]发送字符串消息<"+send+">至终端<"+this.remoteID+">");
+//		message.info("[终端]发送字符串消息<"+send+">至终端<"+this.remoteID+">");
 		sendData(new DataPack(Hmsg));
 	}
 	
@@ -101,7 +95,7 @@ public class Client_sl
 	public void sendData(DataPack input)
 	{
 //		String send = Json.Create(input);
-		message.info("[终端]发送数据包消息<"+input.getStr()+">至终端<"+this.remoteID+">");
+		message.debug("[Client_sl]发送数据包消息<"+input.getStr()+">至终端<"+this.remoteID+">");
 		protocolClass.SendData(input);
 	}
 	
@@ -114,60 +108,36 @@ public class Client_sl
 		this.sendData(new DataPack(send));
 	}
 	
-	public void CLmsg(DataPack re)
-	{	
-		if(!this.isReady)
-		{//本Client_sl还未初始化完成，不向外部传送信息
-			this.reReadyMsg.add(re);
-			return;
-		}
-		message.info("[终端]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
-		if(!LNlib.CheckMapNode(re.getMap()))
+	//当协议收到消息时，协议应调用这个方法
+	public void on_recv(DataPack re)
+	{
+		//如果不汇报ID，则不允许其他消息进入
+		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","请先报告你的ID");return;}
+		message.debug("[Client_sl]接收到来自客户端<"+this.remoteID+">的消息<"+re.getStr()+">");
+		if(!helper.CheckMapNode(re.getMap()))
 		{
-			message.info("[终端]来自终端<"+this.remoteID+">的消息缺少必要消息节点");
+			message.debug("[Client_sl]来自终端<"+this.remoteID+">的消息缺少必要消息节点");
 			this.sendNote("4", "消息缺失必要节点");
 			return;
 		}
-		if(remoteID==null && !re.getValue("type").equals("auth")){this.sendNote("1","请先报告你的ID");return;}
-		if(!this.libCLmsg(re))
-		{
-			LN.mdata(this, re);
-		}
+		LN.mdata(this,re);
 	}
 	
-	/**
-	 * 作为本类唯一一个回调函数，CLmsg需要有一个用以覆盖的拓展
-	 * @param re 数据包
-	 * @return 如果为true，该消息不会继续被localnet处理
-	 */
-	public boolean libCLmsg(DataPack re)
+	//当协议发生错误时，协议应调用这个方法
+	public void on_error(Exception e)
 	{
-		return false;
-	}
-	
-	public void Serr_u(TCP_LK_Exception e)
-	{
-		this.lib_Serr_u(e);
-		Disconnect(e.type+"->"+e.getMessage());
+		new ClientDISconnect_Event(this);
+		NetWorkManager.doclient(0, this, 0);
+		message.warning("[Client_sl]终端<"+this.remoteID+">异常断开连接{"+e.getMessage()+"}");
+		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
 		return;
-	}
-	
-	/**
-	 * 用于当此类作为lib使用时，处理错误<br>
-	 * 当此方法被执行时，连接还没有断开
-	 * @param e 发生的错误
-	 * @return 返回值暂时没有意义，默认为false
-	 */
-	public boolean lib_Serr_u(TCP_LK_Exception e)
-	{
-		return false;
 	}
 	
 	public void Disconnect(String msg)
 	{
 		new ClientDISconnect_Event(this);
 		NetWorkManager.doclient(0, this, 0);
-		message.show("[终端]终端<"+this.remoteID+">断开连接{"+msg+"}");
+		message.show("[Client_sl]终端<"+this.remoteID+">断开连接{"+msg+"}");
 		DataManager.SaveData("./TerminalData/"+this.remoteID, ClientData);//保存数据
 		this.protocolClass.Disconnect();
 	}

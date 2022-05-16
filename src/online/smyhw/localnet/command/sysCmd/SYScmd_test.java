@@ -1,12 +1,12 @@
 package online.smyhw.localnet.command.sysCmd;
 
-import online.smyhw.localnet.network.Client_sl;
+import online.smyhw.localnet.message;
 
 public class SYScmd_test 
 {
-	public static void cmd(Client_sl User,String cmd) 
+	public static void cmd(String cmd) 
 	{
-		User.sendMsg("test");
+		message.show("测试指令123...");
 		return;
 	}
 }

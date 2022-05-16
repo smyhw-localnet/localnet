@@ -1,17 +1,17 @@
 package online.smyhw.localnet.command.sysCmd;
 
+import online.smyhw.localnet.message;
 import online.smyhw.localnet.command.cmdManager;
-import online.smyhw.localnet.network.Client_sl;
 
 public class SYScmd_help 
 {
-	public static void cmd(Client_sl User,String cmd) 
+	public static void cmd(String cmd) 
 	{
 		String re = cmdManager.cmd_list.toString();
 		re="\n".concat(re);
 		re=re.replace('=','\n');
 		re=re.replace(',', '\n');
-		User.sendMsg(re);
+		message.show(re);
 		return;
 	}
 }

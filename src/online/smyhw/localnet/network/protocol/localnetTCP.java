@@ -5,7 +5,6 @@ import java.util.List;
 
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.data.DataPack;
-import online.smyhw.localnet.event.*;
 import online.smyhw.localnet.lib.TCP_LK;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Exception.TCP_LK_Exception;
@@ -52,29 +51,17 @@ public class localnetTCP extends TCP_LK  implements StandardProtocol
 			message.warning("客户端发送了无法解析的信息");
 			return;
 		}
-		this.client.CLmsg(re);
+		this.client.on_recv(re);
 	}
 	public void Serr_u(TCP_LK_Exception e)
 	{
-		this.client.Serr_u(e);
+		this.client.on_error(e);
 		return;
 	}
 	
 	public void Disconnect()
 	{
 		this.isERROR=true;
-	}
-	
-	/**
-	 * 这是不推荐使用的，加密的实现应依赖于协议本身
-	 */
-	public byte[] encryption(byte[] input,int type)
-	{
-		byte[] re=null;
-		DataDecryptEvent temp1 = new DataDecryptEvent(input,type,client);
-		re = temp1.output;
-		if(temp1.Error) {return null;}
-		return re;
 	}
 	
 }

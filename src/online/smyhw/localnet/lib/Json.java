@@ -65,7 +65,8 @@ public class Json
 		     	}
 		     	
 		     	//能处理到这，说明这个构造字符是tm非法的,直接返回null,表示错误数据
-		     	return null;
+//		     	return null;
+		     	throw new Json_Parse_Exception();
 			}
 			else
 			{//如果读取的是数据

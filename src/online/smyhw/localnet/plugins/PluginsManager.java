@@ -45,8 +45,7 @@ public class PluginsManager
 		} 
 		catch (Exception e) 
 		{
-			message.warning("[插件管理器]插件加载出错!请检查发生此错误时正在加载的插件!");
-			e.printStackTrace();
+			message.warning("[插件管理器]插件加载出错!请检查发生此错误时正在加载的插件!",e);
 		}
 	}
 	

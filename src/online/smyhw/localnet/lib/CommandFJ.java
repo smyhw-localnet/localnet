@@ -18,10 +18,15 @@ public class CommandFJ
 		int sy=0;//索引，即现在检查到了哪个字符，以0开头
 		int dl=-1;//记录现在检查到了第几个参数，以1开头
 		int s=0,e=-1;//当前参数开始处索引以及结束处索引(e=结束处索引+1)
+		boolean y_mode = false; //是否处于引号中
 		command=command.trim();//删除前后的空白
 		if(command.isEmpty())
 		{
 			message.info("[命令解释器]:空指令！");
+			return " ";
+		}
+		if(js(command)< num) {
+			message.info("[命令解释器]: 没有那么长的指令！");
 			return " ";
 		}
 		command=command+" ";//尾部加空格，防止单节指令无法读到空格而出错
@@ -34,8 +39,10 @@ public class CommandFJ
 		while(true)
 		{
 			if(command.length()==sy){break;}
-			if(command.charAt(sy)==' ')
+			if((command.charAt(sy)=='"') && (command.length()>(sy+1)) && (command.charAt(sy+1)==' ') ) {y_mode=false;sy++;}
+			if((command.charAt(sy)==' ') && (y_mode==false))
 			{
+				if((command.charAt(sy)==' ') && (command.length()>(sy+1)) && (command.charAt(sy+1)=='"') ) {y_mode=true;}
 				s=e+1;
 				e=sy;
 				dl++;
@@ -44,6 +51,9 @@ public class CommandFJ
 					try 
 					{
 						re=command.substring(s,e);
+						if(re.charAt(0)=='"' && re.charAt(re.length()-1)=='"') {
+							re = re.substring(1, re.length()-1);
+						}
 					}
 					catch(IndexOutOfBoundsException ee)
 					{

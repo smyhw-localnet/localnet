@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
-import online.smyhw.localnet.LN;
 import online.smyhw.localnet.message;
 import online.smyhw.localnet.event.SocketConnectEvent;
 

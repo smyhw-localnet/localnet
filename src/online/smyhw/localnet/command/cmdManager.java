@@ -3,15 +3,8 @@ package online.smyhw.localnet.command;
 import java.util.Hashtable;
 
 import online.smyhw.localnet.message;
-import online.smyhw.localnet.command.sysCmd.SYScmd_doc;
-import online.smyhw.localnet.command.sysCmd.SYScmd_help;
-import online.smyhw.localnet.command.sysCmd.SYScmd_kick;
-import online.smyhw.localnet.command.sysCmd.SYScmd_list;
-import online.smyhw.localnet.command.sysCmd.SYScmd_nwm;
-import online.smyhw.localnet.command.sysCmd.SYScmd_test;
-import online.smyhw.localnet.event.DoCommandEvent;
+import online.smyhw.localnet.command.sysCmd.*;
 import online.smyhw.localnet.lib.*;
-import online.smyhw.localnet.network.Client_sl;
 import java.lang.reflect.Method;
 
 public class cmdManager
@@ -27,16 +20,18 @@ public class cmdManager
 	{
 		try 
 		{
-			cmdManager.add_cmd("doc", SYScmd_doc.class.getMethod("cmd", Client_sl.class,String.class));
-			cmdManager.add_cmd("nwm", SYScmd_nwm.class.getMethod("cmd", Client_sl.class,String.class));
-			cmdManager.add_cmd("help", SYScmd_help.class.getMethod("cmd", Client_sl.class,String.class));
-			cmdManager.add_cmd("kick", SYScmd_kick.class.getMethod("cmd", Client_sl.class,String.class));
-			cmdManager.add_cmd("list", SYScmd_list.class.getMethod("cmd", Client_sl.class,String.class));
-			cmdManager.add_cmd("test", SYScmd_test.class.getMethod("cmd", Client_sl.class,String.class));
+			cmdManager.add_cmd("doc", SYScmd_doc.class.getMethod("cmd", String.class));
+			cmdManager.add_cmd("nwm", SYScmd_nwm.class.getMethod("cmd", String.class));
+			cmdManager.add_cmd("help", SYScmd_help.class.getMethod("cmd",String.class));
+			cmdManager.add_cmd("kick", SYScmd_kick.class.getMethod("cmd", String.class));
+			cmdManager.add_cmd("list", SYScmd_list.class.getMethod("cmd", String.class));
+			cmdManager.add_cmd("test", SYScmd_test.class.getMethod("cmd",String.class));
+			cmdManager.add_cmd("send", SYScmd_send.class.getMethod("cmd",String.class));
+			cmdManager.add_cmd("sendl", SYScmd_sendl.class.getMethod("cmd",String.class));
 		} 
 		catch (Exception e) 
 		{
-			message.warning("警告！加载系统指令时出错，可能会造成不可预知的问题！",e);
+			message.error("加载系统指令时出错",e);
 		}
 		
 		
@@ -48,7 +43,7 @@ public class cmdManager
 	
 	/**
 	 * 
-	 * @author hanhz
+	 * @author smyhw
 	 * 
 	 * @param cmd 需要添加的指令
 	 * @param rclass 处理这个指令的类
@@ -62,27 +57,24 @@ public class cmdManager
 				cmdManager.cmd_list.put(cmd, mff);
 			}
 			else{message.warning("添加指令\""+cmd+"\"失败，该指令已存在");}
-			message.info("指令\""+cmd+"\"添加完成{"+cmd_list.containsKey(cmd)+"}");
+			message.debug("指令\""+cmd+"\"添加完成{"+cmd_list.containsKey(cmd)+"}");
 		} 
 		catch (Exception e) 
 		{
-			message.warning("添加指令\""+cmd+"\"时出现异常！");
-			e.printStackTrace();
+			message.error("添加指令\""+cmd+"\"时出现异常！",e);
 		}
 	}
 
 	
-	public static void ln(Client_sl User,String command)
+	public static void exec(String command)
 	{
-		//触发事件
-		if(new DoCommandEvent(User,command).Cancel) {message.info("终端<"+User.remoteID+">使用指令<"+command+">因事件处理而被拒绝执行");return;}
 		String command_0=CommandFJ.fj(command,0);
-		message.info("处理指令<"+command+">");
-		if(cmd_list.containsKey(command_0)==false) {User.sendMsg("未知指令！\n请使用cmdList列出指令列表");return;};
+		message.debug("处理指令<"+command+">");
+		if(cmd_list.containsKey(command_0)==false) {message.show("未知指令!");return;};
 		try
 		{
 			Method re = (Method) cmd_list.get(command_0);
-			re.invoke(null,User, command);
+			re.invoke(null,command);
 		}
 		catch(Exception e) 
 		{

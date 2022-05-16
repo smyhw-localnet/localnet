@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import online.smyhw.localnet.LN;
+import online.smyhw.localnet.message;
 import online.smyhw.localnet.network.Client_sl;
 
 public class SYScmd_list 
 {
-	public static void cmd(Client_sl User,String cmd) 
+	public static void cmd(String cmd) 
 	{
 		String re = new String();
 		re="在线终端列表:\n";
@@ -19,7 +20,7 @@ public class SYScmd_list
 			Client_sl temp3 = temp2.next();
 			re=re+temp3.remoteID+"\n";
 		}
-		User.sendMsg(re);
+		message.show(re);
 		return;
 	}
 }
