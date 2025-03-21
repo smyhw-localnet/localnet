@@ -107,7 +107,6 @@ public class localnetTCP2 {
      *
      * @param err_msg 错误信息
      */
-    @SuppressWarnings("deprecation")
     void on_error(String err_msg, Exception e) {
         //this.socket.close();
         try {
@@ -118,8 +117,21 @@ public class localnetTCP2 {
         }
         //终止线程
         //在调用上游方法之后调用，防止先把自己干了
-        this.hb_th.stop();
-        this.recv_th.stop();
+        this.hb_th.end();
+        this.recv_th.end();
+    }
+
+    /**
+     * 安全中断连接
+     */
+    public void dis_connect() {
+        this.hb_th.end();
+        this.recv_th.end();
+        try {
+            this.socket.close();
+        } catch (IOException e) {
+            this.on_error("关闭连接时异常", e);
+        }
     }
 }
 
@@ -133,13 +145,19 @@ class heartbeat_thread extends Thread {
     final int frequency = 50;
     localnetTCP2 connection;
 
+    Boolean end_flag = false;
+
+    public void end(){
+        this.end_flag = true;
+    }
+
     public heartbeat_thread(localnetTCP2 connection) {
         this.connection = connection;
         this.start();
     }
 
     public void run() {
-        while (true) {
+        while (!this.end_flag) {
             this.connection.send_raw_string("{"
                     + "\"version\":\"v1.0.0\","
                     + "\"type\":\"heartbeat\""
@@ -164,15 +182,20 @@ class recv_thread extends Thread {
     //
     localnetTCP2 connection;
 
+    Boolean end_flag = false;
+
+    public void end(){
+        this.end_flag = true;
+    }
+
     public recv_thread(localnetTCP2 connection) {
         this.connection = connection;
         this.start();
     }
 
     public void run() {
-        while (true) {
+        while (!this.end_flag) {
             mdata(recv_once());
-
         }
     }
 

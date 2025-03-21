@@ -5,6 +5,7 @@ import online.smyhw.localnet.helper;
 import online.smyhw.localnet.lib.CommandFJ;
 import online.smyhw.localnet.message;
 
+@Deprecated
 public class SYScmd_sendl {
     public static void cmd(String cmd) {
         if (CommandFJ.js(cmd) < 2) {

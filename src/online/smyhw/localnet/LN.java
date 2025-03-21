@@ -6,6 +6,7 @@ import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.config;
 import online.smyhw.localnet.event.Chat_Event;
 import online.smyhw.localnet.event.ClientConnected_Event;
+import online.smyhw.localnet.event.DataPacket_Event;
 import online.smyhw.localnet.network.Client_sl;
 import online.smyhw.localnet.network.NetWorkManager;
 import online.smyhw.localnet.network.OnlineThread;
@@ -39,7 +40,7 @@ public class LN {
     //主配置文件
     public static config LNconfig = new config();
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try {
             message.startLogThread();
             message.info("localnet初始化中...");
@@ -75,6 +76,8 @@ public class LN {
     }
 
     /**
+     *
+     *
      * 现在，这是处理外来数据包的专用逻辑序列了
      *
      * @param User 来路终端
@@ -138,7 +141,12 @@ public class LN {
                 return;
             }
             default:
-                User.sendNote("2", "未知消息类型{" + msg.getStr() + "}");
+                DataPacket_Event dataPacketEvent = new DataPacket_Event(User, msg);
+                if (dataPacketEvent.handled) {
+                    return;
+                }
+                User.sendNote("2", "无法处理的消息，我方没有相应的处理程序{" + msg.getStr() + "}");
+                message.warning("客户端{"+User.remoteID+"}发送了无法处理的消息{"+msg.getStr()+"}");
                 return;
         }
     }
@@ -151,7 +159,7 @@ class smyhw {
 
     public static void main() {
         message.show("+==========smyhw==========+");
-        message.show("|   version:2.1           |");
+        message.show("|   version:3.0           |");
         message.show("|                         |");
         message.show("|                         |");
         message.show("+=========localnet========+");
@@ -221,11 +229,11 @@ class input extends Thread {
      * @param input
      */
     public synchronized void exec(String input) {
-        if (input.startsWith("/")) {
+        if (input.startsWith("#")) {
             String msg = input.substring(1);
             cmdManager.exec(msg);
         } else {
-            //TODO 事件<控制台输入>
+            new Chat_Event(helper.get_local_client(), true, input);
         }
 
     }

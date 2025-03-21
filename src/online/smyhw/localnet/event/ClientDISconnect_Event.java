@@ -13,7 +13,7 @@ public class ClientDISconnect_Event extends LN_Event {
     Client_sl client;
 
     public ClientDISconnect_Event(Client_sl client) {
-        this.EventName = "ClientDISconnect";
+        this.EventName = "ClientDisconnectEvent";
         this.client = client;
         EventManager.DOevent(this);
     }

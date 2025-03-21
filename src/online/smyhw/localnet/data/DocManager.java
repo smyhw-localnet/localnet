@@ -19,7 +19,7 @@ public class DocManager {
     /**
      * 从指定JAR路径获取文档文本
      *
-     * @param path文档路径
+     * @param path 文档路径
      * @return 文档文本, 若文档不存在或读取出错，返回null
      */
     public static String readFromJar(String path) {
@@ -75,8 +75,8 @@ public class DocManager {
     }
 
     /**
-     * 根据给定名称设定RunTime文档</br>
-     * RunTime文档会覆盖其他相同路径的文档</br>
+     * 根据给定名称设定RunTime文档<br>
+     * RunTime文档会覆盖其他相同路径的文档<br>
      *
      * @param doc  文档文本
      * @param path 文档名称
@@ -88,9 +88,9 @@ public class DocManager {
     }
 
     /**
-     * 从指定路径获取文档文本</br>
-     * 自动选择从JAR中获取或从文件获取</br>
-     * JAR中的文档优先级高于文件</br>
+     * 从指定路径获取文档文本<br>
+     * 自动选择从JAR中获取或从文件获取<br>
+     * JAR中的文档优先级高于文件<br>
      * RunTime中的文档优先级高于JAR
      *
      * @param path 文档路径

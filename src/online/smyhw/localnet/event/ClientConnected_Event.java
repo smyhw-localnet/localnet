@@ -12,7 +12,7 @@ public class ClientConnected_Event extends LN_Event {
     Client_sl client;
 
     public ClientConnected_Event(Client_sl client) {
-        this.EventName = "ClientConnected";
+        this.EventName = "ClientConnectedEvent";
         this.client = client;
         EventManager.DOevent(this);
     }

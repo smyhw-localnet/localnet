@@ -8,7 +8,7 @@ import java.util.Set;
 
 
 /**
- * 该类被设计成一个LocalNet的标准传输数据单元</br>
+ * 该类被设计成一个LocalNet的标准传输数据单元<br>
  * 内含一个数据包
  *
  * @author smyhw
@@ -18,7 +18,7 @@ public class DataPack implements java.io.Serializable {
     HashMap<String, String> DataMap = new HashMap<String, String>();
 
     /**
-     * 使用HashMap创建一个数据包</br>
+     * 使用HashMap创建一个数据包<br>
      * 这会浅表clone这个传入参数，对传入参数的后续改变可能会影响这个数据包
      *
      * @param data
@@ -72,7 +72,7 @@ public class DataPack implements java.io.Serializable {
     }
 
     /**
-     * 返回这个数据包的HashMap形式</br>
+     * 返回这个数据包的HashMap形式<br>
      * 这是一个深层clone，对返回对象的任何操作均不会影响本数据包
      *
      * @return

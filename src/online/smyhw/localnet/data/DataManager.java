@@ -60,7 +60,7 @@ public class DataManager {
                             }
                     );
             //遍历完hashmap，将处理过的list写回文件里
-            PrintWriter temp4 = new PrintWriter(new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8));
+            PrintWriter temp4 = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(file.toPath()), StandardCharsets.UTF_8));
             for (String str : flist) {
                 temp4.println(str);
             }
@@ -96,7 +96,7 @@ public class DataManager {
                 if (temp1.startsWith("//") || temp1.startsWith("#")) {
                     continue;
                 }//如果是注释，则跳过
-                String temp2[] = temp1.split("=");
+                String[] temp2 = temp1.split("=");
                 if (temp2.length < 2) {
                     message.debug("config行\"" + temp1 + "\"读取不到分隔符\"=\",跳过行");
                     continue;
@@ -122,7 +122,7 @@ public class DataManager {
         File file = new File(URL);
         ObjectOutputStream oos;
         try {
-            oos = new ObjectOutputStream(new FileOutputStream(file));
+            oos = new ObjectOutputStream(Files.newOutputStream(file.toPath()));
             oos.writeObject(data);
             oos.close();
             return true;
@@ -184,7 +184,7 @@ public class DataManager {
     }
 
     /**
-     * 从JAR包里读出默认配置文件并在指定位置创建这个配置文件</br>
+     * 从JAR包里读出默认配置文件并在指定位置创建这个配置文件<br>
      * 这会检查指定文件是否存在，如果存在，不会覆盖
      *
      * @param newCfgFileUrl 需要创建的配置文件位置
@@ -198,10 +198,12 @@ public class DataManager {
             return false;
         }
         InputStream is = plugin.getResourceAsStream(CfgUrl);
-        BufferedReader br = new BufferedReader(new InputStreamReader(is, "utf-8"));
+        //由开发者提供的路径不应存在素偶我
+        assert is != null;
+        BufferedReader br = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
         File new_file = new File(newCfgFileUrl);
         PrintWriter pw;
-        pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(new_file), StandardCharsets.UTF_8));
+        pw = new PrintWriter(new OutputStreamWriter(Files.newOutputStream(new_file.toPath()), StandardCharsets.UTF_8));
         while (true) {
             String temp = br.readLine();
             if (temp == null) {

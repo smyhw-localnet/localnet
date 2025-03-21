@@ -7,6 +7,9 @@ import online.smyhw.localnet.message;
 import java.lang.reflect.Method;
 import java.util.Hashtable;
 
+/**
+ * 无论如何，这个命令模块都应仅处理来自控制台的输入
+ */
 public class cmdManager {
     public static Hashtable<String, Method> cmd_list = new Hashtable<String, Method>();//存储指令和对应的类
 
@@ -34,7 +37,7 @@ public class cmdManager {
 
     /**
      * @param cmd    需要添加的指令
-     * @param rclass 处理这个指令的类
+     * @param mff 处理这个指令的类
      * @author smyhw
      */
     public synchronized static void add_cmd(String cmd, Method mff) {

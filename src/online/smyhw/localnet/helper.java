@@ -91,6 +91,7 @@ public class helper {
      *
      * @param UserName 要检查的ID
      * @return 如果为true, 则已存在
+     * //TODO x
      */
     public static boolean ID_repeat(String UserName) {
         if (UserName.equalsIgnoreCase(LN.ID)) {
@@ -115,7 +116,11 @@ public class helper {
      * @return 如果符合，返回true,不然返回false
      */
     public static boolean ID_rightful(String UserName) {
-        if (UserName.matches("^[A-Za-z0-9]+$")) {
+        if(UserName.startsWith("_")){
+            return false;
+        }
+
+        if (UserName.matches("^[A-Za-z0-9_]+$")) {
             return true;
         } else {
             return false;

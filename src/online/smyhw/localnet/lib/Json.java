@@ -22,9 +22,6 @@ public class Json {
      */
     public static HashMap<String, String> Parse(String input) throws Json_Parse_Exception {
         HashMap<String, String> re = new HashMap<String, String>();
-//		if(!input.startsWith("{")) {return null;};
-//		input = input.substring(1);
-//		input = input.substring(0, input.length()-1);
         char[] str = input.toCharArray();
         String key = "", value = "";
         int type = 0;//type==0#键;type==1#值
@@ -113,32 +110,19 @@ public class Json {
 
     /**
      * 用于转义特殊字符</br>
-     * <\>(反斜杠)</br>
-     * <">(双引号)</br>
-     * 都会被转义</br>
      *
      * @param input 未转义的字符串
      * @return 转义后的字符串
      */
     public static String Encoded(String input) {
-//		message.info("en++"+input);
-        char[] str = input.toCharArray();
-        ArrayList<Character> out_str = new ArrayList<Character>();
-        ArrayList<Character> key_word = new ArrayList<Character>();
-        key_word.add('\\');
-        key_word.add('"');
-        for (int i = 0; i < str.length; i++) {
-            if (key_word.contains(str[i])) {
-                out_str.add('\\');
-            }
-            out_str.add(str[i]);
-        }
-        String re = "";
-        for (int i = 0; i < out_str.size(); i++) {
-            re = re.concat(out_str.get(i) + "");
-        }
-//		message.info("en--"+re);
-        return re;
+        return input
+                .replace("\\", "\\\\") // 转义反斜杠
+                .replace("\"", "\\\"") // 转义双引号
+                .replace("\b", "\\b")   // 转义退格
+                .replace("\f", "\\f")   // 转义换页
+                .replace("\n", "\\n")   // 转义换行
+                .replace("\r", "\\r")   // 转义回车
+                .replace("\t", "\\t");  // 转义制表符
     }
 
     /**
@@ -149,23 +133,13 @@ public class Json {
      * @see public static String Encoded(String input)
      */
     public static String Decoded(String input) {
-//		message.info("de++"+input);
-        char[] str = input.toCharArray();
-        ArrayList<Character> out_str = new ArrayList<Character>();
-        ArrayList<Character> key_word = new ArrayList<Character>();
-        key_word.add('\\');
-        key_word.add('"');
-        for (int i = 0; i < str.length; i++) {
-            if (str[i] == '\\' && key_word.contains(str[i + 1])) {
-                i = i + 1;
-            }
-            out_str.add(str[i]);
-        }
-        String re = "";
-        for (int i = 0; i < out_str.size(); i++) {
-            re = re.concat(out_str.get(i) + "");
-        }
-//		message.info("de--"+re);
-        return re;
+        return input
+                .replace("\\\\", "\\") // 反转义反斜杠
+                .replace("\\\"", "\"") // 反转义双引号
+                .replace("\\b", "\b")   // 反转义退格
+                .replace("\\f", "\f")   // 反转义换页
+                .replace("\\n", "\n")   // 反转义换行
+                .replace("\\r", "\r")   // 反转义回车
+                .replace("\\t", "\t");   // 反转义制表符
     }
 }

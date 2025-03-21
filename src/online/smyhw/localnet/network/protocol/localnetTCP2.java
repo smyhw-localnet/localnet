@@ -32,7 +32,12 @@ public class localnetTCP2 implements StandardProtocol {
 
     @Override
     public void Disconnect() {
-        //TODO 断开连接
+        try {
+            this.SendData(new DataPack("{\"type\":\"connect\",\"operation\":\"disconnect\"}"));
+        } catch (Json_Parse_Exception e) {
+            throw new RuntimeException(e);
+        }
+        this.lntcp.dis_connect();
     }
 
     public void recv_method(String msg) {

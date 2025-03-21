@@ -13,8 +13,8 @@ public class data implements java.io.Serializable {
 
 
     /**
-     * 线程安全的方法,对该实例的数据表进行设置维护</br>
-     * 可以将value置为null来删除该key</br>
+     * 线程安全的方法,对该实例的数据表进行设置维护<br>
+     * 可以将value置为null来删除该key<br>
      * 参数不用我解释了吧...
      *
      * @param key
@@ -32,7 +32,7 @@ public class data implements java.io.Serializable {
     }
 
     /**
-     * 从该实例的数据表中读取数据</br>
+     * 从该实例的数据表中读取数据<br>
      * 参数不用我解释了吧...
      *
      * @param key
@@ -42,8 +42,8 @@ public class data implements java.io.Serializable {
     }
 
     /**
-     * 从给定的key中读出int类型数据</br>
-     * 如果给定的key不存在,则返回0</br>
+     * 从给定的key中读出int类型数据<br>
+     * 如果给定的key不存在,则返回0<br>
      * 请不要使用这个方法去读取其他类型的数据,鬼知道会返回什么
      *
      * @param key

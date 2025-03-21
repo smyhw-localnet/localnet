@@ -4,8 +4,10 @@ import online.smyhw.localnet.LN;
 import online.smyhw.localnet.data.DataManager;
 import online.smyhw.localnet.data.DataPack;
 import online.smyhw.localnet.data.data;
+import online.smyhw.localnet.event.Chat_Event;
 import online.smyhw.localnet.event.ClientDISconnect_Event;
 import online.smyhw.localnet.helper;
+import online.smyhw.localnet.lib.CommandFJ;
 import online.smyhw.localnet.lib.Exception.Json_Parse_Exception;
 import online.smyhw.localnet.lib.Json;
 import online.smyhw.localnet.message;
@@ -68,6 +70,7 @@ public class Client_sl {
         } catch (Json_Parse_Exception e) {
             e.printStackTrace();
         }//这不该出现异常
+        message.debug("[Client_sl]创建了一个新的客户端实例{" + protocol + "}");
     }
 
     /**
@@ -79,8 +82,9 @@ public class Client_sl {
         HashMap<String, String> Hmsg = new HashMap<String, String>();
         Hmsg.put("type", "message");
         Hmsg.put("message", msg);
-        String send = Json.Create(Hmsg);
-//		message.info("[终端]发送字符串消息<"+send+">至终端<"+this.remoteID+">");
+        if (new Chat_Event(this, true, msg).Cancel){
+            return;
+        }
         sendData(new DataPack(Hmsg));
     }
 
